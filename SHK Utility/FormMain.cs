@@ -65,7 +65,8 @@ namespace SHK_Utility
         // total number of registers for function 3 and 16 share the same register array
     }
 
-    enum IO_Status {
+    enum IO_Status
+    {
         IO_LASER,
         IO_IR_LED,
         IO_TEST_IN,
@@ -125,14 +126,14 @@ namespace SHK_Utility
 
 
             chart1.ChartAreas[1].AxisX.LabelStyle.Format = "HH:mm:ss";
-            
+
 
 
             //comboBoxGain1.Enabled = false;
             //comboBoxPositionOffset.Enabled = false;
 
 
-    }
+        }
 
         private void buttonConnect_Click(object sender, EventArgs e)
         {
@@ -237,7 +238,7 @@ namespace SHK_Utility
 
                         // enable groups
 
-                        
+
                         buttonConnect.Text = "&Disconnect";
                         groupBoxSystemInfo.Enabled = true;
                         groupBoxIOStatus.Enabled = true;
@@ -303,7 +304,8 @@ namespace SHK_Utility
 
 
                 }
-            } else
+            }
+            else
             {
                 if (serialPort1.IsOpen)
                 {
@@ -335,7 +337,7 @@ namespace SHK_Utility
                 buttonLogin.Text = "&Login";
                 //chart1.ChartAreas[0].Visible = false;
                 //chart1.ChartAreas[1].Visible = false;
-                
+
             }
 
         }
@@ -402,7 +404,8 @@ namespace SHK_Utility
                 numericUpDownFilterOff.Value = registers[(int)SHKModBusRegisters.FILTER_OFF];
 
                 timer_counter = 0;
-            } else
+            }
+            else
             {
                 timer_counter++;
             }
@@ -486,7 +489,6 @@ namespace SHK_Utility
                 // AN_VALUES 50 values from analog_buffer[200]: MSB = signal[i*8+4], LSB = signal[i*8] 
                 chart1.Series["Signal"].Points.AddXY(i * 4, ((float)((uint)registers[i + (int)SHKModBusRegisters.AN_VALUES] % 256)) * 100 / 256); // LSB to 0-100%
                 chart1.Series["Signal"].Points.AddXY(i * 4 + 2, ((float)((uint)registers[i + (int)SHKModBusRegisters.AN_VALUES] >> 8)) * 100 / 256); // MSB to 0-100%
-
             }
 
             //time chart
@@ -496,12 +498,9 @@ namespace SHK_Utility
             chart1.Series["Position Raw"].Points.AddXY(now.ToOADate(), (float)registers[(int)SHKModBusRegisters.POSITION_VALUE] / 10);
             chart1.Series["Position Out"].Points.AddXY(now.ToOADate(), (float)registers[(int)SHKModBusRegisters.POSITION_VALUE_AVG] / 10);
             chart1.Series["Temperature"].Points.AddXY(now.ToOADate(), registers[(int)SHKModBusRegisters.ACT_TEMPERATURE]);
-
-
-
         }
 
-        
+
 
 
 
@@ -851,7 +850,7 @@ namespace SHK_Utility
                         groupBoxAnalog.Enabled = true;
                         numericUpDownOffset.Enabled = false;
                         groupBoxFilters.Enabled = true;
-                        
+
                         break;
                     case DialogResult.Cancel:
                         buttonLogin.Text = "&Login";
@@ -862,9 +861,10 @@ namespace SHK_Utility
                         groupBoxFilters.Enabled = false;
                         //this.Close();
                         break;
-                    
+
                 }
-            } else
+            }
+            else
             {
                 buttonLogin.Text = "&Login";
                 buttonImport.Enabled = false;
@@ -909,7 +909,7 @@ namespace SHK_Utility
             openFileDialog1.Multiselect = false;
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {   
+            {
                 using (var s = openFileDialog1.OpenFile())
                 {
                     file.Load(s);
@@ -919,7 +919,7 @@ namespace SHK_Utility
                 StringWriter contentWriter = new StringWriter();
                 //file.Save(contentWriter);
                 //string iniContent = contentWriter.ToString();
-                
+
                 foreach (var section in file.Sections)
                 {
                     contentWriter.WriteLine("[{0}]", section.Name);
@@ -952,7 +952,8 @@ namespace SHK_Utility
                         numericUpDownFilterOff.Value = ushort.Parse(file.Sections["Filters"].Keys["Signal Off Filter"].Value.ToString());
 
 
-                    } catch (Exception inie)
+                    }
+                    catch (Exception inie)
                     {
                         MessageBox.Show(inie.Message + Environment.NewLine + inie.Source + Environment.NewLine + inie.TargetSite, "INI file loading error!");
                     }
@@ -961,7 +962,7 @@ namespace SHK_Utility
                 {
                     //do something else
                 }
-                
+
 
 
             }
@@ -978,7 +979,7 @@ namespace SHK_Utility
                                     KeySpaceAroundDelimiter = true,
                                     //SectionWrapper = IniSectionWrapper.CurlyBrackets,
                                     //Encoding = Encoding.UTF8
-                                    
+
                                 });
 
 
@@ -995,7 +996,7 @@ namespace SHK_Utility
             //// Save file.
             //file.Save("Sample.ini"); 
 
-             
+
             IniSection sensorIniSection = file.Sections.Add("Sensor");
             sensorIniSection.TrailingComment.Text = "Sensor Setup";
             //sensorIniSection.TrailingComment.EmptyLinesBefore = 1;
@@ -1047,7 +1048,7 @@ namespace SHK_Utility
 
 
 
-            var filename = "SHK_Setup_" + DateTime.Now.ToString("yyyyMMddHHmm") + ".ini"; 
+            var filename = "SHK_Setup_" + DateTime.Now.ToString("yyyyMMddHHmm") + ".ini";
             saveFileDialog1.AddExtension = true;
             saveFileDialog1.DefaultExt = ".ini";
             saveFileDialog1.FileName = filename;
