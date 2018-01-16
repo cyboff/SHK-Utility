@@ -89,6 +89,8 @@ namespace SHK_Utility
         private byte slaveId = 1;
         private IModbusSerialMaster master;
         private ushort[] registers;
+        private ushort startAddress = 0;
+        private ushort numRegisters = 1;
         private int timer_counter = 0;
         private bool logFormatHex = false;
 
@@ -215,30 +217,25 @@ namespace SHK_Utility
                     // create modbus master
                     master = factory.CreateRtuMaster(adapter);
 
-                    ushort startAddress = 0;
-                    ushort numRegisters = 56;
+                    startAddress = 0;
+                    numRegisters = 1;
 
 
                     //slaveId = 2;
 
-                    // read five registers	
+                    
 
                     master.Transport.ReadTimeout = 1000;
                     try
                     {
+                        // read total number of registers first - SHKModBusRegisters.ENUM_SIZE
                         registers = master.ReadHoldingRegisters(slaveId, startAddress, numRegisters);
 
-
-                        for (int i = 0; i < numRegisters; i++)
-                        {
-                            //textBox1.AppendText($"R{startAddress + i}={registers[i]} ");
-                            textBox1.AppendText($"{registers[i]} ");
-                        }
-                        textBox1.AppendText("\r\n");
+                        numRegisters = registers[0];
+                        
+                        textBox1.AppendText($"Connected, number of registers: {numRegisters}\r\n");
 
                         // enable groups
-
-
                         buttonConnect.Text = "&Disconnect";
                         groupBoxSystemInfo.Enabled = true;
                         groupBoxIOStatus.Enabled = true;
@@ -251,35 +248,6 @@ namespace SHK_Utility
                         buttonLogin.Enabled = true;
                         buttonLogin.Text = "&Login";
                         buttonLogin.Focus();
-
-                        //chart1.ChartAreas[0].Visible = true;
-                        //chart1.ChartAreas[1].Visible = true;
-
-
-                        // load setup from registers
-                        textBoxModel.Text = "SHK01/" + registers[(int)SHKModBusRegisters.MB_MODEL_TYPE].ToString();
-                        textBoxSerial.Text = registers[(int)SHKModBusRegisters.MB_MODEL_SERIAL_NUMBER].ToString();
-                        textBoxFW.Text = registers[(int)SHKModBusRegisters.MB_FW_VERSION].ToString();
-
-
-                        comboBoxSet.SelectedIndex = registers[(int)SHKModBusRegisters.SET];
-                        comboBoxPositionMode.SelectedIndex = registers[(int)SHKModBusRegisters.POSITION_MODE];
-                        comboBoxAnalogOut.SelectedIndex = registers[(int)SHKModBusRegisters.ANALOG_OUT_MODE];
-
-                        comboBoxGain1.SelectedIndex = comboBoxGain1.FindStringExact(registers[(int)SHKModBusRegisters.GAIN_SET1].ToString());
-                        numericUpDownThre1.Value = registers[(int)SHKModBusRegisters.THRESHOLD_SET1];
-
-                        comboBoxGain2.SelectedIndex = comboBoxGain2.FindStringExact(registers[(int)SHKModBusRegisters.GAIN_SET2].ToString());
-                        numericUpDownThre2.Value = registers[(int)SHKModBusRegisters.THRESHOLD_SET2];
-
-                        numericUpDownWindowBeg.Value = registers[(int)SHKModBusRegisters.WINDOW_BEGIN];
-                        numericUpDownWindowEnd.Value = registers[(int)SHKModBusRegisters.WINDOW_END];
-                        numericUpDownOffset.Value = registers[(int)SHKModBusRegisters.POSITION_OFFSET];
-
-                        numericUpDownFilterPosition.Value = registers[(int)SHKModBusRegisters.FILTER_POSITION];
-                        numericUpDownFilterOn.Value = registers[(int)SHKModBusRegisters.FILTER_ON];
-                        numericUpDownFilterOff.Value = registers[(int)SHKModBusRegisters.FILTER_OFF];
-
 
                         if (serialPort1.BaudRate < 19200)
                         {
@@ -300,9 +268,6 @@ namespace SHK_Utility
 
                         return;
                     }
-
-
-
                 }
             }
             else
@@ -344,13 +309,11 @@ namespace SHK_Utility
 
         private void Timer1_Tick(object sender, EventArgs e)
         {
-            ushort startAddress = 0;
-            ushort numRegisters = 56;
+            
             DateTime now = DateTime.Now;
             DateTime minDate = DateTime.Now.AddMinutes(-5);
             //DateTime maxDate = DateTime.Now.AddSeconds(1);
 
-            // read five registers	
             try
             {
                 registers = master.ReadHoldingRegisters(slaveId, startAddress, numRegisters);
@@ -377,10 +340,10 @@ namespace SHK_Utility
             textBox1.AppendText("\r\n");
 
             // update setup values every 10 seconds
-            if (timer_counter > 20)
+            if (timer_counter == 0)
             {
                 // load setup from registers
-                textBoxModel.Text = "SHK01/" + registers[(int)SHKModBusRegisters.MB_MODEL_TYPE].ToString();
+                textBoxModel.Text = "SHK01-" + registers[(int)SHKModBusRegisters.MB_MODEL_TYPE].ToString();
                 textBoxSerial.Text = registers[(int)SHKModBusRegisters.MB_MODEL_SERIAL_NUMBER].ToString();
                 textBoxFW.Text = registers[(int)SHKModBusRegisters.MB_FW_VERSION].ToString();
 
@@ -403,11 +366,10 @@ namespace SHK_Utility
                 numericUpDownFilterOn.Value = registers[(int)SHKModBusRegisters.FILTER_ON];
                 numericUpDownFilterOff.Value = registers[(int)SHKModBusRegisters.FILTER_OFF];
 
-                timer_counter = 0;
             }
             else
             {
-                timer_counter++;
+                timer_counter = (timer_counter + 1) % 20;
             }
 
             for (int i = 0; i < checkedListBoxIOStatus.Items.Count; i++)
@@ -520,6 +482,7 @@ namespace SHK_Utility
                 try
                 {
                     master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.GAIN_SET1, ushort.Parse(comboBoxGain1.SelectedItem.ToString()));
+                    textBox1.AppendText("Gain1 saved!\r\n");
                 }
                 catch (Exception mbe)
                 {
@@ -537,6 +500,7 @@ namespace SHK_Utility
                 try
                 {
                     master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.GAIN_SET2, ushort.Parse(comboBoxGain2.SelectedItem.ToString()));
+                    textBox1.AppendText("Gain2 saved!\r\n");
                 }
                 catch (Exception mbe)
                 {
@@ -555,6 +519,7 @@ namespace SHK_Utility
                 try
                 {
                     master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.SET, ushort.Parse(comboBoxSet.SelectedIndex.ToString()));
+                    textBox1.AppendText("Set saved!\r\n");
                 }
                 catch (Exception mbe)
                 {
@@ -573,6 +538,7 @@ namespace SHK_Utility
                 try
                 {
                     master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.POSITION_MODE, ushort.Parse(comboBoxPositionMode.SelectedIndex.ToString()));
+                    textBox1.AppendText("Position Mode saved!\r\n");
                 }
                 catch (Exception mbe)
                 {
@@ -683,6 +649,7 @@ namespace SHK_Utility
                 try
                 {
                     master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.THRESHOLD_SET1, ushort.Parse(numericUpDownThre1.Value.ToString()));
+                    textBox1.AppendText("Threshold1 saved!\r\n");
                 }
                 catch (Exception mbe)
                 {
@@ -699,6 +666,7 @@ namespace SHK_Utility
                 try
                 {
                     master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.THRESHOLD_SET2, ushort.Parse(numericUpDownThre2.Value.ToString()));
+                    textBox1.AppendText("Threshold2 saved!\r\n");
                 }
                 catch (Exception mbe)
                 {
@@ -715,6 +683,7 @@ namespace SHK_Utility
                 try
                 {
                     master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.WINDOW_BEGIN, ushort.Parse(numericUpDownWindowBeg.Value.ToString()));
+                    textBox1.AppendText("Window Begin saved!\r\n");
                 }
                 catch (Exception mbe)
                 {
@@ -731,6 +700,7 @@ namespace SHK_Utility
                 try
                 {
                     master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.WINDOW_END, ushort.Parse(numericUpDownWindowEnd.Value.ToString()));
+                    textBox1.AppendText("Window End saved!\r\n");
                 }
                 catch (Exception mbe)
                 {
@@ -747,6 +717,7 @@ namespace SHK_Utility
                 try
                 {
                     master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.POSITION_OFFSET, ushort.Parse(numericUpDownOffset.Value.ToString()));
+                    textBox1.AppendText("Offset saved!\r\n");
                 }
                 catch (Exception mbe)
                 {
@@ -763,6 +734,7 @@ namespace SHK_Utility
                 try
                 {
                     master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.FILTER_POSITION, ushort.Parse(numericUpDownFilterPosition.Value.ToString()));
+                    textBox1.AppendText("Filter Position saved!\r\n");
                 }
                 catch (Exception mbe)
                 {
@@ -779,6 +751,7 @@ namespace SHK_Utility
                 try
                 {
                     master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.FILTER_ON, ushort.Parse(numericUpDownFilterOn.Value.ToString()));
+                    textBox1.AppendText("Filter Signal On saved!\r\n");
                 }
                 catch (Exception mbe)
                 {
@@ -795,6 +768,7 @@ namespace SHK_Utility
                 try
                 {
                     master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.FILTER_OFF, ushort.Parse(numericUpDownFilterOff.Value.ToString()));
+                    textBox1.AppendText("Filter Signal Off saved!\r\n");
                 }
                 catch (Exception mbe)
                 {
@@ -811,6 +785,7 @@ namespace SHK_Utility
                 try
                 {
                     master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.ANALOG_OUT_MODE, ushort.Parse(comboBoxAnalogOut.SelectedIndex.ToString()));
+                    textBox1.AppendText("Analog Out Mode saved!\r\n");
                 }
                 catch (Exception mbe)
                 {
@@ -998,7 +973,7 @@ namespace SHK_Utility
 
 
             IniSection sensorIniSection = file.Sections.Add("Sensor");
-            sensorIniSection.TrailingComment.Text = "Sensor Setup";
+            sensorIniSection.TrailingComment.Text = "INI file for importing/exporting SHK sensor settings\r\n\r\nSensor Setup";
             //sensorIniSection.TrailingComment.EmptyLinesBefore = 1;
             IniKey setIniKey = sensorIniSection.Keys.Add("Set", registers[(int)SHKModBusRegisters.SET].ToString());
             setIniKey.LeadingComment.Text = " RELAY = 0, MAN1 = 1, MAN2 = 2";
