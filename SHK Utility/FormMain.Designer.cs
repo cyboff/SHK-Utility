@@ -199,6 +199,7 @@
             this.chart1.Legends.Add(legend2);
             this.chart1.Location = new System.Drawing.Point(458, 131);
             this.chart1.Name = "chart1";
+            series1.BorderColor = System.Drawing.Color.Chocolate;
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Range;
             series1.Color = System.Drawing.Color.BurlyWood;
@@ -977,11 +978,6 @@
             // 
             // numericUpDownFilterPosition
             // 
-            this.numericUpDownFilterPosition.Increment = new decimal(new int[] {
-            6,
-            0,
-            0,
-            0});
             this.numericUpDownFilterPosition.Location = new System.Drawing.Point(58, 26);
             this.numericUpDownFilterPosition.Maximum = new decimal(new int[] {
             9999,
