@@ -93,6 +93,7 @@ namespace SHK_Utility
         private ushort numRegisters = 1;
         private int timer_counter = 0;
         private bool logFormatHex = false;
+        private bool settingsChanged = false;
 
 
         public FormMain()
@@ -314,6 +315,196 @@ namespace SHK_Utility
             DateTime minDate = DateTime.Now.AddMinutes(-5);
             //DateTime maxDate = DateTime.Now.AddSeconds(1);
 
+            if (settingsChanged) // update only once per tick, to avoid hang-ups
+            {
+                // check Sensor settings
+                if (registers[(int)SHKModBusRegisters.SET] != ushort.Parse(comboBoxSet.SelectedIndex.ToString()))
+                {
+                    try
+                    {
+                        master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.SET, ushort.Parse(comboBoxSet.SelectedIndex.ToString()));
+                        textBox1.AppendText("Set saved!\r\n");
+                    }
+                    catch (Exception mbe)
+                    {
+                        textBox1.AppendText(mbe.Message);
+                        textBox1.AppendText("\r\n");
+                    }
+                }
+
+                if (registers[(int)SHKModBusRegisters.GAIN_SET1] != ushort.Parse(comboBoxGain1.SelectedItem.ToString()))
+                {
+                    try
+                    {
+                        master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.GAIN_SET1, ushort.Parse(comboBoxGain1.SelectedItem.ToString()));
+                        textBox1.AppendText("Gain1 saved!\r\n");
+                    }
+                    catch (Exception mbe)
+                    {
+                        textBox1.AppendText(mbe.Message);
+                        textBox1.AppendText("\r\n");
+                    }
+                }
+
+                if (registers[(int)SHKModBusRegisters.THRESHOLD_SET1] != ushort.Parse(numericUpDownThre1.Value.ToString()))
+                {
+                    try
+                    {
+                        master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.THRESHOLD_SET1, ushort.Parse(numericUpDownThre1.Value.ToString()));
+                        textBox1.AppendText("Threshold1 saved!\r\n");
+                    }
+                    catch (Exception mbe)
+                    {
+                        textBox1.AppendText(mbe.Message);
+                        textBox1.AppendText("\r\n");
+                    }
+                }
+
+                if (registers[(int)SHKModBusRegisters.GAIN_SET2] != ushort.Parse(comboBoxGain2.SelectedItem.ToString()))
+                {
+                    try
+                    {
+                        master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.GAIN_SET2, ushort.Parse(comboBoxGain2.SelectedItem.ToString()));
+                        textBox1.AppendText("Gain2 saved!\r\n");
+                    }
+                    catch (Exception mbe)
+                    {
+                        textBox1.AppendText(mbe.Message);
+                        textBox1.AppendText("\r\n");
+                    }
+                }
+
+                if (registers[(int)SHKModBusRegisters.THRESHOLD_SET2] != ushort.Parse(numericUpDownThre2.Value.ToString()))
+                {
+                    try
+                    {
+                        master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.THRESHOLD_SET2, ushort.Parse(numericUpDownThre2.Value.ToString()));
+                        textBox1.AppendText("Threshold2 saved!\r\n");
+                    }
+                    catch (Exception mbe)
+                    {
+                        textBox1.AppendText(mbe.Message);
+                        textBox1.AppendText("\r\n");
+                    }
+                }
+
+                //check Analog settings
+                if (registers[(int)SHKModBusRegisters.ANALOG_OUT_MODE] != ushort.Parse(comboBoxAnalogOut.SelectedIndex.ToString()))
+                {
+                    try
+                    {
+                        master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.ANALOG_OUT_MODE, ushort.Parse(comboBoxAnalogOut.SelectedIndex.ToString()));
+                        textBox1.AppendText("Analog Out Mode saved!\r\n");
+                    }
+                    catch (Exception mbe)
+                    {
+                        textBox1.AppendText(mbe.Message);
+                        textBox1.AppendText("\r\n");
+                    }
+                }
+
+                if (registers[(int)SHKModBusRegisters.POSITION_MODE] != ushort.Parse(comboBoxPositionMode.SelectedIndex.ToString()))
+                {
+                    try
+                    {
+                        master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.POSITION_MODE, ushort.Parse(comboBoxPositionMode.SelectedIndex.ToString()));
+                        textBox1.AppendText("Position Mode saved!\r\n");
+                    }
+                    catch (Exception mbe)
+                    {
+                        textBox1.AppendText(mbe.Message);
+                        textBox1.AppendText("\r\n");
+                    }
+                }
+
+                if (registers[(int)SHKModBusRegisters.WINDOW_BEGIN] != ushort.Parse(numericUpDownWindowBeg.Value.ToString()))
+                {
+                    try
+                    {
+                        master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.WINDOW_BEGIN, ushort.Parse(numericUpDownWindowBeg.Value.ToString()));
+                        textBox1.AppendText("Window Begin saved!\r\n");
+                    }
+                    catch (Exception mbe)
+                    {
+                        textBox1.AppendText(mbe.Message);
+                        textBox1.AppendText("\r\n");
+                    }
+                }
+
+                if (registers[(int)SHKModBusRegisters.WINDOW_END] != ushort.Parse(numericUpDownWindowEnd.Value.ToString()))
+                {
+                    try
+                    {
+                        master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.WINDOW_END, ushort.Parse(numericUpDownWindowEnd.Value.ToString()));
+                        textBox1.AppendText("Window End saved!\r\n");
+                    }
+                    catch (Exception mbe)
+                    {
+                        textBox1.AppendText(mbe.Message);
+                        textBox1.AppendText("\r\n");
+                    }
+                }
+
+                if (registers[(int)SHKModBusRegisters.POSITION_OFFSET] != ushort.Parse(numericUpDownOffset.Value.ToString()))
+                {
+                    try
+                    {
+                        master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.POSITION_OFFSET, ushort.Parse(numericUpDownOffset.Value.ToString()));
+                        textBox1.AppendText("Offset saved!\r\n");
+                    }
+                    catch (Exception mbe)
+                    {
+                        textBox1.AppendText(mbe.Message);
+                        textBox1.AppendText("\r\n");
+                    }
+                }
+
+                //check Filter settings
+                if (registers[(int)SHKModBusRegisters.FILTER_POSITION] != ushort.Parse(numericUpDownFilterPosition.Value.ToString()))
+                {
+                    try
+                    {
+                        master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.FILTER_POSITION, ushort.Parse(numericUpDownFilterPosition.Value.ToString()));
+                        textBox1.AppendText("Filter Position saved!\r\n");
+                    }
+                    catch (Exception mbe)
+                    {
+                        textBox1.AppendText(mbe.Message);
+                        textBox1.AppendText("\r\n");
+                    }
+                }
+
+                if (registers[(int)SHKModBusRegisters.FILTER_ON] != ushort.Parse(numericUpDownFilterOn.Value.ToString()))
+                {
+                    try
+                    {
+                        master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.FILTER_ON, ushort.Parse(numericUpDownFilterOn.Value.ToString()));
+                        textBox1.AppendText("Filter Signal On saved!\r\n");
+                    }
+                    catch (Exception mbe)
+                    {
+                        textBox1.AppendText(mbe.Message);
+                        textBox1.AppendText("\r\n");
+                    }
+                }
+
+                if (registers[(int)SHKModBusRegisters.FILTER_OFF] != ushort.Parse(numericUpDownFilterOff.Value.ToString()))
+                {
+                    try
+                    {
+                        master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.FILTER_OFF, ushort.Parse(numericUpDownFilterOff.Value.ToString()));
+                        textBox1.AppendText("Filter Signal Off saved!\r\n");
+                    }
+                    catch (Exception mbe)
+                    {
+                        textBox1.AppendText(mbe.Message);
+                        textBox1.AppendText("\r\n");
+                    }
+                }
+
+                settingsChanged = false;
+            }
+
             try
             {
                 registers = master.ReadHoldingRegisters(slaveId, startAddress, numRegisters);
@@ -477,75 +668,27 @@ namespace SHK_Utility
 
         private void ComboBoxGain1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (registers[(int)SHKModBusRegisters.GAIN_SET1] != ushort.Parse(comboBoxGain1.SelectedItem.ToString()))
-            {
-                try
-                {
-                    master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.GAIN_SET1, ushort.Parse(comboBoxGain1.SelectedItem.ToString()));
-                    textBox1.AppendText("Gain1 saved!\r\n");
-                }
-                catch (Exception mbe)
-                {
-                    textBox1.AppendText(mbe.Message);
-                    textBox1.AppendText("\r\n");
-                }
-            }
+            settingsChanged = true;
         }
 
 
         private void ComboBoxGain2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (registers[(int)SHKModBusRegisters.GAIN_SET2] != ushort.Parse(comboBoxGain2.SelectedItem.ToString()))
-            {
-                try
-                {
-                    master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.GAIN_SET2, ushort.Parse(comboBoxGain2.SelectedItem.ToString()));
-                    textBox1.AppendText("Gain2 saved!\r\n");
-                }
-                catch (Exception mbe)
-                {
-                    textBox1.AppendText(mbe.Message);
-                    textBox1.AppendText("\r\n");
-                }
-            }
+            settingsChanged = true;
         }
 
 
 
         private void ComboBoxSet_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (registers[(int)SHKModBusRegisters.SET] != ushort.Parse(comboBoxSet.SelectedIndex.ToString()))
-            {
-                try
-                {
-                    master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.SET, ushort.Parse(comboBoxSet.SelectedIndex.ToString()));
-                    textBox1.AppendText("Set saved!\r\n");
-                }
-                catch (Exception mbe)
-                {
-                    textBox1.AppendText(mbe.Message);
-                    textBox1.AppendText("\r\n");
-                }
-            }
+            settingsChanged = true;
         }
 
 
 
         private void ComboBoxPositionMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (registers[(int)SHKModBusRegisters.POSITION_MODE] != ushort.Parse(comboBoxPositionMode.SelectedIndex.ToString()))
-            {
-                try
-                {
-                    master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.POSITION_MODE, ushort.Parse(comboBoxPositionMode.SelectedIndex.ToString()));
-                    textBox1.AppendText("Position Mode saved!\r\n");
-                }
-                catch (Exception mbe)
-                {
-                    textBox1.AppendText(mbe.Message);
-                    textBox1.AppendText("\r\n");
-                }
-            }
+            settingsChanged = true;
         }
 
 
@@ -644,155 +787,47 @@ namespace SHK_Utility
 
         private void NumericUpDownThre1_ValueChanged(object sender, EventArgs e)
         {
-            if (registers[(int)SHKModBusRegisters.THRESHOLD_SET1] != ushort.Parse(numericUpDownThre1.Value.ToString()))
-            {
-                try
-                {
-                    master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.THRESHOLD_SET1, ushort.Parse(numericUpDownThre1.Value.ToString()));
-                    textBox1.AppendText("Threshold1 saved!\r\n");
-                }
-                catch (Exception mbe)
-                {
-                    textBox1.AppendText(mbe.Message);
-                    textBox1.AppendText("\r\n");
-                }
-            }
+            settingsChanged = true;
         }
 
         private void NumericUpDownThre2_ValueChanged(object sender, EventArgs e)
         {
-            if (registers[(int)SHKModBusRegisters.THRESHOLD_SET2] != ushort.Parse(numericUpDownThre2.Value.ToString()))
-            {
-                try
-                {
-                    master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.THRESHOLD_SET2, ushort.Parse(numericUpDownThre2.Value.ToString()));
-                    textBox1.AppendText("Threshold2 saved!\r\n");
-                }
-                catch (Exception mbe)
-                {
-                    textBox1.AppendText(mbe.Message);
-                    textBox1.AppendText("\r\n");
-                }
-            }
+            settingsChanged = true;
         }
 
         private void NumericUpDownWindowBeg_ValueChanged(object sender, EventArgs e)
         {
-            if (registers[(int)SHKModBusRegisters.WINDOW_BEGIN] != ushort.Parse(numericUpDownWindowBeg.Value.ToString()))
-            {
-                try
-                {
-                    master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.WINDOW_BEGIN, ushort.Parse(numericUpDownWindowBeg.Value.ToString()));
-                    textBox1.AppendText("Window Begin saved!\r\n");
-                }
-                catch (Exception mbe)
-                {
-                    textBox1.AppendText(mbe.Message);
-                    textBox1.AppendText("\r\n");
-                }
-            }
+            settingsChanged = true;
         }
 
         private void NumericUpDownWindowEnd_ValueChanged(object sender, EventArgs e)
         {
-            if (registers[(int)SHKModBusRegisters.WINDOW_END] != ushort.Parse(numericUpDownWindowEnd.Value.ToString()))
-            {
-                try
-                {
-                    master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.WINDOW_END, ushort.Parse(numericUpDownWindowEnd.Value.ToString()));
-                    textBox1.AppendText("Window End saved!\r\n");
-                }
-                catch (Exception mbe)
-                {
-                    textBox1.AppendText(mbe.Message);
-                    textBox1.AppendText("\r\n");
-                }
-            }
+            settingsChanged = true;
         }
 
         private void NumericUpDownOffset_ValueChanged(object sender, EventArgs e)
         {
-            if (registers[(int)SHKModBusRegisters.POSITION_OFFSET] != ushort.Parse(numericUpDownOffset.Value.ToString()))
-            {
-                try
-                {
-                    master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.POSITION_OFFSET, ushort.Parse(numericUpDownOffset.Value.ToString()));
-                    textBox1.AppendText("Offset saved!\r\n");
-                }
-                catch (Exception mbe)
-                {
-                    textBox1.AppendText(mbe.Message);
-                    textBox1.AppendText("\r\n");
-                }
-            }
+            settingsChanged = true;
         }
 
         private void NumericUpDownFilterPosition_ValueChanged(object sender, EventArgs e)
         {
-            if (registers[(int)SHKModBusRegisters.FILTER_POSITION] != ushort.Parse(numericUpDownFilterPosition.Value.ToString()))
-            {
-                try
-                {
-                    master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.FILTER_POSITION, ushort.Parse(numericUpDownFilterPosition.Value.ToString()));
-                    textBox1.AppendText("Filter Position saved!\r\n");
-                }
-                catch (Exception mbe)
-                {
-                    textBox1.AppendText(mbe.Message);
-                    textBox1.AppendText("\r\n");
-                }
-            }
+            settingsChanged = true;
         }
 
         private void NumericUpDownFilterOn_ValueChanged(object sender, EventArgs e)
         {
-            if (registers[(int)SHKModBusRegisters.FILTER_ON] != ushort.Parse(numericUpDownFilterOn.Value.ToString()))
-            {
-                try
-                {
-                    master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.FILTER_ON, ushort.Parse(numericUpDownFilterOn.Value.ToString()));
-                    textBox1.AppendText("Filter Signal On saved!\r\n");
-                }
-                catch (Exception mbe)
-                {
-                    textBox1.AppendText(mbe.Message);
-                    textBox1.AppendText("\r\n");
-                }
-            }
+            settingsChanged = true;
         }
 
         private void NumericUpDownFilterOff_ValueChanged(object sender, EventArgs e)
         {
-            if (registers[(int)SHKModBusRegisters.FILTER_OFF] != ushort.Parse(numericUpDownFilterOff.Value.ToString()))
-            {
-                try
-                {
-                    master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.FILTER_OFF, ushort.Parse(numericUpDownFilterOff.Value.ToString()));
-                    textBox1.AppendText("Filter Signal Off saved!\r\n");
-                }
-                catch (Exception mbe)
-                {
-                    textBox1.AppendText(mbe.Message);
-                    textBox1.AppendText("\r\n");
-                }
-            }
+            settingsChanged = true;
         }
 
         private void ComboBoxAnalogOut_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (registers[(int)SHKModBusRegisters.ANALOG_OUT_MODE] != ushort.Parse(comboBoxAnalogOut.SelectedIndex.ToString()))
-            {
-                try
-                {
-                    master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.ANALOG_OUT_MODE, ushort.Parse(comboBoxAnalogOut.SelectedIndex.ToString()));
-                    textBox1.AppendText("Analog Out Mode saved!\r\n");
-                }
-                catch (Exception mbe)
-                {
-                    textBox1.AppendText(mbe.Message);
-                    textBox1.AppendText("\r\n");
-                }
-            }
+            settingsChanged = true;
         }
 
         private void ButtonLogin_Click(object sender, EventArgs e)
