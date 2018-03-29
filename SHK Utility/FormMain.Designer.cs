@@ -45,10 +45,10 @@
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.buttonConnect = new System.Windows.Forms.Button();
-            this.comboBoxPorts = new System.Windows.Forms.ComboBox();
+            this.comboBoxComPorts = new System.Windows.Forms.ComboBox();
             this.comboBoxBaudrates = new System.Windows.Forms.ComboBox();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBoxLog = new System.Windows.Forms.TextBox();
             this.comboBoxGain1 = new System.Windows.Forms.ComboBox();
             this.labelGain1 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -71,7 +71,7 @@
             this.comboBoxSet = new System.Windows.Forms.ComboBox();
             this.comboBoxPositionMode = new System.Windows.Forms.ComboBox();
             this.label14 = new System.Windows.Forms.Label();
-            this.groupBoxRTU = new System.Windows.Forms.GroupBox();
+            this.groupBoxSerial = new System.Windows.Forms.GroupBox();
             this.checkedListBoxIOStatus = new System.Windows.Forms.CheckedListBox();
             this.groupBoxLaser = new System.Windows.Forms.GroupBox();
             this.radioButtonLaserOff = new System.Windows.Forms.RadioButton();
@@ -131,8 +131,17 @@
             this.buttonExport = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.groupBoxMode = new System.Windows.Forms.GroupBox();
+            this.radioButtonUDP = new System.Windows.Forms.RadioButton();
+            this.radioButtonTCP = new System.Windows.Forms.RadioButton();
+            this.radioButtonSerial = new System.Windows.Forms.RadioButton();
+            this.groupBoxTCP = new System.Windows.Forms.GroupBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
+            this.textBoxPort = new System.Windows.Forms.TextBox();
+            this.textBoxIP = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
-            this.groupBoxRTU.SuspendLayout();
+            this.groupBoxSerial.SuspendLayout();
             this.groupBoxLaser.SuspendLayout();
             this.groupBoxIOStatus.SuspendLayout();
             this.groupBoxTest.SuspendLayout();
@@ -150,6 +159,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilterPosition)).BeginInit();
             this.groupBoxActValues.SuspendLayout();
             this.groupBoxSystemInfo.SuspendLayout();
+            this.groupBoxMode.SuspendLayout();
+            this.groupBoxTCP.SuspendLayout();
             this.SuspendLayout();
             // 
             // chart1
@@ -253,7 +264,7 @@
             this.chart1.Series.Add(series6);
             this.chart1.Series.Add(series7);
             this.chart1.Series.Add(series8);
-            this.chart1.Size = new System.Drawing.Size(510, 409);
+            this.chart1.Size = new System.Drawing.Size(514, 409);
             this.chart1.TabIndex = 2;
             this.chart1.Text = "chart1";
             // 
@@ -271,24 +282,24 @@
             this.buttonConnect.UseVisualStyleBackColor = true;
             this.buttonConnect.Click += new System.EventHandler(this.buttonConnect_Click);
             // 
-            // comboBoxPorts
+            // comboBoxComPorts
             // 
-            this.comboBoxPorts.AllowDrop = true;
-            this.comboBoxPorts.AutoCompleteCustomSource.AddRange(new string[] {
+            this.comboBoxComPorts.AllowDrop = true;
+            this.comboBoxComPorts.AutoCompleteCustomSource.AddRange(new string[] {
             "COM1",
             "COM2"});
-            this.comboBoxPorts.FormattingEnabled = true;
-            this.comboBoxPorts.Items.AddRange(new object[] {
+            this.comboBoxComPorts.FormattingEnabled = true;
+            this.comboBoxComPorts.Items.AddRange(new object[] {
             "COM1",
             "COM2",
             "COM3",
             "COM4"});
-            this.comboBoxPorts.Location = new System.Drawing.Point(67, 16);
-            this.comboBoxPorts.Name = "comboBoxPorts";
-            this.comboBoxPorts.Size = new System.Drawing.Size(69, 21);
-            this.comboBoxPorts.Sorted = true;
-            this.comboBoxPorts.TabIndex = 7;
-            this.comboBoxPorts.DropDown += new System.EventHandler(this.ComboBoxPorts_DropDown);
+            this.comboBoxComPorts.Location = new System.Drawing.Point(67, 16);
+            this.comboBoxComPorts.Name = "comboBoxComPorts";
+            this.comboBoxComPorts.Size = new System.Drawing.Size(69, 21);
+            this.comboBoxComPorts.Sorted = true;
+            this.comboBoxComPorts.TabIndex = 7;
+            this.comboBoxComPorts.DropDown += new System.EventHandler(this.ComboBoxComPorts_DropDown);
             // 
             // comboBoxBaudrates
             // 
@@ -308,18 +319,18 @@
             this.comboBoxBaudrates.Size = new System.Drawing.Size(68, 21);
             this.comboBoxBaudrates.TabIndex = 8;
             // 
-            // textBox1
+            // textBoxLog
             // 
-            this.textBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.textBox1.Location = new System.Drawing.Point(0, 546);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox1.Size = new System.Drawing.Size(980, 87);
-            this.textBox1.TabIndex = 10;
-            this.textBox1.WordWrap = false;
-            this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
+            this.textBoxLog.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.textBoxLog.Location = new System.Drawing.Point(0, 546);
+            this.textBoxLog.Multiline = true;
+            this.textBoxLog.Name = "textBoxLog";
+            this.textBoxLog.ReadOnly = true;
+            this.textBoxLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textBoxLog.Size = new System.Drawing.Size(984, 87);
+            this.textBoxLog.TabIndex = 10;
+            this.textBoxLog.WordWrap = false;
+            this.textBoxLog.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
             // 
             // comboBoxGain1
             // 
@@ -591,24 +602,24 @@
             this.label14.TabIndex = 38;
             this.label14.Text = "Position Mode:";
             // 
-            // groupBoxRTU
+            // groupBoxSerial
             // 
-            this.groupBoxRTU.Controls.Add(this.comboBoxDataBits);
-            this.groupBoxRTU.Controls.Add(this.comboBoxPorts);
-            this.groupBoxRTU.Controls.Add(this.comboBoxBaudrates);
-            this.groupBoxRTU.Controls.Add(this.label1);
-            this.groupBoxRTU.Controls.Add(this.label2);
-            this.groupBoxRTU.Controls.Add(this.comboBoxParity);
-            this.groupBoxRTU.Controls.Add(this.label3);
-            this.groupBoxRTU.Controls.Add(this.comboBoxStopBits);
-            this.groupBoxRTU.Controls.Add(this.label4);
-            this.groupBoxRTU.Controls.Add(this.label5);
-            this.groupBoxRTU.Location = new System.Drawing.Point(150, 12);
-            this.groupBoxRTU.Name = "groupBoxRTU";
-            this.groupBoxRTU.Size = new System.Drawing.Size(566, 43);
-            this.groupBoxRTU.TabIndex = 39;
-            this.groupBoxRTU.TabStop = false;
-            this.groupBoxRTU.Text = "RTU";
+            this.groupBoxSerial.Controls.Add(this.comboBoxDataBits);
+            this.groupBoxSerial.Controls.Add(this.comboBoxComPorts);
+            this.groupBoxSerial.Controls.Add(this.comboBoxBaudrates);
+            this.groupBoxSerial.Controls.Add(this.label1);
+            this.groupBoxSerial.Controls.Add(this.label2);
+            this.groupBoxSerial.Controls.Add(this.comboBoxParity);
+            this.groupBoxSerial.Controls.Add(this.label3);
+            this.groupBoxSerial.Controls.Add(this.comboBoxStopBits);
+            this.groupBoxSerial.Controls.Add(this.label4);
+            this.groupBoxSerial.Controls.Add(this.label5);
+            this.groupBoxSerial.Location = new System.Drawing.Point(150, 12);
+            this.groupBoxSerial.Name = "groupBoxSerial";
+            this.groupBoxSerial.Size = new System.Drawing.Size(566, 43);
+            this.groupBoxSerial.TabIndex = 39;
+            this.groupBoxSerial.TabStop = false;
+            this.groupBoxSerial.Text = "Serial";
             // 
             // checkedListBoxIOStatus
             // 
@@ -1343,11 +1354,107 @@
             this.saveFileDialog1.InitialDirectory = ".";
             this.saveFileDialog1.Title = "Save as INI file";
             // 
+            // groupBoxMode
+            // 
+            this.groupBoxMode.Controls.Add(this.radioButtonUDP);
+            this.groupBoxMode.Controls.Add(this.radioButtonTCP);
+            this.groupBoxMode.Controls.Add(this.radioButtonSerial);
+            this.groupBoxMode.Location = new System.Drawing.Point(10, 12);
+            this.groupBoxMode.Name = "groupBoxMode";
+            this.groupBoxMode.Size = new System.Drawing.Size(134, 92);
+            this.groupBoxMode.TabIndex = 71;
+            this.groupBoxMode.TabStop = false;
+            this.groupBoxMode.Text = "Modbus Mode";
+            // 
+            // radioButtonUDP
+            // 
+            this.radioButtonUDP.AutoSize = true;
+            this.radioButtonUDP.Location = new System.Drawing.Point(25, 65);
+            this.radioButtonUDP.Name = "radioButtonUDP";
+            this.radioButtonUDP.Size = new System.Drawing.Size(48, 17);
+            this.radioButtonUDP.TabIndex = 2;
+            this.radioButtonUDP.Text = "UDP";
+            this.radioButtonUDP.UseVisualStyleBackColor = true;
+            this.radioButtonUDP.CheckedChanged += new System.EventHandler(this.radioButtonUDP_CheckedChanged);
+            // 
+            // radioButtonTCP
+            // 
+            this.radioButtonTCP.AutoSize = true;
+            this.radioButtonTCP.Location = new System.Drawing.Point(25, 40);
+            this.radioButtonTCP.Name = "radioButtonTCP";
+            this.radioButtonTCP.Size = new System.Drawing.Size(46, 17);
+            this.radioButtonTCP.TabIndex = 1;
+            this.radioButtonTCP.Text = "TCP";
+            this.radioButtonTCP.UseVisualStyleBackColor = true;
+            this.radioButtonTCP.CheckedChanged += new System.EventHandler(this.radioButtonTCP_CheckedChanged);
+            // 
+            // radioButtonSerial
+            // 
+            this.radioButtonSerial.AutoSize = true;
+            this.radioButtonSerial.Checked = true;
+            this.radioButtonSerial.Location = new System.Drawing.Point(25, 17);
+            this.radioButtonSerial.Name = "radioButtonSerial";
+            this.radioButtonSerial.Size = new System.Drawing.Size(77, 17);
+            this.radioButtonSerial.TabIndex = 0;
+            this.radioButtonSerial.TabStop = true;
+            this.radioButtonSerial.Text = "Serial RTU";
+            this.radioButtonSerial.UseVisualStyleBackColor = true;
+            this.radioButtonSerial.CheckedChanged += new System.EventHandler(this.radioButtonSerial_CheckedChanged);
+            // 
+            // groupBoxTCP
+            // 
+            this.groupBoxTCP.Controls.Add(this.label22);
+            this.groupBoxTCP.Controls.Add(this.label21);
+            this.groupBoxTCP.Controls.Add(this.textBoxPort);
+            this.groupBoxTCP.Controls.Add(this.textBoxIP);
+            this.groupBoxTCP.Location = new System.Drawing.Point(150, 61);
+            this.groupBoxTCP.Name = "groupBoxTCP";
+            this.groupBoxTCP.Size = new System.Drawing.Size(566, 43);
+            this.groupBoxTCP.TabIndex = 72;
+            this.groupBoxTCP.TabStop = false;
+            this.groupBoxTCP.Text = "TCP";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(185, 18);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(29, 13);
+            this.label22.TabIndex = 3;
+            this.label22.Text = "Port:";
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(6, 18);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(61, 13);
+            this.label21.TabIndex = 2;
+            this.label21.Text = "IP Address:";
+            // 
+            // textBoxPort
+            // 
+            this.textBoxPort.Location = new System.Drawing.Point(220, 15);
+            this.textBoxPort.Name = "textBoxPort";
+            this.textBoxPort.Size = new System.Drawing.Size(60, 20);
+            this.textBoxPort.TabIndex = 1;
+            this.textBoxPort.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // textBoxIP
+            // 
+            this.textBoxIP.Location = new System.Drawing.Point(67, 15);
+            this.textBoxIP.Name = "textBoxIP";
+            this.textBoxIP.Size = new System.Drawing.Size(99, 20);
+            this.textBoxIP.TabIndex = 0;
+            this.textBoxIP.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(980, 633);
+            this.ClientSize = new System.Drawing.Size(984, 633);
+            this.Controls.Add(this.groupBoxTCP);
+            this.Controls.Add(this.groupBoxMode);
             this.Controls.Add(this.buttonExport);
             this.Controls.Add(this.buttonImport);
             this.Controls.Add(this.buttonLogin);
@@ -1360,18 +1467,19 @@
             this.Controls.Add(this.groupBoxTest);
             this.Controls.Add(this.groupBoxIOStatus);
             this.Controls.Add(this.groupBoxLaser);
-            this.Controls.Add(this.groupBoxRTU);
+            this.Controls.Add(this.groupBoxSerial);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.textBoxLog);
             this.Controls.Add(this.buttonConnect);
             this.Controls.Add(this.chart1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(985, 620);
             this.Name = "FormMain";
             this.Text = "SHK Utility";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
-            this.groupBoxRTU.ResumeLayout(false);
-            this.groupBoxRTU.PerformLayout();
+            this.groupBoxSerial.ResumeLayout(false);
+            this.groupBoxSerial.PerformLayout();
             this.groupBoxLaser.ResumeLayout(false);
             this.groupBoxLaser.PerformLayout();
             this.groupBoxIOStatus.ResumeLayout(false);
@@ -1396,6 +1504,10 @@
             this.groupBoxActValues.PerformLayout();
             this.groupBoxSystemInfo.ResumeLayout(false);
             this.groupBoxSystemInfo.PerformLayout();
+            this.groupBoxMode.ResumeLayout(false);
+            this.groupBoxMode.PerformLayout();
+            this.groupBoxTCP.ResumeLayout(false);
+            this.groupBoxTCP.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1405,10 +1517,10 @@
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Button buttonConnect;
-        private System.Windows.Forms.ComboBox comboBoxPorts;
+        private System.Windows.Forms.ComboBox comboBoxComPorts;
         private System.Windows.Forms.ComboBox comboBoxBaudrates;
         private System.IO.Ports.SerialPort serialPort1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBoxLog;
         private System.Windows.Forms.ComboBox comboBoxGain1;
         private System.Windows.Forms.Label labelGain1;
         private System.Windows.Forms.Label label1;
@@ -1431,7 +1543,7 @@
         private System.Windows.Forms.ComboBox comboBoxSet;
         private System.Windows.Forms.ComboBox comboBoxPositionMode;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.GroupBox groupBoxRTU;
+        private System.Windows.Forms.GroupBox groupBoxSerial;
         private System.Windows.Forms.CheckedListBox checkedListBoxIOStatus;
         private System.Windows.Forms.GroupBox groupBoxLaser;
         private System.Windows.Forms.RadioButton radioButtonLaserOff;
@@ -1491,6 +1603,15 @@
         private System.Windows.Forms.Button buttonExport;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.GroupBox groupBoxMode;
+        private System.Windows.Forms.RadioButton radioButtonUDP;
+        private System.Windows.Forms.RadioButton radioButtonTCP;
+        private System.Windows.Forms.RadioButton radioButtonSerial;
+        private System.Windows.Forms.GroupBox groupBoxTCP;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.TextBox textBoxPort;
+        private System.Windows.Forms.TextBox textBoxIP;
     }
 }
 
