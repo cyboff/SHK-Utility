@@ -14,6 +14,7 @@ using System.Net;
 using System.Net.Sockets;
 using NModbus;
 using NModbus.Serial;
+using NModbus.IO;
 using MadMilkman.Ini;
 
 
@@ -230,6 +231,26 @@ namespace SHK_Utility
 
                 }
 
+                if (radioButtonRTUTCP.Checked)
+                {
+
+                    try
+                    {
+                        tcpclient = new TcpClient(textBoxIP.Text, Int32.Parse(textBoxPort.Text));
+
+                        var adapter = new TcpClientAdapter(tcpclient); // for Modbus/RTU over TCP protocol
+                        master = factory.CreateRtuMaster(adapter);
+                        //master = factory.CreateMaster(tcpclient); // for Modbus/TCP protocol
+
+                        textBoxLog.AppendText($"Connecting using Modbus/TCP to {textBoxIP.Text}:{textBoxPort.Text}\r\n");
+                    }
+                    catch
+                    {
+                        MessageBox.Show($"Unable to connect to {textBoxIP.Text}:{textBoxPort.Text} using Modbus/TCP");
+                        return;
+                    }
+                }
+
                 if (radioButtonTCP.Checked)
                 {
 
@@ -237,7 +258,7 @@ namespace SHK_Utility
                     {
                         tcpclient = new TcpClient(textBoxIP.Text, Int32.Parse(textBoxPort.Text));
 
-                        master = factory.CreateMaster(tcpclient);
+                        master = factory.CreateMaster(tcpclient); // for Modbus/TCP protocol
 
                         textBoxLog.AppendText($"Connecting using Modbus/TCP to {textBoxIP.Text}:{textBoxPort.Text}\r\n");
                     }
@@ -1212,6 +1233,20 @@ namespace SHK_Utility
         private void radioButtonUDP_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButtonUDP.Checked)
+            {
+                groupBoxSerial.Enabled = false;
+                groupBoxTCP.Enabled = true;
+            }
+            else
+            {
+                groupBoxSerial.Enabled = true;
+                groupBoxTCP.Enabled = false;
+            }
+        }
+
+        private void radioButtonRTUTCP_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonRTUTCP.Checked)
             {
                 groupBoxSerial.Enabled = false;
                 groupBoxTCP.Enabled = true;
