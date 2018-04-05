@@ -88,7 +88,7 @@ namespace SHK_Utility
     public partial class FormMain : Form
     {
 
-        private SerialPortAdapter adapter;
+        //private SerialPortAdapter adapter;
         private TcpClient tcpclient;
         private UdpClient udpclient;
         private IPEndPoint endPoint;
@@ -210,7 +210,6 @@ namespace SHK_Utility
                     }
 
 
-
                     try
                     {
                         serialPort1.PortName = comboBoxComPorts.SelectedItem.ToString();
@@ -223,11 +222,11 @@ namespace SHK_Utility
                     }
 
 
-                    adapter = new SerialPortAdapter(serialPort1);
+                    var adapter = new SerialPortAdapter(serialPort1);
 
                     // create modbus master
                     master = factory.CreateRtuMaster(adapter);
-                    textBoxLog.AppendText($"Connecting using Modbus RTU on {serialPort1.PortName}\r\n");
+                    textBoxLog.AppendText($"Connecting using Modbus/RTU via {serialPort1.PortName}\r\n");
 
                 }
 
@@ -240,13 +239,33 @@ namespace SHK_Utility
 
                         var adapter = new TcpClientAdapter(tcpclient); // for Modbus/RTU over TCP protocol
                         master = factory.CreateRtuMaster(adapter);
-                        //master = factory.CreateMaster(tcpclient); // for Modbus/TCP protocol
 
-                        textBoxLog.AppendText($"Connecting using Modbus/TCP to {textBoxIP.Text}:{textBoxPort.Text}\r\n");
+                        textBoxLog.AppendText($"Connecting using Modbus/RTU over TCP to {textBoxIP.Text}:{textBoxPort.Text}\r\n");
                     }
                     catch
                     {
-                        MessageBox.Show($"Unable to connect to {textBoxIP.Text}:{textBoxPort.Text} using Modbus/TCP");
+                        MessageBox.Show($"Unable to connect to {textBoxIP.Text}:{textBoxPort.Text} using Modbus/RTU over TCP");
+                        return;
+                    }
+                }
+
+                if (radioButtonRTUUDP.Checked)
+                {
+
+                    try
+                    {
+                        udpclient = new UdpClient();
+                        endPoint = new IPEndPoint(IPAddress.Parse(textBoxIP.Text), Int32.Parse(textBoxPort.Text));
+                        udpclient.Connect(endPoint);
+
+                        var adapter = new UdpClientAdapter(udpclient); // for Modbus/RTU over UDP protocol
+                        master = factory.CreateRtuMaster(adapter);
+
+                        textBoxLog.AppendText($"Connecting using Modbus/RTU over UDP to {textBoxIP.Text}:{textBoxPort.Text}\r\n");
+                    }
+                    catch
+                    {
+                        MessageBox.Show($"Unable to connect to {textBoxIP.Text}:{textBoxPort.Text} using Modbus/RTU over TCP");
                         return;
                     }
                 }
@@ -276,7 +295,6 @@ namespace SHK_Utility
                     {
                         udpclient = new UdpClient();
                         endPoint = new IPEndPoint(IPAddress.Parse(textBoxIP.Text), Int32.Parse(textBoxPort.Text));
-                        //IPEndPoint endPoint = new IPEndPoint(new IPAddress(new byte[] { 127, 0, 0, 1 }), 502);
                         udpclient.Connect(endPoint);
                         
                         master = factory.CreateMaster(udpclient);
@@ -297,9 +315,10 @@ namespace SHK_Utility
                     slaveId = byte.Parse(numericUpDownID.Value.ToString());
 
                     startAddress = 0;
-                    numRegisters = 1;
+                    numRegisters = 7;
 
-                    master.Transport.ReadTimeout = 1000;
+                    master.Transport.ReadTimeout = 2000;
+                    master.Transport.WriteTimeout = 2000;
 
                     // read total number of registers first - SHKModBusRegisters.ENUM_SIZE
                     registers = master.ReadHoldingRegisters(slaveId, startAddress, numRegisters);
@@ -324,7 +343,7 @@ namespace SHK_Utility
                     buttonLogin.Text = "&Login";
                     buttonLogin.Focus();
 
-                    if (serialPort1.BaudRate < 19200)
+                    if (registers[(int)SHKModBusRegisters.MODBUS_SPEED] * 100 < 19200)
                     {
                         timer1.Interval = 2000;
                     }
@@ -332,6 +351,7 @@ namespace SHK_Utility
                     {
                         timer1.Interval = 500;
                     }
+
                     timer1.Start();
                 }
                 catch (Exception mbe)
@@ -361,14 +381,9 @@ namespace SHK_Utility
                     }
                 }
 
-                if (master != null)
-                {
-                    master.Dispose();
-                    master = null;
-                }
-
                 if (tcpclient != null)
                 {
+                    tcpclient.GetStream().Close();
                     tcpclient.Close();
                     tcpclient.Dispose();
                     tcpclient = null;
@@ -379,6 +394,13 @@ namespace SHK_Utility
                     udpclient.Close();
                     udpclient.Dispose();
                     udpclient = null;
+                }
+
+                if (master != null)
+                {
+                    master.Transport.Dispose();
+                    master.Dispose();
+                    master = null;
                 }
 
                 buttonConnect.Text = "&Connect";
@@ -1247,6 +1269,20 @@ namespace SHK_Utility
         private void radioButtonRTUTCP_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButtonRTUTCP.Checked)
+            {
+                groupBoxSerial.Enabled = false;
+                groupBoxTCP.Enabled = true;
+            }
+            else
+            {
+                groupBoxSerial.Enabled = true;
+                groupBoxTCP.Enabled = false;
+            }
+        }
+
+        private void radioButtonRTUUDP_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonRTUUDP.Checked)
             {
                 groupBoxSerial.Enabled = false;
                 groupBoxTCP.Enabled = true;
