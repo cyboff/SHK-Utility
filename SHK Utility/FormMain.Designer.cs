@@ -132,6 +132,7 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.groupBoxMode = new System.Windows.Forms.GroupBox();
+            this.radioButtonRTUUDP = new System.Windows.Forms.RadioButton();
             this.radioButtonRTUTCP = new System.Windows.Forms.RadioButton();
             this.radioButtonUDP = new System.Windows.Forms.RadioButton();
             this.radioButtonTCP = new System.Windows.Forms.RadioButton();
@@ -141,7 +142,7 @@
             this.label21 = new System.Windows.Forms.Label();
             this.textBoxPort = new System.Windows.Forms.TextBox();
             this.textBoxIP = new System.Windows.Forms.TextBox();
-            this.radioButtonRTUUDP = new System.Windows.Forms.RadioButton();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.groupBoxSerial.SuspendLayout();
             this.groupBoxLaser.SuspendLayout();
@@ -171,6 +172,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chart1.BackColor = System.Drawing.SystemColors.Menu;
+            this.chart1.BorderlineColor = System.Drawing.SystemColors.ControlLight;
             chartArea1.AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.True;
             chartArea1.AxisX.Interval = 10D;
             chartArea1.AxisX.Maximum = 100D;
@@ -197,7 +199,6 @@
             chartArea2.Name = "ChartArea2";
             this.chart1.ChartAreas.Add(chartArea1);
             this.chart1.ChartAreas.Add(chartArea2);
-            this.chart1.Enabled = false;
             legend1.Alignment = System.Drawing.StringAlignment.Center;
             legend1.DockedToChartArea = "ChartArea1";
             legend1.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
@@ -210,7 +211,7 @@
             legend2.Name = "Legend2";
             this.chart1.Legends.Add(legend1);
             this.chart1.Legends.Add(legend2);
-            this.chart1.Location = new System.Drawing.Point(458, 121);
+            this.chart1.Location = new System.Drawing.Point(458, 111);
             this.chart1.Name = "chart1";
             series1.BorderColor = System.Drawing.Color.Chocolate;
             series1.ChartArea = "ChartArea1";
@@ -266,9 +267,11 @@
             this.chart1.Series.Add(series6);
             this.chart1.Series.Add(series7);
             this.chart1.Series.Add(series8);
-            this.chart1.Size = new System.Drawing.Size(506, 417);
+            this.chart1.Size = new System.Drawing.Size(506, 435);
             this.chart1.TabIndex = 2;
             this.chart1.Text = "chart1";
+            this.chart1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.chart1_MouseDoubleClick);
+            this.chart1.MouseHover += new System.EventHandler(this.chart1_MouseHover);
             // 
             // timer1
             // 
@@ -276,9 +279,9 @@
             // 
             // buttonConnect
             // 
-            this.buttonConnect.Location = new System.Drawing.Point(822, 73);
+            this.buttonConnect.Location = new System.Drawing.Point(839, 73);
             this.buttonConnect.Name = "buttonConnect";
-            this.buttonConnect.Size = new System.Drawing.Size(114, 32);
+            this.buttonConnect.Size = new System.Drawing.Size(113, 32);
             this.buttonConnect.TabIndex = 5;
             this.buttonConnect.Text = "&Connect";
             this.buttonConnect.UseVisualStyleBackColor = true;
@@ -296,7 +299,7 @@
             "COM2",
             "COM3",
             "COM4"});
-            this.comboBoxComPorts.Location = new System.Drawing.Point(67, 16);
+            this.comboBoxComPorts.Location = new System.Drawing.Point(73, 16);
             this.comboBoxComPorts.Name = "comboBoxComPorts";
             this.comboBoxComPorts.Size = new System.Drawing.Size(69, 21);
             this.comboBoxComPorts.Sorted = true;
@@ -316,7 +319,7 @@
             "38400",
             "57600",
             "115200"});
-            this.comboBoxBaudrates.Location = new System.Drawing.Point(197, 16);
+            this.comboBoxBaudrates.Location = new System.Drawing.Point(207, 16);
             this.comboBoxBaudrates.Name = "comboBoxBaudrates";
             this.comboBoxBaudrates.Size = new System.Drawing.Size(68, 21);
             this.comboBoxBaudrates.TabIndex = 8;
@@ -333,6 +336,7 @@
             this.textBoxLog.TabIndex = 10;
             this.textBoxLog.WordWrap = false;
             this.textBoxLog.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
+            this.textBoxLog.MouseHover += new System.EventHandler(this.textBoxLog_MouseHover);
             // 
             // comboBoxGain1
             // 
@@ -368,7 +372,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 19);
+            this.label1.Location = new System.Drawing.Point(7, 19);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(60, 13);
             this.label1.TabIndex = 14;
@@ -377,7 +381,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(142, 19);
+            this.label2.Location = new System.Drawing.Point(148, 19);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(53, 13);
             this.label2.TabIndex = 15;
@@ -386,7 +390,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(369, 19);
+            this.label3.Location = new System.Drawing.Point(379, 19);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(36, 13);
             this.label3.TabIndex = 17;
@@ -405,7 +409,7 @@
             "38400",
             "57600",
             "115200"});
-            this.comboBoxParity.Location = new System.Drawing.Point(411, 16);
+            this.comboBoxParity.Location = new System.Drawing.Point(421, 16);
             this.comboBoxParity.Name = "comboBoxParity";
             this.comboBoxParity.Size = new System.Drawing.Size(49, 21);
             this.comboBoxParity.TabIndex = 16;
@@ -423,7 +427,7 @@
             "38400",
             "57600",
             "115200"});
-            this.comboBoxStopBits.Location = new System.Drawing.Point(524, 16);
+            this.comboBoxStopBits.Location = new System.Drawing.Point(534, 16);
             this.comboBoxStopBits.Name = "comboBoxStopBits";
             this.comboBoxStopBits.Size = new System.Drawing.Size(33, 21);
             this.comboBoxStopBits.TabIndex = 18;
@@ -431,7 +435,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(466, 19);
+            this.label4.Location = new System.Drawing.Point(476, 19);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(52, 13);
             this.label4.TabIndex = 19;
@@ -440,7 +444,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(271, 19);
+            this.label5.Location = new System.Drawing.Point(281, 19);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(53, 13);
             this.label5.TabIndex = 21;
@@ -459,7 +463,7 @@
             "38400",
             "57600",
             "115200"});
-            this.comboBoxDataBits.Location = new System.Drawing.Point(330, 16);
+            this.comboBoxDataBits.Location = new System.Drawing.Point(340, 16);
             this.comboBoxDataBits.Name = "comboBoxDataBits";
             this.comboBoxDataBits.Size = new System.Drawing.Size(33, 21);
             this.comboBoxDataBits.TabIndex = 20;
@@ -467,7 +471,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(819, 32);
+            this.label6.Location = new System.Drawing.Point(836, 31);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(51, 13);
             this.label6.TabIndex = 22;
@@ -618,7 +622,7 @@
             this.groupBoxSerial.Controls.Add(this.label5);
             this.groupBoxSerial.Location = new System.Drawing.Point(230, 12);
             this.groupBoxSerial.Name = "groupBoxSerial";
-            this.groupBoxSerial.Size = new System.Drawing.Size(566, 47);
+            this.groupBoxSerial.Size = new System.Drawing.Size(600, 47);
             this.groupBoxSerial.TabIndex = 39;
             this.groupBoxSerial.TabStop = false;
             this.groupBoxSerial.Text = "Serial Port";
@@ -749,7 +753,7 @@
             // 
             // numericUpDownID
             // 
-            this.numericUpDownID.Location = new System.Drawing.Point(876, 28);
+            this.numericUpDownID.Location = new System.Drawing.Point(893, 29);
             this.numericUpDownID.Maximum = new decimal(new int[] {
             247,
             0,
@@ -1311,9 +1315,9 @@
             // buttonLogin
             // 
             this.buttonLogin.Enabled = false;
-            this.buttonLogin.Location = new System.Drawing.Point(10, 128);
+            this.buttonLogin.Location = new System.Drawing.Point(10, 132);
             this.buttonLogin.Name = "buttonLogin";
-            this.buttonLogin.Size = new System.Drawing.Size(134, 42);
+            this.buttonLogin.Size = new System.Drawing.Size(134, 33);
             this.buttonLogin.TabIndex = 68;
             this.buttonLogin.Text = "&Login";
             this.buttonLogin.UseVisualStyleBackColor = true;
@@ -1322,9 +1326,9 @@
             // buttonImport
             // 
             this.buttonImport.Enabled = false;
-            this.buttonImport.Location = new System.Drawing.Point(10, 189);
+            this.buttonImport.Location = new System.Drawing.Point(10, 184);
             this.buttonImport.Name = "buttonImport";
-            this.buttonImport.Size = new System.Drawing.Size(64, 23);
+            this.buttonImport.Size = new System.Drawing.Size(64, 33);
             this.buttonImport.TabIndex = 69;
             this.buttonImport.Text = "&Import";
             this.buttonImport.UseVisualStyleBackColor = true;
@@ -1333,9 +1337,9 @@
             // buttonExport
             // 
             this.buttonExport.Enabled = false;
-            this.buttonExport.Location = new System.Drawing.Point(80, 189);
+            this.buttonExport.Location = new System.Drawing.Point(80, 184);
             this.buttonExport.Name = "buttonExport";
-            this.buttonExport.Size = new System.Drawing.Size(64, 23);
+            this.buttonExport.Size = new System.Drawing.Size(64, 33);
             this.buttonExport.TabIndex = 70;
             this.buttonExport.Text = "&Export";
             this.buttonExport.UseVisualStyleBackColor = true;
@@ -1369,6 +1373,17 @@
             this.groupBoxMode.TabIndex = 71;
             this.groupBoxMode.TabStop = false;
             this.groupBoxMode.Text = "Modbus Mode";
+            // 
+            // radioButtonRTUUDP
+            // 
+            this.radioButtonRTUUDP.AutoSize = true;
+            this.radioButtonRTUUDP.Location = new System.Drawing.Point(7, 76);
+            this.radioButtonRTUUDP.Name = "radioButtonRTUUDP";
+            this.radioButtonRTUUDP.Size = new System.Drawing.Size(98, 17);
+            this.radioButtonRTUUDP.TabIndex = 4;
+            this.radioButtonRTUUDP.Text = "RTU over UDP";
+            this.radioButtonRTUUDP.UseVisualStyleBackColor = true;
+            this.radioButtonRTUUDP.CheckedChanged += new System.EventHandler(this.radioButtonRTUUDP_CheckedChanged);
             // 
             // radioButtonRTUTCP
             // 
@@ -1407,7 +1422,7 @@
             // 
             this.radioButtonSerial.AutoSize = true;
             this.radioButtonSerial.Checked = true;
-            this.radioButtonSerial.Location = new System.Drawing.Point(7, 20);
+            this.radioButtonSerial.Location = new System.Drawing.Point(7, 17);
             this.radioButtonSerial.Name = "radioButtonSerial";
             this.radioButtonSerial.Size = new System.Drawing.Size(99, 17);
             this.radioButtonSerial.TabIndex = 0;
@@ -1424,7 +1439,7 @@
             this.groupBoxTCP.Controls.Add(this.textBoxIP);
             this.groupBoxTCP.Location = new System.Drawing.Point(230, 65);
             this.groupBoxTCP.Name = "groupBoxTCP";
-            this.groupBoxTCP.Size = new System.Drawing.Size(566, 47);
+            this.groupBoxTCP.Size = new System.Drawing.Size(600, 47);
             this.groupBoxTCP.TabIndex = 72;
             this.groupBoxTCP.TabStop = false;
             this.groupBoxTCP.Text = "Network";
@@ -1432,7 +1447,7 @@
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(233, 18);
+            this.label22.Location = new System.Drawing.Point(305, 18);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(29, 13);
             this.label22.TabIndex = 3;
@@ -1449,7 +1464,7 @@
             // 
             // textBoxPort
             // 
-            this.textBoxPort.Location = new System.Drawing.Point(268, 15);
+            this.textBoxPort.Location = new System.Drawing.Point(340, 15);
             this.textBoxPort.Name = "textBoxPort";
             this.textBoxPort.Size = new System.Drawing.Size(84, 20);
             this.textBoxPort.TabIndex = 1;
@@ -1459,31 +1474,25 @@
             // 
             this.textBoxIP.Location = new System.Drawing.Point(73, 15);
             this.textBoxIP.Name = "textBoxIP";
-            this.textBoxIP.Size = new System.Drawing.Size(135, 20);
+            this.textBoxIP.Size = new System.Drawing.Size(202, 20);
             this.textBoxIP.TabIndex = 0;
             this.textBoxIP.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // radioButtonRTUUDP
+            // toolTip1
             // 
-            this.radioButtonRTUUDP.AutoSize = true;
-            this.radioButtonRTUUDP.Location = new System.Drawing.Point(7, 76);
-            this.radioButtonRTUUDP.Name = "radioButtonRTUUDP";
-            this.radioButtonRTUUDP.Size = new System.Drawing.Size(98, 17);
-            this.radioButtonRTUUDP.TabIndex = 4;
-            this.radioButtonRTUUDP.Text = "RTU over UDP";
-            this.radioButtonRTUUDP.UseVisualStyleBackColor = true;
-            this.radioButtonRTUUDP.CheckedChanged += new System.EventHandler(this.radioButtonRTUUDP_CheckedChanged);
+            this.toolTip1.ShowAlways = true;
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(964, 631);
+            this.Controls.Add(this.chart1);
             this.Controls.Add(this.groupBoxTCP);
             this.Controls.Add(this.groupBoxMode);
             this.Controls.Add(this.buttonExport);
-            this.Controls.Add(this.buttonImport);
             this.Controls.Add(this.buttonLogin);
+            this.Controls.Add(this.buttonImport);
             this.Controls.Add(this.groupBoxSystemInfo);
             this.Controls.Add(this.groupBoxActValues);
             this.Controls.Add(this.groupBoxAnalog);
@@ -1497,7 +1506,6 @@
             this.Controls.Add(this.label6);
             this.Controls.Add(this.textBoxLog);
             this.Controls.Add(this.buttonConnect);
-            this.Controls.Add(this.chart1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(980, 670);
             this.Name = "FormMain";
@@ -1640,6 +1648,7 @@
         private System.Windows.Forms.TextBox textBoxIP;
         private System.Windows.Forms.RadioButton radioButtonRTUTCP;
         private System.Windows.Forms.RadioButton radioButtonRTUUDP;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
 

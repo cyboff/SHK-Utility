@@ -330,7 +330,6 @@ namespace SHK_Utility
                     // enable groups
                     buttonConnect.Text = "&Disconnect";
                     groupBoxMode.Enabled = false;
-                    chart1.Enabled = true;
                     groupBoxSystemInfo.Enabled = true;
                     groupBoxIOStatus.Enabled = true;
                     groupBoxActValues.Enabled = true;
@@ -406,7 +405,8 @@ namespace SHK_Utility
                 buttonConnect.Text = "&Connect";
                 textBoxLog.AppendText("Disconnected\r\n");
                 groupBoxMode.Enabled = true;
-                chart1.Enabled = false;
+                chart1.Location = new System.Drawing.Point(458, 111);
+                chart1.Width = textBoxLog.Width - 458;
                 buttonImport.Enabled = false;
                 buttonExport.Enabled = false;
                 groupBoxSystemInfo.Enabled = false;
@@ -419,6 +419,7 @@ namespace SHK_Utility
                 groupBoxTest.Enabled = false;
                 buttonLogin.Enabled = false;
                 buttonLogin.Text = "&Login";
+
                 //chart1.ChartAreas[0].Visible = false;
                 //chart1.ChartAreas[1].Visible = false;
 
@@ -1292,6 +1293,34 @@ namespace SHK_Utility
                 groupBoxSerial.Enabled = true;
                 groupBoxTCP.Enabled = false;
             }
+        }
+
+        private void chart1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (chart1.Location.X != 0)
+            {
+                chart1.Location = new System.Drawing.Point(0, chart1.Location.Y);
+                chart1.Width = textBoxLog.Width;
+                //chart1.Height += 121;
+                chart1.BringToFront();
+            }
+            else
+            {
+                chart1.Location = new System.Drawing.Point(458, 111);
+                chart1.Width = textBoxLog.Width - 458;
+                //chart1.Height -= 121;
+            }
+
+        }
+
+        private void chart1_MouseHover(object sender, EventArgs e)
+        {
+            toolTip1.Show("double-click to resize", (Control)sender);
+        }
+
+        private void textBoxLog_MouseHover(object sender, EventArgs e)
+        {
+            toolTip1.Show("click & press: 'h' to hex; 'd' to decimal", (Control)sender);
         }
     }
 }
