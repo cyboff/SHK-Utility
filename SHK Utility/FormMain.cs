@@ -111,43 +111,43 @@ namespace SHK_Utility
             string[] ports = SerialPort.GetPortNames();
             comboBoxComPorts.Items.Clear();
             comboBoxComPorts.Items.AddRange(ports);
-            if (ports.Length > 0)
+            if (comboBoxComPorts.Items.Count > 0)
             {
-                comboBoxComPorts.SelectedIndex = 0;
+                    comboBoxComPorts.SelectedIndex = comboBoxComPorts.FindStringExact(Properties.Settings.Default.ComPort);
+                
+                    if  (comboBoxComPorts.SelectedIndex < 0)   comboBoxComPorts.SelectedIndex = 0;
+                
             }
 
-            comboBoxBaudrates.SelectedIndex = 3;
+            comboBoxBaudrates.SelectedIndex = Properties.Settings.Default.BaudrateIndex;
 
             comboBoxDataBits.Items.Clear();
             comboBoxDataBits.Items.Add("8");
             comboBoxDataBits.Items.Add("7");
-            comboBoxDataBits.SelectedIndex = 0;
+            comboBoxDataBits.SelectedIndex = Properties.Settings.Default.DataBitsIndex;
 
             comboBoxParity.Items.Clear();
             comboBoxParity.Items.Add(Parity.Even.ToString());
             comboBoxParity.Items.Add(Parity.None.ToString());
             comboBoxParity.Items.Add(Parity.Odd.ToString());
-            comboBoxParity.SelectedIndex = 0;
+            comboBoxParity.SelectedIndex = Properties.Settings.Default.ParityIndex;
 
             comboBoxStopBits.Items.Clear();
             comboBoxStopBits.Items.Add("1");
             comboBoxStopBits.Items.Add("2");
-            comboBoxStopBits.SelectedIndex = 0;
+            comboBoxStopBits.SelectedIndex = Properties.Settings.Default.StopBitsIndex;
 
 
             chart1.ChartAreas[1].AxisX.LabelStyle.Format = "HH:mm:ss";
 
-            textBoxIP.Text = "127.0.0.1";
-            textBoxPort.Text = "502";
+            textBoxIP.Text = Properties.Settings.Default.IP;
+            textBoxPort.Text = Properties.Settings.Default.Port;
+
+            numericUpDownID.Value = Properties.Settings.Default.SlaveID;
 
             groupBoxMode.Enabled = true;
             radioButtonSerial.Checked = true;
             groupBoxTCP.Enabled = false;
-
-            //comboBoxGain1.Enabled = false;
-            //comboBoxPositionOffset.Enabled = false;
-
-
         }
 
         private void buttonConnect_Click(object sender, EventArgs e)
@@ -214,20 +214,17 @@ namespace SHK_Utility
                     {
                         serialPort1.PortName = comboBoxComPorts.SelectedItem.ToString();
                         serialPort1.Open();
+                        var adapter = new SerialPortAdapter(serialPort1);
+
+                        // create modbus master
+                        master = factory.CreateRtuMaster(adapter);
+                        textBoxLog.AppendText($"Connecting using Modbus/RTU via {serialPort1.PortName}\r\n");
                     }
                     catch
                     {
-                        MessageBox.Show("Unable to open the requested serial port");
+                        MessageBox.Show($"Unable to connect via serial port {serialPort1.PortName}");
                         return;
-                    }
-
-
-                    var adapter = new SerialPortAdapter(serialPort1);
-
-                    // create modbus master
-                    master = factory.CreateRtuMaster(adapter);
-                    textBoxLog.AppendText($"Connecting using Modbus/RTU via {serialPort1.PortName}\r\n");
-
+                    }  
                 }
 
                 if (radioButtonRTUTCP.Checked)
@@ -312,7 +309,7 @@ namespace SHK_Utility
 
                 try
                 {
-                    slaveId = byte.Parse(numericUpDownID.Value.ToString());
+                    slaveId = (byte)numericUpDownID.Value;
 
                     startAddress = 0;
                     numRegisters = 7;
@@ -362,7 +359,44 @@ namespace SHK_Utility
 
                     textBoxLog.AppendText(mbe.Message);
                     textBoxLog.AppendText("\r\n");
+                    textBoxLog.AppendText("Unable to connect!\r\n");
 
+                    timer1.Stop();
+
+                    if (serialPort1.IsOpen)
+                    {
+                        try
+                        {
+                            serialPort1.Close();
+                            serialPort1.Dispose();
+                        }
+                        catch
+                        {
+                            MessageBox.Show("Unable to close the serial port");
+                        }
+                    }
+
+                    if (tcpclient != null)
+                    {
+                        tcpclient.GetStream().Close();
+                        tcpclient.Close();
+                        tcpclient.Dispose();
+                        tcpclient = null;
+                    }
+
+                    if (udpclient != null)
+                    {
+                        udpclient.Close();
+                        udpclient.Dispose();
+                        udpclient = null;
+                    }
+
+                    if (master != null)
+                    {
+                        master.Transport.Dispose();
+                        master.Dispose();
+                        master = null;
+                    }
                     return;
                 }
 
@@ -1227,6 +1261,17 @@ namespace SHK_Utility
                 udpclient.Dispose();
                 udpclient = null;
             }
+
+            // save last used settings
+            Properties.Settings.Default.IP = textBoxIP.Text;
+            Properties.Settings.Default.Port = textBoxPort.Text;
+            Properties.Settings.Default.BaudrateIndex = comboBoxBaudrates.SelectedIndex;
+            Properties.Settings.Default.DataBitsIndex = comboBoxDataBits.SelectedIndex;
+            Properties.Settings.Default.ParityIndex = comboBoxParity.SelectedIndex;
+            Properties.Settings.Default.StopBitsIndex = comboBoxStopBits.SelectedIndex;
+            Properties.Settings.Default.SlaveID = (int)numericUpDownID.Value;
+            if (comboBoxComPorts.Items.Count > 0) Properties.Settings.Default.ComPort = comboBoxComPorts.SelectedItem.ToString();
+            Properties.Settings.Default.Save();
         }
 
         private void radioButtonSerial_CheckedChanged(object sender, EventArgs e)
