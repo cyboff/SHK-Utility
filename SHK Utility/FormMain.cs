@@ -61,9 +61,9 @@ namespace SHK_Utility
         POSITION_VALUE_AVG,
 
         AN_VALUES, // 25 registers
-        AN_VALUES_END = AN_VALUES + 25,
-        EXEC_TIME,
-        TOTAL_ERRORS,
+        EXEC_TIME_ADC = AN_VALUES + 25,  // time of adc convertions for one mirror
+        EXEC_TIME,                       // time of adc conv + results calculation
+        TOTAL_ERRORS,                    // modbus errors
         // leave this one
         TOTAL_REGS_SIZE
         // total number of registers for function 3 and 16 share the same register array
@@ -341,6 +341,10 @@ namespace SHK_Utility
                     buttonLogin.Enabled = true;
                     buttonLogin.Text = "&Login";
                     buttonLogin.Focus();
+                    foreach (var series in chart1.Series)
+                    {
+                        series.Points.Clear();
+                    }
 
                     if (registers[(int)SHKModBusRegisters.MODBUS_SPEED] * 100 < 19200)
                     {
@@ -756,7 +760,7 @@ namespace SHK_Utility
             chart1.Series["Position"].Points.AddXY((float)registers[(int)SHKModBusRegisters.POSITION_VALUE] / 10, 100);
             //chart1.Series["Reg11"].Points.AddY(registers[(int)SHKModBusRegisters.THRESHOLD_SET1]);
             chart1.Series["Signal"].Points.Clear();
-            for (int i = 0; i < ((int)SHKModBusRegisters.AN_VALUES_END - (int)SHKModBusRegisters.AN_VALUES); i++)
+            for (int i = 0; i < ((int)SHKModBusRegisters.EXEC_TIME_ADC - (int)SHKModBusRegisters.AN_VALUES); i++)   // EXEC_TIME_ADC = AN_VALUES+25
             {
                 // AN_VALUES 50 values from analog_buffer[200]: MSB = signal[i*8+4], LSB = signal[i*8] 
                 chart1.Series["Signal"].Points.AddXY(i * 4, ((float)((uint)registers[i + (int)SHKModBusRegisters.AN_VALUES] % 256)) * 100 / 256); // LSB to 0-100%
