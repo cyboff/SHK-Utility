@@ -99,6 +99,7 @@ namespace SHK_Utility
         private ushort startAddress = 0;
         private ushort numRegisters = 1;
         private int timer_counter = 0;
+        private int timerLogout_counter = 0;
         private bool logFormatHex = false;
         private bool settingsChanged = false;
 
@@ -330,14 +331,31 @@ namespace SHK_Utility
                     groupBoxSystemInfo.Enabled = true;
                     groupBoxIOStatus.Enabled = true;
                     groupBoxActValues.Enabled = true;
-                    groupBoxSensor.Enabled = false;
-                    groupBoxAnalog.Enabled = false;
-                    groupBoxFilters.Enabled = false;
-                    groupBoxLaser.Enabled = false;
-                    groupBoxTest.Enabled = false;
-                    buttonLogin.Enabled = true;
-                    buttonLogin.Text = "&Login";
-                    buttonLogin.Focus();
+
+                    if (buttonLogin.Text.Equals("&Login"))
+                    {
+                        groupBoxSensor.Enabled = false;
+                        groupBoxAnalog.Enabled = false;
+                        groupBoxFilters.Enabled = false;
+                        groupBoxLaser.Enabled = false;
+                        groupBoxTest.Enabled = false;
+                        buttonLogin.Enabled = true;
+                        //buttonLogin.Text = "&Login";
+                        buttonLogin.Focus();
+                    }
+                    else
+                    {
+                        buttonImport.Enabled = true;
+                        buttonExport.Enabled = true;
+                        groupBoxLaser.Enabled = true;
+                        groupBoxTest.Enabled = true;
+                        groupBoxSensor.Enabled = true;
+                        groupBoxAnalog.Enabled = true;
+                        groupBoxFilters.Enabled = true;
+                        buttonLogin.Enabled = true;
+                    }
+
+
                     foreach (var series in chart1.Series)
                     {
                         series.Points.Clear();
@@ -456,7 +474,7 @@ namespace SHK_Utility
                 groupBoxLaser.Enabled = false;
                 groupBoxTest.Enabled = false;
                 buttonLogin.Enabled = false;
-                buttonLogin.Text = "&Login";
+                //buttonLogin.Text = "&Login";
 
                 //chart1.ChartAreas[0].Visible = false;
                 //chart1.ChartAreas[1].Visible = false;
@@ -471,6 +489,22 @@ namespace SHK_Utility
             DateTime now = DateTime.Now;
             DateTime minDate = DateTime.Now.AddMinutes(-5);
             //DateTime maxDate = DateTime.Now.AddSeconds(1);
+
+            if (timerLogout_counter == 0)  // automatic logout after 30 minutes
+            {
+                buttonLogin.Text = "&Login";
+                buttonImport.Enabled = false;
+                buttonExport.Enabled = false;
+                groupBoxLaser.Enabled = false;
+                groupBoxTest.Enabled = false;
+                groupBoxSensor.Enabled = false;
+                groupBoxAnalog.Enabled = false;
+                groupBoxFilters.Enabled = false;
+            }
+            else
+            {
+                timerLogout_counter--;
+            }
 
             if (settingsChanged) // update only once per tick, to avoid hang-ups
             {
@@ -812,8 +846,6 @@ namespace SHK_Utility
 
 
 
-
-
         private void ComboBoxComPorts_DropDown(object sender, EventArgs e)
         {
             string[] ports = SerialPort.GetPortNames();
@@ -995,7 +1027,7 @@ namespace SHK_Utility
                 DialogResult loginResult = formLogin.ShowDialog();
                 switch (loginResult)
                 {
-                    case DialogResult.Yes:
+                    case DialogResult.Yes:  // password for calibration/offset
                         buttonLogin.Text = "&Logout";
                         buttonImport.Enabled = true;
                         buttonExport.Enabled = true;
@@ -1005,9 +1037,9 @@ namespace SHK_Utility
                         groupBoxAnalog.Enabled = true;
                         numericUpDownOffset.Enabled = true;
                         groupBoxFilters.Enabled = true;
+                        timerLogout_counter = 3600;  // automatic logout after 30 min
                         break;
-                    case DialogResult.OK:
-                        //do stuff
+                    case DialogResult.OK: // password for operator
                         buttonLogin.Text = "&Logout";
                         buttonImport.Enabled = true;
                         buttonExport.Enabled = true;
@@ -1017,9 +1049,9 @@ namespace SHK_Utility
                         groupBoxAnalog.Enabled = true;
                         numericUpDownOffset.Enabled = false;
                         groupBoxFilters.Enabled = true;
-
+                        timerLogout_counter = 3600; // automatic logout after 30 min
                         break;
-                    case DialogResult.Cancel:
+                    case DialogResult.Cancel:  // wrong password
                         buttonLogin.Text = "&Login";
                         groupBoxLaser.Enabled = false;
                         groupBoxTest.Enabled = false;
@@ -1041,6 +1073,7 @@ namespace SHK_Utility
                 groupBoxSensor.Enabled = false;
                 groupBoxAnalog.Enabled = false;
                 groupBoxFilters.Enabled = false;
+                timerLogout_counter = 0;
             }
 
         }
@@ -1095,7 +1128,7 @@ namespace SHK_Utility
                     contentWriter.Write(Environment.NewLine);
                 }
 
-                DialogResult dialogResult = MessageBox.Show("Import Settings: " + Environment.NewLine + Environment.NewLine + contentWriter.ToString(), "Import Settings", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show("Import following settings?" + Environment.NewLine + Environment.NewLine + contentWriter.ToString(), "Import Settings", MessageBoxButtons.YesNo);
 
                 if (dialogResult == DialogResult.Yes)
                 {
@@ -1212,9 +1245,6 @@ namespace SHK_Utility
             filtersignaloffIniKey.LeadingComment.Text = " valid values 0..9999 ms";
             filtersignaloffIniKey.LeadingComment.LeftIndentation = 4;
 
-
-
-
             var filename = "SHK_Setup_" + DateTime.Now.ToString("yyyyMMddHHmm") + ".ini";
             saveFileDialog1.AddExtension = true;
             saveFileDialog1.DefaultExt = ".ini";
@@ -1228,8 +1258,6 @@ namespace SHK_Utility
                     s.Close();
                 }
             }
-
-
         }
 
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
