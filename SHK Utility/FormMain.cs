@@ -462,7 +462,7 @@ namespace SHK_Utility
                 textBoxLog.AppendText("Disconnected\r\n");
                 groupBoxMode.Enabled = true;
                 chart1.Location = new System.Drawing.Point(458, 111);
-                chart1.Width = textBoxLog.Width - 458;
+                chart1.Width = this.ClientRectangle.Width - 458 - 10;
                 buttonImport.Enabled = false;
                 buttonExport.Enabled = false;
                 groupBoxSystemInfo.Enabled = false;
@@ -1377,14 +1377,14 @@ namespace SHK_Utility
             if (chart1.Location.X != 0)
             {
                 chart1.Location = new System.Drawing.Point(0, chart1.Location.Y);
-                chart1.Width = textBoxLog.Width;
+                chart1.Width = this.ClientRectangle.Width;
                 //chart1.Height += 121;
                 chart1.BringToFront();
             }
             else
             {
-                chart1.Location = new System.Drawing.Point(458, 111);
-                chart1.Width = textBoxLog.Width - 458;
+                chart1.Location = new System.Drawing.Point(458, 118);
+                chart1.Width = this.ClientRectangle.Width - 458 - 10;
                 //chart1.Height -= 121;
             }
 
@@ -1398,6 +1398,12 @@ namespace SHK_Utility
         private void textBoxLog_MouseHover(object sender, EventArgs e)
         {
             toolTip1.Show("click & press: 'h' to hex; 'd' to decimal", (Control)sender);
+        }
+
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://www.ssktrinec.cz");
         }
     }
 }
