@@ -282,9 +282,9 @@
             // 
             // buttonConnect
             // 
-            this.buttonConnect.Location = new System.Drawing.Point(839, 73);
+            this.buttonConnect.Location = new System.Drawing.Point(839, 71);
             this.buttonConnect.Name = "buttonConnect";
-            this.buttonConnect.Size = new System.Drawing.Size(113, 32);
+            this.buttonConnect.Size = new System.Drawing.Size(113, 36);
             this.buttonConnect.TabIndex = 5;
             this.buttonConnect.Text = "&Connect";
             this.buttonConnect.UseVisualStyleBackColor = true;
@@ -1325,9 +1325,9 @@
             // buttonLogin
             // 
             this.buttonLogin.Enabled = false;
-            this.buttonLogin.Location = new System.Drawing.Point(10, 132);
+            this.buttonLogin.Location = new System.Drawing.Point(10, 130);
             this.buttonLogin.Name = "buttonLogin";
-            this.buttonLogin.Size = new System.Drawing.Size(134, 33);
+            this.buttonLogin.Size = new System.Drawing.Size(134, 36);
             this.buttonLogin.TabIndex = 68;
             this.buttonLogin.Text = "&Login";
             this.buttonLogin.UseVisualStyleBackColor = true;
@@ -1336,22 +1336,22 @@
             // buttonImport
             // 
             this.buttonImport.Enabled = false;
-            this.buttonImport.Location = new System.Drawing.Point(10, 184);
+            this.buttonImport.Location = new System.Drawing.Point(10, 175);
             this.buttonImport.Name = "buttonImport";
-            this.buttonImport.Size = new System.Drawing.Size(64, 33);
+            this.buttonImport.Size = new System.Drawing.Size(64, 36);
             this.buttonImport.TabIndex = 69;
-            this.buttonImport.Text = "&Import";
+            this.buttonImport.Text = "&Import Settings";
             this.buttonImport.UseVisualStyleBackColor = true;
             this.buttonImport.Click += new System.EventHandler(this.ButtonImport_Click);
             // 
             // buttonExport
             // 
             this.buttonExport.Enabled = false;
-            this.buttonExport.Location = new System.Drawing.Point(80, 184);
+            this.buttonExport.Location = new System.Drawing.Point(80, 175);
             this.buttonExport.Name = "buttonExport";
-            this.buttonExport.Size = new System.Drawing.Size(64, 33);
+            this.buttonExport.Size = new System.Drawing.Size(64, 36);
             this.buttonExport.TabIndex = 70;
-            this.buttonExport.Text = "&Export";
+            this.buttonExport.Text = "&Export Settings";
             this.buttonExport.UseVisualStyleBackColor = true;
             this.buttonExport.Click += new System.EventHandler(this.ButtonExport_Click);
             // 

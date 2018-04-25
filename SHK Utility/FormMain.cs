@@ -789,15 +789,30 @@ namespace SHK_Utility
             textBoxTotalTime.Text = registers[(int)SHKModBusRegisters.TOTAL_RUNTIME].ToString();
             textBoxActTemp.Text = registers[(int)SHKModBusRegisters.ACT_TEMPERATURE].ToString();
             textBoxMaxTemp.Text = registers[(int)SHKModBusRegisters.MAX_TEMPERATURE].ToString();
-
+            if (registers[(int)SHKModBusRegisters.ACT_TEMPERATURE] > 50)  // internal temperature is too high!
+            { textBoxActTemp.BackColor = Color.Red; }
+            else
+            { textBoxActTemp.BackColor = System.Drawing.SystemColors.Window; }
 
             textBoxInt.Text = ((float)registers[(int)SHKModBusRegisters.PEAK_VALUE] * 100 / 256).ToString("0.0");
             textBoxPos.Text = ((float)registers[(int)SHKModBusRegisters.POSITION_VALUE_AVG] / 10).ToString("0.0");
             textBoxAnalog1.Text = ((float)registers[(int)SHKModBusRegisters.PEAK_VALUE] / 16 + 4).ToString("0.0"); // in 4-20 mA   b = 16/100*a + 4 
             textBoxAnalog2.Text = ((float)registers[(int)SHKModBusRegisters.POSITION_VALUE_AVG] * 16 / 1000 + 4).ToString("0.0");
+            
             //update charts
             chart1.Series["Window"].Points.Clear();
             chart1.Series["Threshold"].Points.Clear();
+
+            if (registers[(int)SHKModBusRegisters.SET] < 2)
+            {
+                chart1.Series["Threshold"].Points.AddXY(0, registers[(int)SHKModBusRegisters.THRESHOLD_SET1] - 5, registers[(int)SHKModBusRegisters.THRESHOLD_SET1] + 5);
+                chart1.Series["Threshold"].Points.AddXY(99.9, registers[(int)SHKModBusRegisters.THRESHOLD_SET1] - 5, registers[(int)SHKModBusRegisters.THRESHOLD_SET1] + 5);
+            }
+            else
+            {
+                chart1.Series["Threshold"].Points.AddXY(0, registers[(int)SHKModBusRegisters.THRESHOLD_SET2] - 5, registers[(int)SHKModBusRegisters.THRESHOLD_SET2] + 5);
+                chart1.Series["Threshold"].Points.AddXY(99.9, registers[(int)SHKModBusRegisters.THRESHOLD_SET2] - 5, registers[(int)SHKModBusRegisters.THRESHOLD_SET2] + 5);
+            }
 
             chart1.Series["Window"].Points.AddXY(0, 100);
             chart1.Series["Window"].Points.AddXY(registers[(int)SHKModBusRegisters.WINDOW_BEGIN], 100);
@@ -810,23 +825,9 @@ namespace SHK_Utility
             chart1.ChartAreas[0].AxisX2.Maximum = (100 * (100 - chart1.ChartAreas[0].AxisX2.Minimum) / (float)registers[(int)SHKModBusRegisters.WINDOW_END]) + chart1.ChartAreas[0].AxisX2.Minimum;
             chart1.ChartAreas[0].AxisX2.IntervalOffset = -chart1.ChartAreas[0].AxisX2.Minimum;
 
-            //textBoxAnalog1.Text = chart1.ChartAreas[0].AxisX2.Minimum.ToString();
-            //textBoxAnalog2.Text = chart1.ChartAreas[0].AxisX2.Maximum.ToString();
-            if (registers[(int)SHKModBusRegisters.SET] < 2)
-            {
-                chart1.Series["Threshold"].Points.AddXY(0, registers[(int)SHKModBusRegisters.THRESHOLD_SET1] - 5, registers[(int)SHKModBusRegisters.THRESHOLD_SET1] + 5);
-                chart1.Series["Threshold"].Points.AddXY(100, registers[(int)SHKModBusRegisters.THRESHOLD_SET1] - 5, registers[(int)SHKModBusRegisters.THRESHOLD_SET1] + 5);
-            }
-            else
-            {
-                chart1.Series["Threshold"].Points.AddXY(0, registers[(int)SHKModBusRegisters.THRESHOLD_SET2] - 5, registers[(int)SHKModBusRegisters.THRESHOLD_SET2] + 5);
-                chart1.Series["Threshold"].Points.AddXY(100, registers[(int)SHKModBusRegisters.THRESHOLD_SET2] - 5, registers[(int)SHKModBusRegisters.THRESHOLD_SET2] + 5);
-            }
-
-
             chart1.Series["Position"].Points.Clear();
             chart1.Series["Position"].Points.AddXY((float)registers[(int)SHKModBusRegisters.POSITION_VALUE] / 10, 100);
-            //chart1.Series["Reg11"].Points.AddY(registers[(int)SHKModBusRegisters.THRESHOLD_SET1]);
+            
             chart1.Series["Signal"].Points.Clear();
             for (int i = 0; i < ((int)SHKModBusRegisters.EXEC_TIME_ADC - (int)SHKModBusRegisters.AN_VALUES); i++)   // EXEC_TIME_ADC = AN_VALUES+25
             {
