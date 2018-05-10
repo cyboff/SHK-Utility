@@ -114,10 +114,10 @@ namespace SHK_Utility
             comboBoxComPorts.Items.AddRange(ports);
             if (comboBoxComPorts.Items.Count > 0)
             {
-                    comboBoxComPorts.SelectedIndex = comboBoxComPorts.FindStringExact(Properties.Settings.Default.ComPort);
-                
-                    if  (comboBoxComPorts.SelectedIndex < 0)   comboBoxComPorts.SelectedIndex = 0;
-                
+                comboBoxComPorts.SelectedIndex = comboBoxComPorts.FindStringExact(Properties.Settings.Default.ComPort);
+
+                if (comboBoxComPorts.SelectedIndex < 0) comboBoxComPorts.SelectedIndex = 0;
+
             }
 
             comboBoxBaudrates.SelectedIndex = Properties.Settings.Default.BaudrateIndex;
@@ -155,158 +155,8 @@ namespace SHK_Utility
         {
             if (buttonConnect.Text.Equals("&Connect"))
             {
-                var factory = new ModbusFactory();
 
-
-                if (radioButtonSerial.Checked && !serialPort1.IsOpen)
-                {
-                    // configure serial port
-                    serialPort1.BaudRate = int.Parse(comboBoxBaudrates.SelectedItem.ToString());
-
-
-                    switch (comboBoxDataBits.SelectedItem.ToString())
-                    {
-                        case "8":
-                            serialPort1.DataBits = 8;
-                            break;
-                        case "7":
-                            serialPort1.DataBits = 7;
-                            break;
-
-                        default:
-                            serialPort1.DataBits = 8;
-                            break;
-                    }
-
-
-                    switch (comboBoxParity.SelectedItem.ToString())
-                    {
-                        case "Even":
-                            serialPort1.Parity = Parity.Even;
-                            break;
-                        case "None":
-                            serialPort1.Parity = Parity.None;
-                            break;
-                        case "Odd":
-                            serialPort1.Parity = Parity.Odd;
-                            break;
-                        default:
-                            serialPort1.Parity = Parity.Even;
-                            break;
-                    }
-
-
-                    switch (comboBoxStopBits.SelectedItem.ToString())
-                    {
-                        case "1":
-                            serialPort1.StopBits = StopBits.One;
-                            break;
-                        case "2":
-                            serialPort1.StopBits = StopBits.Two;
-                            break;
-
-                        default:
-                            serialPort1.StopBits = StopBits.One;
-                            break;
-                    }
-
-
-                    try
-                    {
-                        serialPort1.PortName = comboBoxComPorts.SelectedItem.ToString();
-                        serialPort1.Open();
-                        var adapter = new SerialPortAdapter(serialPort1);
-
-                        // create modbus master
-                        master = factory.CreateRtuMaster(adapter);
-                        textBoxLog.AppendText($"Connecting using Modbus/RTU via {serialPort1.PortName}\r\n");
-                    }
-                    catch
-                    {
-                        MessageBox.Show($"Unable to connect via serial port {serialPort1.PortName}");
-                        return;
-                    }  
-                }
-
-                if (radioButtonRTUTCP.Checked)
-                {
-
-                    try
-                    {
-                        tcpclient = new TcpClient(textBoxIP.Text, Int32.Parse(textBoxPort.Text));
-
-                        var adapter = new TcpClientAdapter(tcpclient); // for Modbus/RTU over TCP protocol
-                        master = factory.CreateRtuMaster(adapter);
-
-                        textBoxLog.AppendText($"Connecting using Modbus/RTU over TCP to {textBoxIP.Text}:{textBoxPort.Text}\r\n");
-                    }
-                    catch
-                    {
-                        MessageBox.Show($"Unable to connect to {textBoxIP.Text}:{textBoxPort.Text} using Modbus/RTU over TCP");
-                        return;
-                    }
-                }
-
-                if (radioButtonRTUUDP.Checked)
-                {
-
-                    try
-                    {
-                        udpclient = new UdpClient();
-                        endPoint = new IPEndPoint(IPAddress.Parse(textBoxIP.Text), Int32.Parse(textBoxPort.Text));
-                        udpclient.Connect(endPoint);
-
-                        var adapter = new UdpClientAdapter(udpclient); // for Modbus/RTU over UDP protocol
-                        master = factory.CreateRtuMaster(adapter);
-
-                        textBoxLog.AppendText($"Connecting using Modbus/RTU over UDP to {textBoxIP.Text}:{textBoxPort.Text}\r\n");
-                    }
-                    catch
-                    {
-                        MessageBox.Show($"Unable to connect to {textBoxIP.Text}:{textBoxPort.Text} using Modbus/RTU over TCP");
-                        return;
-                    }
-                }
-
-                if (radioButtonTCP.Checked)
-                {
-
-                    try
-                    {
-                        tcpclient = new TcpClient(textBoxIP.Text, Int32.Parse(textBoxPort.Text));
-
-                        master = factory.CreateMaster(tcpclient); // for Modbus/TCP protocol
-
-                        textBoxLog.AppendText($"Connecting using Modbus/TCP to {textBoxIP.Text}:{textBoxPort.Text}\r\n");
-                    }
-                    catch
-                    {
-                        MessageBox.Show($"Unable to connect to {textBoxIP.Text}:{textBoxPort.Text} using Modbus/TCP");
-                        return;
-                    }
-                }
-
-
-                if (radioButtonUDP.Checked)
-                {
-                    try
-                    {
-                        udpclient = new UdpClient();
-                        endPoint = new IPEndPoint(IPAddress.Parse(textBoxIP.Text), Int32.Parse(textBoxPort.Text));
-                        udpclient.Connect(endPoint);
-                        
-                        master = factory.CreateMaster(udpclient);
-
-                        textBoxLog.AppendText($"Connecting using Modbus/UDP to {textBoxIP.Text}:{textBoxPort.Text}\r\n");
-                    }
-                    catch
-                    {
-                        MessageBox.Show($"Unable to connect to {textBoxIP.Text}:{textBoxPort.Text} using Modbus/UDP");
-                        return;
-                    }
-                }
-
-
+                CreateModbusMaster();
 
                 try
                 {
@@ -315,8 +165,7 @@ namespace SHK_Utility
                     startAddress = 0;
                     numRegisters = 7;
 
-                    master.Transport.ReadTimeout = 2000;
-                    master.Transport.WriteTimeout = 2000;
+                    
 
                     // read total number of registers first - SHKModBusRegisters.ENUM_SIZE
                     registers = master.ReadHoldingRegisters(slaveId, startAddress, numRegisters);
@@ -381,40 +230,7 @@ namespace SHK_Utility
 
                     timer1.Stop();
 
-                    if (serialPort1.IsOpen)
-                    {
-                        try
-                        {
-                            serialPort1.Close();
-                            serialPort1.Dispose();
-                        }
-                        catch
-                        {
-                            MessageBox.Show("Unable to close the serial port");
-                        }
-                    }
-
-                    if (tcpclient != null)
-                    {
-                        tcpclient.GetStream().Close();
-                        tcpclient.Close();
-                        tcpclient.Dispose();
-                        tcpclient = null;
-                    }
-
-                    if (udpclient != null)
-                    {
-                        udpclient.Close();
-                        udpclient.Dispose();
-                        udpclient = null;
-                    }
-
-                    if (master != null)
-                    {
-                        master.Transport.Dispose();
-                        master.Dispose();
-                        master = null;
-                    }
+                    DoDisconnect();
                     return;
                 }
 
@@ -423,62 +239,7 @@ namespace SHK_Utility
             {
                 timer1.Stop();
 
-                if (serialPort1.IsOpen)
-                {
-                    try
-                    {
-                        serialPort1.Close();
-                        serialPort1.Dispose();
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Unable to close the serial port");
-                    }
-                }
-
-                if (tcpclient != null)
-                {
-                    tcpclient.GetStream().Close();
-                    tcpclient.Close();
-                    tcpclient.Dispose();
-                    tcpclient = null;
-                }
-
-                if (udpclient != null)
-                {
-                    udpclient.Close();
-                    udpclient.Dispose();
-                    udpclient = null;
-                }
-
-                if (master != null)
-                {
-                    master.Transport.Dispose();
-                    master.Dispose();
-                    master = null;
-                }
-
-                buttonConnect.Text = "&Connect";
-                textBoxLog.AppendText("Disconnected\r\n");
-                groupBoxMode.Enabled = true;
-                chart1.Location = new System.Drawing.Point(458, 111);
-                chart1.Width = this.ClientRectangle.Width - 458 - 10;
-                buttonImport.Enabled = false;
-                buttonExport.Enabled = false;
-                groupBoxSystemInfo.Enabled = false;
-                groupBoxIOStatus.Enabled = false;
-                groupBoxActValues.Enabled = false;
-                groupBoxSensor.Enabled = false;
-                groupBoxAnalog.Enabled = false;
-                groupBoxFilters.Enabled = false;
-                groupBoxLaser.Enabled = false;
-                groupBoxTest.Enabled = false;
-                buttonLogin.Enabled = false;
-                //buttonLogin.Text = "&Login";
-
-                //chart1.ChartAreas[0].Visible = false;
-                //chart1.ChartAreas[1].Visible = false;
-
+                DoDisconnect();
             }
 
         }
@@ -509,188 +270,92 @@ namespace SHK_Utility
             if (settingsChanged) // update only once per tick, to avoid hang-ups
             {
                 // check Sensor settings
-                if (registers[(int)SHKModBusRegisters.SET] != ushort.Parse(comboBoxSet.SelectedIndex.ToString()))
+                try
                 {
-                    try
+                    if (registers[(int)SHKModBusRegisters.SET] != ushort.Parse(comboBoxSet.SelectedIndex.ToString()))
                     {
                         master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.SET, ushort.Parse(comboBoxSet.SelectedIndex.ToString()));
                         textBoxLog.AppendText("Set saved!\r\n");
                     }
-                    catch (Exception mbe)
-                    {
-                        textBoxLog.AppendText(mbe.Message);
-                        textBoxLog.AppendText("\r\n");
-                    }
-                }
 
-                if (registers[(int)SHKModBusRegisters.GAIN_SET1] != ushort.Parse(comboBoxGain1.SelectedItem.ToString()))
-                {
-                    try
+                    if (registers[(int)SHKModBusRegisters.GAIN_SET1] != ushort.Parse(comboBoxGain1.SelectedItem.ToString()))
                     {
                         master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.GAIN_SET1, ushort.Parse(comboBoxGain1.SelectedItem.ToString()));
                         textBoxLog.AppendText("Gain1 saved!\r\n");
                     }
-                    catch (Exception mbe)
-                    {
-                        textBoxLog.AppendText(mbe.Message);
-                        textBoxLog.AppendText("\r\n");
-                    }
-                }
 
-                if (registers[(int)SHKModBusRegisters.THRESHOLD_SET1] != ushort.Parse(numericUpDownThre1.Value.ToString()))
-                {
-                    try
+                    if (registers[(int)SHKModBusRegisters.THRESHOLD_SET1] != ushort.Parse(numericUpDownThre1.Value.ToString()))
                     {
                         master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.THRESHOLD_SET1, ushort.Parse(numericUpDownThre1.Value.ToString()));
                         textBoxLog.AppendText("Threshold1 saved!\r\n");
                     }
-                    catch (Exception mbe)
-                    {
-                        textBoxLog.AppendText(mbe.Message);
-                        textBoxLog.AppendText("\r\n");
-                    }
-                }
 
-                if (registers[(int)SHKModBusRegisters.GAIN_SET2] != ushort.Parse(comboBoxGain2.SelectedItem.ToString()))
-                {
-                    try
+                    if (registers[(int)SHKModBusRegisters.GAIN_SET2] != ushort.Parse(comboBoxGain2.SelectedItem.ToString()))
                     {
                         master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.GAIN_SET2, ushort.Parse(comboBoxGain2.SelectedItem.ToString()));
                         textBoxLog.AppendText("Gain2 saved!\r\n");
                     }
-                    catch (Exception mbe)
-                    {
-                        textBoxLog.AppendText(mbe.Message);
-                        textBoxLog.AppendText("\r\n");
-                    }
-                }
 
-                if (registers[(int)SHKModBusRegisters.THRESHOLD_SET2] != ushort.Parse(numericUpDownThre2.Value.ToString()))
-                {
-                    try
+                    if (registers[(int)SHKModBusRegisters.THRESHOLD_SET2] != ushort.Parse(numericUpDownThre2.Value.ToString()))
                     {
                         master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.THRESHOLD_SET2, ushort.Parse(numericUpDownThre2.Value.ToString()));
                         textBoxLog.AppendText("Threshold2 saved!\r\n");
                     }
-                    catch (Exception mbe)
-                    {
-                        textBoxLog.AppendText(mbe.Message);
-                        textBoxLog.AppendText("\r\n");
-                    }
-                }
 
-                //check Analog settings
-                if (registers[(int)SHKModBusRegisters.ANALOG_OUT_MODE] != ushort.Parse(comboBoxAnalogOut.SelectedIndex.ToString()))
-                {
-                    try
+                    //check Analog settings
+                    if (registers[(int)SHKModBusRegisters.ANALOG_OUT_MODE] != ushort.Parse(comboBoxAnalogOut.SelectedIndex.ToString()))
                     {
                         master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.ANALOG_OUT_MODE, ushort.Parse(comboBoxAnalogOut.SelectedIndex.ToString()));
                         textBoxLog.AppendText("Analog Out Mode saved!\r\n");
                     }
-                    catch (Exception mbe)
-                    {
-                        textBoxLog.AppendText(mbe.Message);
-                        textBoxLog.AppendText("\r\n");
-                    }
-                }
 
-                if (registers[(int)SHKModBusRegisters.POSITION_MODE] != ushort.Parse(comboBoxPositionMode.SelectedIndex.ToString()))
-                {
-                    try
+                    if (registers[(int)SHKModBusRegisters.POSITION_MODE] != ushort.Parse(comboBoxPositionMode.SelectedIndex.ToString()))
                     {
                         master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.POSITION_MODE, ushort.Parse(comboBoxPositionMode.SelectedIndex.ToString()));
                         textBoxLog.AppendText("Position Mode saved!\r\n");
                     }
-                    catch (Exception mbe)
-                    {
-                        textBoxLog.AppendText(mbe.Message);
-                        textBoxLog.AppendText("\r\n");
-                    }
-                }
 
-                if (registers[(int)SHKModBusRegisters.WINDOW_BEGIN] != ushort.Parse(numericUpDownWindowBeg.Value.ToString()))
-                {
-                    try
+                    if (registers[(int)SHKModBusRegisters.WINDOW_BEGIN] != ushort.Parse(numericUpDownWindowBeg.Value.ToString()))
                     {
                         master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.WINDOW_BEGIN, ushort.Parse(numericUpDownWindowBeg.Value.ToString()));
                         textBoxLog.AppendText("Window Begin saved!\r\n");
                     }
-                    catch (Exception mbe)
-                    {
-                        textBoxLog.AppendText(mbe.Message);
-                        textBoxLog.AppendText("\r\n");
-                    }
-                }
 
-                if (registers[(int)SHKModBusRegisters.WINDOW_END] != ushort.Parse(numericUpDownWindowEnd.Value.ToString()))
-                {
-                    try
+                    if (registers[(int)SHKModBusRegisters.WINDOW_END] != ushort.Parse(numericUpDownWindowEnd.Value.ToString()))
                     {
                         master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.WINDOW_END, ushort.Parse(numericUpDownWindowEnd.Value.ToString()));
                         textBoxLog.AppendText("Window End saved!\r\n");
                     }
-                    catch (Exception mbe)
-                    {
-                        textBoxLog.AppendText(mbe.Message);
-                        textBoxLog.AppendText("\r\n");
-                    }
-                }
 
-                if (registers[(int)SHKModBusRegisters.POSITION_OFFSET] != ushort.Parse(numericUpDownOffset.Value.ToString()))
-                {
-                    try
+                    if (registers[(int)SHKModBusRegisters.POSITION_OFFSET] != ushort.Parse(numericUpDownOffset.Value.ToString()))
                     {
                         master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.POSITION_OFFSET, ushort.Parse(numericUpDownOffset.Value.ToString()));
                         textBoxLog.AppendText("Offset saved!\r\n");
                     }
-                    catch (Exception mbe)
-                    {
-                        textBoxLog.AppendText(mbe.Message);
-                        textBoxLog.AppendText("\r\n");
-                    }
-                }
 
-                //check Filter settings
-                if (registers[(int)SHKModBusRegisters.FILTER_POSITION] != ushort.Parse(numericUpDownFilterPosition.Value.ToString()))
-                {
-                    try
+                    //check Filter settings
+                    if (registers[(int)SHKModBusRegisters.FILTER_POSITION] != ushort.Parse(numericUpDownFilterPosition.Value.ToString()))
                     {
                         master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.FILTER_POSITION, ushort.Parse(numericUpDownFilterPosition.Value.ToString()));
                         textBoxLog.AppendText("Filter Position saved!\r\n");
                     }
-                    catch (Exception mbe)
-                    {
-                        textBoxLog.AppendText(mbe.Message);
-                        textBoxLog.AppendText("\r\n");
-                    }
-                }
 
-                if (registers[(int)SHKModBusRegisters.FILTER_ON] != ushort.Parse(numericUpDownFilterOn.Value.ToString()))
-                {
-                    try
+                    if (registers[(int)SHKModBusRegisters.FILTER_ON] != ushort.Parse(numericUpDownFilterOn.Value.ToString()))
                     {
                         master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.FILTER_ON, ushort.Parse(numericUpDownFilterOn.Value.ToString()));
                         textBoxLog.AppendText("Filter Signal On saved!\r\n");
                     }
-                    catch (Exception mbe)
-                    {
-                        textBoxLog.AppendText(mbe.Message);
-                        textBoxLog.AppendText("\r\n");
-                    }
-                }
 
-                if (registers[(int)SHKModBusRegisters.FILTER_OFF] != ushort.Parse(numericUpDownFilterOff.Value.ToString()))
-                {
-                    try
+                    if (registers[(int)SHKModBusRegisters.FILTER_OFF] != ushort.Parse(numericUpDownFilterOff.Value.ToString()))
                     {
                         master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.FILTER_OFF, ushort.Parse(numericUpDownFilterOff.Value.ToString()));
                         textBoxLog.AppendText("Filter Signal Off saved!\r\n");
                     }
-                    catch (Exception mbe)
-                    {
-                        textBoxLog.AppendText(mbe.Message);
-                        textBoxLog.AppendText("\r\n");
-                    }
+                }
+                catch (Exception mbe)
+                {
+                    textBoxLog.AppendText(mbe.Message);
+                    textBoxLog.AppendText("\r\n");
                 }
 
                 settingsChanged = false;
@@ -704,6 +369,9 @@ namespace SHK_Utility
             {
                 textBoxLog.AppendText(mbe.Message);
                 textBoxLog.AppendText("\r\n");
+                timer1.Stop();
+                DoDisconnect();
+                return;
             }
 
             // update log
@@ -798,7 +466,7 @@ namespace SHK_Utility
             textBoxPos.Text = ((float)registers[(int)SHKModBusRegisters.POSITION_VALUE_AVG] / 10).ToString("0.0");
             textBoxAnalog1.Text = ((float)registers[(int)SHKModBusRegisters.PEAK_VALUE] / 16 + 4).ToString("0.0"); // in 4-20 mA   b = 16/100*a + 4 
             textBoxAnalog2.Text = ((float)registers[(int)SHKModBusRegisters.POSITION_VALUE_AVG] * 16 / 1000 + 4).ToString("0.0");
-            
+
             //update charts
             chart1.Series["Window"].Points.Clear();
             chart1.Series["Threshold"].Points.Clear();
@@ -827,7 +495,7 @@ namespace SHK_Utility
 
             chart1.Series["Position"].Points.Clear();
             chart1.Series["Position"].Points.AddXY((float)registers[(int)SHKModBusRegisters.POSITION_VALUE] / 10, 100);
-            
+
             chart1.Series["Signal"].Points.Clear();
             for (int i = 0; i < ((int)SHKModBusRegisters.EXEC_TIME_ADC - (int)SHKModBusRegisters.AN_VALUES); i++)   // EXEC_TIME_ADC = AN_VALUES+25
             {
@@ -1263,33 +931,7 @@ namespace SHK_Utility
 
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            timer1.Stop();
-
-            if (serialPort1.IsOpen)
-            {
-                serialPort1.Close();
-                serialPort1.Dispose();
-            }
-
-            if (master != null)
-            {
-                master.Dispose();
-                master = null;
-            }
-
-            if (tcpclient != null)
-            {
-                tcpclient.Close();
-                tcpclient.Dispose();
-                tcpclient = null;
-            }
-
-            if (udpclient != null)
-            {
-                udpclient.Close();
-                udpclient.Dispose();
-                udpclient = null;
-            }
+            DoDisconnect();
 
             // save last used settings
             Properties.Settings.Default.IP = textBoxIP.Text;
@@ -1405,6 +1047,223 @@ namespace SHK_Utility
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("http://www.ssktrinec.cz");
+        }
+
+        private void CreateModbusMaster()
+        {
+            var factory = new ModbusFactory();
+
+
+            if (radioButtonSerial.Checked && !serialPort1.IsOpen)
+            {
+                // configure serial port
+                serialPort1.BaudRate = int.Parse(comboBoxBaudrates.SelectedItem.ToString());
+
+
+                switch (comboBoxDataBits.SelectedItem.ToString())
+                {
+                    case "8":
+                        serialPort1.DataBits = 8;
+                        break;
+                    case "7":
+                        serialPort1.DataBits = 7;
+                        break;
+
+                    default:
+                        serialPort1.DataBits = 8;
+                        break;
+                }
+
+
+                switch (comboBoxParity.SelectedItem.ToString())
+                {
+                    case "Even":
+                        serialPort1.Parity = Parity.Even;
+                        break;
+                    case "None":
+                        serialPort1.Parity = Parity.None;
+                        break;
+                    case "Odd":
+                        serialPort1.Parity = Parity.Odd;
+                        break;
+                    default:
+                        serialPort1.Parity = Parity.Even;
+                        break;
+                }
+
+
+                switch (comboBoxStopBits.SelectedItem.ToString())
+                {
+                    case "1":
+                        serialPort1.StopBits = StopBits.One;
+                        break;
+                    case "2":
+                        serialPort1.StopBits = StopBits.Two;
+                        break;
+
+                    default:
+                        serialPort1.StopBits = StopBits.One;
+                        break;
+                }
+
+
+                try
+                {
+                    serialPort1.PortName = comboBoxComPorts.SelectedItem.ToString();
+                    serialPort1.Open();
+                    var adapter = new SerialPortAdapter(serialPort1);
+
+                    // create modbus master
+                    master = factory.CreateRtuMaster(adapter);
+                    textBoxLog.AppendText($"Connecting using Modbus/RTU via {serialPort1.PortName}\r\n");
+                }
+                catch
+                {
+                    MessageBox.Show($"Unable to connect via serial port {serialPort1.PortName}");
+                    return;
+                }
+            }
+
+            if (radioButtonRTUTCP.Checked)
+            {
+
+                try
+                {
+                    tcpclient = new TcpClient(textBoxIP.Text, Int32.Parse(textBoxPort.Text));
+
+                    var adapter = new TcpClientAdapter(tcpclient); // for Modbus/RTU over TCP protocol
+                    master = factory.CreateRtuMaster(adapter);
+
+                    textBoxLog.AppendText($"Connecting using Modbus/RTU over TCP to {textBoxIP.Text}:{textBoxPort.Text}\r\n");
+                }
+                catch
+                {
+                    MessageBox.Show($"Unable to connect to {textBoxIP.Text}:{textBoxPort.Text} using Modbus/RTU over TCP");
+                    return;
+                }
+            }
+
+            if (radioButtonRTUUDP.Checked)
+            {
+
+                try
+                {
+                    udpclient = new UdpClient();
+                    endPoint = new IPEndPoint(IPAddress.Parse(textBoxIP.Text), Int32.Parse(textBoxPort.Text));
+                    udpclient.Connect(endPoint);
+
+                    var adapter = new UdpClientAdapter(udpclient); // for Modbus/RTU over UDP protocol
+                    master = factory.CreateRtuMaster(adapter);
+
+                    textBoxLog.AppendText($"Connecting using Modbus/RTU over UDP to {textBoxIP.Text}:{textBoxPort.Text}\r\n");
+                }
+                catch
+                {
+                    MessageBox.Show($"Unable to connect to {textBoxIP.Text}:{textBoxPort.Text} using Modbus/RTU over TCP");
+                    return;
+                }
+            }
+
+            if (radioButtonTCP.Checked)
+            {
+
+                try
+                {
+                    tcpclient = new TcpClient(textBoxIP.Text, Int32.Parse(textBoxPort.Text));
+
+                    master = factory.CreateMaster(tcpclient); // for Modbus/TCP protocol
+
+                    textBoxLog.AppendText($"Connecting using Modbus/TCP to {textBoxIP.Text}:{textBoxPort.Text}\r\n");
+                }
+                catch
+                {
+                    MessageBox.Show($"Unable to connect to {textBoxIP.Text}:{textBoxPort.Text} using Modbus/TCP");
+                    return;
+                }
+            }
+
+
+            if (radioButtonUDP.Checked)
+            {
+                try
+                {
+                    udpclient = new UdpClient();
+                    endPoint = new IPEndPoint(IPAddress.Parse(textBoxIP.Text), Int32.Parse(textBoxPort.Text));
+                    udpclient.Connect(endPoint);
+
+                    master = factory.CreateMaster(udpclient);
+
+                    textBoxLog.AppendText($"Connecting using Modbus/UDP to {textBoxIP.Text}:{textBoxPort.Text}\r\n");
+                }
+                catch
+                {
+                    MessageBox.Show($"Unable to connect to {textBoxIP.Text}:{textBoxPort.Text} using Modbus/UDP");
+                    return;
+                }
+            }
+
+            master.Transport.ReadTimeout = 5000;
+            master.Transport.WriteTimeout = 5000;
+
+        }
+
+        private void DoDisconnect()
+        {
+            if (serialPort1.IsOpen)
+            {
+                try
+                {
+                    serialPort1.Close();
+                    serialPort1.Dispose();
+                }
+                catch
+                {
+                    MessageBox.Show("Unable to close the serial port");
+                }
+            }
+
+            if (tcpclient != null)
+            {
+                tcpclient.GetStream().Close();
+                tcpclient.Close();
+                tcpclient.Dispose();
+                tcpclient = null;
+            }
+
+            if (udpclient != null)
+            {
+                udpclient.Close();
+                udpclient.Dispose();
+                udpclient = null;
+            }
+
+            if (master != null)
+            {
+                master.Transport.Dispose();
+                master.Dispose();
+                master = null;
+            }
+
+            buttonConnect.Text = "&Connect";
+            textBoxLog.AppendText("Disconnected\r\n");
+            groupBoxMode.Enabled = true;
+            chart1.Location = new System.Drawing.Point(458, 111);
+            chart1.Width = this.ClientRectangle.Width - 458 - 10;
+            buttonImport.Enabled = false;
+            buttonExport.Enabled = false;
+            groupBoxSystemInfo.Enabled = false;
+            groupBoxIOStatus.Enabled = false;
+            groupBoxActValues.Enabled = false;
+            groupBoxSensor.Enabled = false;
+            groupBoxAnalog.Enabled = false;
+            groupBoxFilters.Enabled = false;
+            groupBoxLaser.Enabled = false;
+            groupBoxTest.Enabled = false;
+            buttonLogin.Enabled = false;
+            //buttonLogin.Text = "&Login";
+
+            //chart1.ChartAreas[0].Visible = false;
+            //chart1.ChartAreas[1].Visible = false;
         }
     }
 }
