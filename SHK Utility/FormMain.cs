@@ -92,7 +92,6 @@ namespace SHK_Utility
         private TcpClient tcpclient;
         private UdpClient udpclient;
         private IPEndPoint endPoint;
-        private ModbusFactory factory;
         private IModbusMaster master;
         private byte slaveId = 1;
         private ushort[] registers;
@@ -107,7 +106,6 @@ namespace SHK_Utility
         public FormMain()
         {
             InitializeComponent();
-
 
             string[] ports = SerialPort.GetPortNames();
             comboBoxComPorts.Items.Clear();
@@ -151,7 +149,7 @@ namespace SHK_Utility
             groupBoxTCP.Enabled = false;
         }
 
-        private void buttonConnect_Click(object sender, EventArgs e)
+        private void ButtonConnect_Click(object sender, EventArgs e)
         {
             if (buttonConnect.Text.Equals("&Connect"))
             {
@@ -164,8 +162,6 @@ namespace SHK_Utility
 
                     startAddress = 0;
                     numRegisters = 7;
-
-                    
 
                     // read total number of registers first - SHKModBusRegisters.ENUM_SIZE
                     registers = master.ReadHoldingRegisters(slaveId, startAddress, numRegisters);
@@ -223,7 +219,6 @@ namespace SHK_Utility
                 }
                 catch (Exception mbe)
                 {
-
                     textBoxLog.AppendText(mbe.Message);
                     textBoxLog.AppendText("\r\n");
                     textBoxLog.AppendText("Unable to connect!\r\n");
@@ -747,7 +742,7 @@ namespace SHK_Utility
 
         }
 
-        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        private void TextBox1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyData == Keys.D)
             {
@@ -945,7 +940,7 @@ namespace SHK_Utility
             Properties.Settings.Default.Save();
         }
 
-        private void radioButtonSerial_CheckedChanged(object sender, EventArgs e)
+        private void RadioButtonSerial_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButtonSerial.Checked)
             {
@@ -959,7 +954,7 @@ namespace SHK_Utility
             }
         }
 
-        private void radioButtonTCP_CheckedChanged(object sender, EventArgs e)
+        private void RadioButtonTCP_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButtonTCP.Checked)
             {
@@ -973,7 +968,7 @@ namespace SHK_Utility
             }
         }
 
-        private void radioButtonUDP_CheckedChanged(object sender, EventArgs e)
+        private void RadioButtonUDP_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButtonUDP.Checked)
             {
@@ -987,7 +982,7 @@ namespace SHK_Utility
             }
         }
 
-        private void radioButtonRTUTCP_CheckedChanged(object sender, EventArgs e)
+        private void RadioButtonRTUTCP_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButtonRTUTCP.Checked)
             {
@@ -1001,7 +996,7 @@ namespace SHK_Utility
             }
         }
 
-        private void radioButtonRTUUDP_CheckedChanged(object sender, EventArgs e)
+        private void RadioButtonRTUUDP_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButtonRTUUDP.Checked)
             {
@@ -1015,7 +1010,7 @@ namespace SHK_Utility
             }
         }
 
-        private void chart1_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void Chart1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (chart1.Location.X != 0)
             {
@@ -1033,18 +1028,18 @@ namespace SHK_Utility
 
         }
 
-        private void chart1_MouseHover(object sender, EventArgs e)
+        private void Chart1_MouseHover(object sender, EventArgs e)
         {
             toolTip1.Show("double-click to resize", (Control)sender);
         }
 
-        private void textBoxLog_MouseHover(object sender, EventArgs e)
+        private void TextBoxLog_MouseHover(object sender, EventArgs e)
         {
             toolTip1.Show("click & press: 'h' to hex; 'd' to decimal", (Control)sender);
         }
 
 
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("http://www.ssktrinec.cz");
         }
@@ -1209,6 +1204,13 @@ namespace SHK_Utility
 
         private void DoDisconnect()
         {
+            if (master != null)
+            {
+                master.Transport.Dispose();
+                master.Dispose();
+                master = null;
+            }
+
             if (serialPort1.IsOpen)
             {
                 try
@@ -1237,15 +1239,8 @@ namespace SHK_Utility
                 udpclient = null;
             }
 
-            if (master != null)
-            {
-                master.Transport.Dispose();
-                master.Dispose();
-                master = null;
-            }
-
             buttonConnect.Text = "&Connect";
-            textBoxLog.AppendText("Disconnected\r\n");
+            textBoxLog.AppendText("Disconnected!\r\n");
             groupBoxMode.Enabled = true;
             chart1.Location = new System.Drawing.Point(458, 111);
             chart1.Width = this.ClientRectangle.Width - 458 - 10;
@@ -1260,10 +1255,6 @@ namespace SHK_Utility
             groupBoxLaser.Enabled = false;
             groupBoxTest.Enabled = false;
             buttonLogin.Enabled = false;
-            //buttonLogin.Text = "&Login";
-
-            //chart1.ChartAreas[0].Visible = false;
-            //chart1.ChartAreas[1].Visible = false;
         }
     }
 }

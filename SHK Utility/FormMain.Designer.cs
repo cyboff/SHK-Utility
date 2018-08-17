@@ -273,8 +273,8 @@
             this.chart1.Size = new System.Drawing.Size(494, 422);
             this.chart1.TabIndex = 2;
             this.chart1.Text = "chart1";
-            this.chart1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.chart1_MouseDoubleClick);
-            this.chart1.MouseHover += new System.EventHandler(this.chart1_MouseHover);
+            this.chart1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.Chart1_MouseDoubleClick);
+            this.chart1.MouseHover += new System.EventHandler(this.Chart1_MouseHover);
             // 
             // timer1
             // 
@@ -289,7 +289,7 @@
             this.buttonConnect.TabIndex = 5;
             this.buttonConnect.Text = "&Connect";
             this.buttonConnect.UseVisualStyleBackColor = true;
-            this.buttonConnect.Click += new System.EventHandler(this.buttonConnect_Click);
+            this.buttonConnect.Click += new System.EventHandler(this.ButtonConnect_Click);
             // 
             // comboBoxComPorts
             // 
@@ -346,8 +346,8 @@
             this.textBoxLog.Size = new System.Drawing.Size(802, 76);
             this.textBoxLog.TabIndex = 10;
             this.textBoxLog.WordWrap = false;
-            this.textBoxLog.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
-            this.textBoxLog.MouseHover += new System.EventHandler(this.textBoxLog_MouseHover);
+            this.textBoxLog.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBox1_KeyDown);
+            this.textBoxLog.MouseHover += new System.EventHandler(this.TextBoxLog_MouseHover);
             // 
             // comboBoxGain1
             // 
@@ -1394,7 +1394,7 @@
             this.radioButtonRTUUDP.TabIndex = 4;
             this.radioButtonRTUUDP.Text = "RTU over UDP";
             this.radioButtonRTUUDP.UseVisualStyleBackColor = true;
-            this.radioButtonRTUUDP.CheckedChanged += new System.EventHandler(this.radioButtonRTUUDP_CheckedChanged);
+            this.radioButtonRTUUDP.CheckedChanged += new System.EventHandler(this.RadioButtonRTUUDP_CheckedChanged);
             // 
             // radioButtonRTUTCP
             // 
@@ -1405,7 +1405,7 @@
             this.radioButtonRTUTCP.TabIndex = 3;
             this.radioButtonRTUTCP.Text = "RTU over TCP";
             this.radioButtonRTUTCP.UseVisualStyleBackColor = true;
-            this.radioButtonRTUTCP.CheckedChanged += new System.EventHandler(this.radioButtonRTUTCP_CheckedChanged);
+            this.radioButtonRTUTCP.CheckedChanged += new System.EventHandler(this.RadioButtonRTUTCP_CheckedChanged);
             // 
             // radioButtonUDP
             // 
@@ -1416,7 +1416,7 @@
             this.radioButtonUDP.TabIndex = 2;
             this.radioButtonUDP.Text = "Modbus/UDP";
             this.radioButtonUDP.UseVisualStyleBackColor = true;
-            this.radioButtonUDP.CheckedChanged += new System.EventHandler(this.radioButtonUDP_CheckedChanged);
+            this.radioButtonUDP.CheckedChanged += new System.EventHandler(this.RadioButtonUDP_CheckedChanged);
             // 
             // radioButtonTCP
             // 
@@ -1427,7 +1427,7 @@
             this.radioButtonTCP.TabIndex = 1;
             this.radioButtonTCP.Text = "Modbus/TCP";
             this.radioButtonTCP.UseVisualStyleBackColor = true;
-            this.radioButtonTCP.CheckedChanged += new System.EventHandler(this.radioButtonTCP_CheckedChanged);
+            this.radioButtonTCP.CheckedChanged += new System.EventHandler(this.RadioButtonTCP_CheckedChanged);
             // 
             // radioButtonSerial
             // 
@@ -1440,7 +1440,7 @@
             this.radioButtonSerial.TabStop = true;
             this.radioButtonSerial.Text = "Serial Port RTU";
             this.radioButtonSerial.UseVisualStyleBackColor = true;
-            this.radioButtonSerial.CheckedChanged += new System.EventHandler(this.radioButtonSerial_CheckedChanged);
+            this.radioButtonSerial.CheckedChanged += new System.EventHandler(this.RadioButtonSerial_CheckedChanged);
             // 
             // groupBoxTCP
             // 
@@ -1514,7 +1514,7 @@
             this.linkLabel1.TabIndex = 74;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "www.ssktrinec.cz";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel1_LinkClicked);
             // 
             // FormMain
             // 
