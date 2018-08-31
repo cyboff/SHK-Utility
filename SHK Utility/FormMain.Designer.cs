@@ -857,12 +857,7 @@
             // 
             this.numericUpDownOffset.Location = new System.Drawing.Point(80, 133);
             this.numericUpDownOffset.Maximum = new decimal(new int[] {
-            95,
-            0,
-            0,
-            0});
-            this.numericUpDownOffset.Minimum = new decimal(new int[] {
-            5,
+            500,
             0,
             0,
             0});
@@ -870,7 +865,7 @@
             this.numericUpDownOffset.Size = new System.Drawing.Size(60, 20);
             this.numericUpDownOffset.TabIndex = 50;
             this.numericUpDownOffset.Value = new decimal(new int[] {
-            50,
+            250,
             0,
             0,
             0});
