@@ -857,7 +857,7 @@
             // 
             this.numericUpDownOffset.Location = new System.Drawing.Point(80, 133);
             this.numericUpDownOffset.Maximum = new decimal(new int[] {
-            500,
+            999,
             0,
             0,
             0});

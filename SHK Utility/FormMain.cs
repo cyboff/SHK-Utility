@@ -63,6 +63,8 @@ namespace SHK_Utility
         AN_VALUES, // 25 registers
         EXEC_TIME_ADC = AN_VALUES + 25,  // time of adc convertions for one mirror
         EXEC_TIME,                       // time of adc conv + results calculation
+        EXEC_TIME_TRIGGER,
+        OFFSET_DELAY,
         TOTAL_ERRORS,                    // modbus errors
         // leave this one
         TOTAL_REGS_SIZE
