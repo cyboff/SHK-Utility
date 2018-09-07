@@ -486,9 +486,9 @@ namespace SHK_Utility
             chart1.Series["Window"].Points.AddXY(registers[(int)SHKModBusRegisters.WINDOW_END], 100);
             chart1.Series["Window"].Points.AddXY(100, 100);
 
-            chart1.ChartAreas[0].AxisX2.Minimum = 100 * (float)registers[(int)SHKModBusRegisters.WINDOW_BEGIN] / ((float)registers[(int)SHKModBusRegisters.WINDOW_BEGIN] - (float)registers[(int)SHKModBusRegisters.WINDOW_END]);
-            chart1.ChartAreas[0].AxisX2.Maximum = (100 * (100 - chart1.ChartAreas[0].AxisX2.Minimum) / (float)registers[(int)SHKModBusRegisters.WINDOW_END]) + chart1.ChartAreas[0].AxisX2.Minimum;
-            chart1.ChartAreas[0].AxisX2.IntervalOffset = -chart1.ChartAreas[0].AxisX2.Minimum;
+            chart1.ChartAreas[0].AxisX.Minimum = 100 * (float)registers[(int)SHKModBusRegisters.WINDOW_BEGIN] / ((float)registers[(int)SHKModBusRegisters.WINDOW_BEGIN] - (float)registers[(int)SHKModBusRegisters.WINDOW_END]);
+            chart1.ChartAreas[0].AxisX.Maximum = (100 * (100 - chart1.ChartAreas[0].AxisX.Minimum) / (float)registers[(int)SHKModBusRegisters.WINDOW_END]) + chart1.ChartAreas[0].AxisX.Minimum;
+            chart1.ChartAreas[0].AxisX.IntervalOffset = -chart1.ChartAreas[0].AxisX.Minimum;
 
             chart1.Series["Position"].Points.Clear();
             chart1.Series["Position"].Points.AddXY((float)registers[(int)SHKModBusRegisters.POSITION_VALUE] / 10, 100);
@@ -500,6 +500,8 @@ namespace SHK_Utility
                 chart1.Series["Signal"].Points.AddXY(i * 4, ((float)((uint)registers[i + (int)SHKModBusRegisters.AN_VALUES] % 256)) * 100 / 256); // LSB to 0-100%
                 chart1.Series["Signal"].Points.AddXY(i * 4 + 2, ((float)((uint)registers[i + (int)SHKModBusRegisters.AN_VALUES] >> 8)) * 100 / 256); // MSB to 0-100%
             }
+            //repeat last value to have nice chart
+            chart1.Series["Signal"].Points.AddXY(100, ((float)((uint)registers[(int)SHKModBusRegisters.EXEC_TIME_ADC - 1] >> 8)) * 100 / 256); // MSB to 0-100% 
 
             //time chart
             chart1.ChartAreas[1].AxisX.Minimum = minDate.ToOADate();
