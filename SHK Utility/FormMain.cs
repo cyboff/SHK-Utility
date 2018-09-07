@@ -52,16 +52,15 @@ namespace SHK_Utility
         ACT_TEMPERATURE,
         MAX_TEMPERATURE,
         TOTAL_RUNTIME,
-
-        MOTOR_TIME_DIFF,
         IO_STATE,
 
         PEAK_VALUE,
         POSITION_VALUE,
         POSITION_VALUE_AVG,
 
-        AN_VALUES, // 25 registers
-        EXEC_TIME_ADC = AN_VALUES + 25,  // time of adc convertions for one mirror
+        AN_VALUES,                       // 25 registers
+        MOTOR_TIME_DIFF = AN_VALUES + 25,
+        EXEC_TIME_ADC,                   // time of adc convertions for one mirror
         EXEC_TIME,                       // time of adc conv + results calculation
         EXEC_TIME_TRIGGER,
         OFFSET_DELAY,
@@ -496,14 +495,14 @@ namespace SHK_Utility
             chart1.Series["Signal"].Points.Clear();
             // start from second point to have nice chart
             chart1.Series["Signal"].Points.AddXY(2, ((float)((uint)registers[(int)SHKModBusRegisters.AN_VALUES] >> 8)) * 100 / 256); // MSB to 0-100%
-            for (int i = 1; i < ((int)SHKModBusRegisters.EXEC_TIME_ADC - (int)SHKModBusRegisters.AN_VALUES); i++)   // EXEC_TIME_ADC = AN_VALUES+25
+            for (int i = 1; i < ((int)SHKModBusRegisters.MOTOR_TIME_DIFF - (int)SHKModBusRegisters.AN_VALUES); i++)   // MOTOR_TIME_DIFF = AN_VALUES+25
             {
                 // AN_VALUES 50 values from analog_buffer[200]: MSB = signal[i*8+4], LSB = signal[i*8] 
                 chart1.Series["Signal"].Points.AddXY(i * 4, ((float)((uint)registers[i + (int)SHKModBusRegisters.AN_VALUES] % 256)) * 100 / 256); // LSB to 0-100%
                 chart1.Series["Signal"].Points.AddXY(i * 4 + 2, ((float)((uint)registers[i + (int)SHKModBusRegisters.AN_VALUES] >> 8)) * 100 / 256); // MSB to 0-100%
             }
             //repeat last value to have nice chart
-            //chart1.Series["Signal"].Points.AddXY(100, ((float)((uint)registers[(int)SHKModBusRegisters.EXEC_TIME_ADC - 1] >> 8)) * 100 / 256); // MSB to 0-100% 
+            //chart1.Series["Signal"].Points.AddXY(100, ((float)((uint)registers[(int)SHKModBusRegisters.MOTOR_TIME_DIFF - 1] >> 8)) * 100 / 256); // MSB to 0-100% 
 
             //time chart
             chart1.ChartAreas[1].AxisX.Minimum = minDate.ToOADate();
