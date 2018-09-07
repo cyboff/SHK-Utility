@@ -494,14 +494,16 @@ namespace SHK_Utility
             chart1.Series["Position"].Points.AddXY((float)registers[(int)SHKModBusRegisters.POSITION_VALUE] / 10, 100);
 
             chart1.Series["Signal"].Points.Clear();
-            for (int i = 0; i < ((int)SHKModBusRegisters.EXEC_TIME_ADC - (int)SHKModBusRegisters.AN_VALUES); i++)   // EXEC_TIME_ADC = AN_VALUES+25
+            // start from second point to have nice chart
+            chart1.Series["Signal"].Points.AddXY(2, ((float)((uint)registers[(int)SHKModBusRegisters.AN_VALUES] >> 8)) * 100 / 256); // MSB to 0-100%
+            for (int i = 1; i < ((int)SHKModBusRegisters.EXEC_TIME_ADC - (int)SHKModBusRegisters.AN_VALUES); i++)   // EXEC_TIME_ADC = AN_VALUES+25
             {
                 // AN_VALUES 50 values from analog_buffer[200]: MSB = signal[i*8+4], LSB = signal[i*8] 
                 chart1.Series["Signal"].Points.AddXY(i * 4, ((float)((uint)registers[i + (int)SHKModBusRegisters.AN_VALUES] % 256)) * 100 / 256); // LSB to 0-100%
                 chart1.Series["Signal"].Points.AddXY(i * 4 + 2, ((float)((uint)registers[i + (int)SHKModBusRegisters.AN_VALUES] >> 8)) * 100 / 256); // MSB to 0-100%
             }
             //repeat last value to have nice chart
-            chart1.Series["Signal"].Points.AddXY(100, ((float)((uint)registers[(int)SHKModBusRegisters.EXEC_TIME_ADC - 1] >> 8)) * 100 / 256); // MSB to 0-100% 
+            //chart1.Series["Signal"].Points.AddXY(100, ((float)((uint)registers[(int)SHKModBusRegisters.EXEC_TIME_ADC - 1] >> 8)) * 100 / 256); // MSB to 0-100% 
 
             //time chart
             chart1.ChartAreas[1].AxisX.Minimum = minDate.ToOADate();

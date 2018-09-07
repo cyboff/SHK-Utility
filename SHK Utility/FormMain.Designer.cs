@@ -178,8 +178,7 @@
             this.chart1.BorderlineColor = System.Drawing.SystemColors.ControlLight;
             chartArea1.AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.True;
             chartArea1.AxisX.Interval = 10D;
-            chartArea1.AxisX.LabelAutoFitStyle = ((System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles)(((System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.IncreaseFont | System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.DecreaseFont) 
-            | System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.WordWrap)));
+            chartArea1.AxisX.LabelAutoFitStyle = ((System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles)((System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.IncreaseFont | System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.DecreaseFont)));
             chartArea1.AxisX.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
             chartArea1.AxisX.Maximum = 100D;
             chartArea1.AxisX.Minimum = 0D;
@@ -240,7 +239,7 @@
             series2.Name = "Window";
             series2.XAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
             series3.ChartArea = "ChartArea1";
-            series3.Color = System.Drawing.Color.OliveDrab;
+            series3.Color = System.Drawing.Color.DarkSeaGreen;
             series3.Legend = "Legend1";
             series3.LegendText = "Position (Unfiltered)";
             series3.Name = "Position";
@@ -259,7 +258,7 @@
             series5.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Time;
             series6.ChartArea = "ChartArea2";
             series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series6.Color = System.Drawing.Color.OliveDrab;
+            series6.Color = System.Drawing.Color.DarkSeaGreen;
             series6.Legend = "Legend2";
             series6.LegendText = "Pos. (Unfiltered)";
             series6.Name = "Position Raw";
@@ -271,7 +270,7 @@
             series7.Name = "Position Out";
             series8.ChartArea = "ChartArea2";
             series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series8.Color = System.Drawing.Color.Red;
+            series8.Color = System.Drawing.Color.Salmon;
             series8.Legend = "Legend2";
             series8.LegendText = "Internal Temp.";
             series8.Name = "Temperature";
