@@ -458,9 +458,9 @@ namespace SHK_Utility
             else
             { textBoxActTemp.BackColor = System.Drawing.SystemColors.Window; }
 
-            textBoxInt.Text = ((float)registers[(int)SHKModBusRegisters.PEAK_VALUE] * 100 / 256).ToString("0.0");
+            textBoxInt.Text = registers[(int)SHKModBusRegisters.PEAK_VALUE].ToString("0.0");
             textBoxPos.Text = ((float)registers[(int)SHKModBusRegisters.POSITION_VALUE_AVG] / 10).ToString("0.0");
-            textBoxAnalog1.Text = ((float)registers[(int)SHKModBusRegisters.PEAK_VALUE] / 16 + 4).ToString("0.0"); // in 4-20 mA   b = 16/100*a + 4 
+            textBoxAnalog1.Text = ((float)registers[(int)SHKModBusRegisters.PEAK_VALUE] * 16 / 100 + 4).ToString("0.0"); // in 4-20 mA   b = 16/100*a + 4 
             textBoxAnalog2.Text = ((float)registers[(int)SHKModBusRegisters.POSITION_VALUE_AVG] * 16 / 1000 + 4).ToString("0.0");
 
             //update charts
@@ -507,7 +507,7 @@ namespace SHK_Utility
             //time chart
             chart1.ChartAreas[1].AxisX.Minimum = minDate.ToOADate();
             chart1.ChartAreas[1].AxisX.Maximum = now.ToOADate();
-            chart1.Series["Intensity"].Points.AddXY(now.ToOADate(), (float)registers[(int)SHKModBusRegisters.PEAK_VALUE] * 100 / 256);
+            chart1.Series["Intensity"].Points.AddXY(now.ToOADate(), registers[(int)SHKModBusRegisters.PEAK_VALUE]);
             chart1.Series["Position Raw"].Points.AddXY(now.ToOADate(), (float)registers[(int)SHKModBusRegisters.POSITION_VALUE] / 10);
             chart1.Series["Position Out"].Points.AddXY(now.ToOADate(), (float)registers[(int)SHKModBusRegisters.POSITION_VALUE_AVG] / 10);
             chart1.Series["Temperature"].Points.AddXY(now.ToOADate(), registers[(int)SHKModBusRegisters.ACT_TEMPERATURE]);
