@@ -224,10 +224,10 @@
             this.chart1.Legends.Add(legend2);
             this.chart1.Location = new System.Drawing.Point(458, 118);
             this.chart1.Name = "chart1";
-            series1.BorderColor = System.Drawing.Color.Chocolate;
+            series1.BorderColor = System.Drawing.Color.SandyBrown;
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Range;
-            series1.Color = System.Drawing.Color.BurlyWood;
+            series1.Color = System.Drawing.Color.PeachPuff;
             series1.Legend = "Legend1";
             series1.Name = "Threshold";
             series1.XAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
@@ -238,8 +238,10 @@
             series2.Legend = "Legend1";
             series2.Name = "Window";
             series2.XAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
+            series3.BorderWidth = 0;
             series3.ChartArea = "ChartArea1";
             series3.Color = System.Drawing.Color.DarkSeaGreen;
+            series3.CustomProperties = "PointWidth=0.25";
             series3.Legend = "Legend1";
             series3.LegendText = "Position (Unfiltered)";
             series3.Name = "Position";
@@ -869,7 +871,7 @@
             // 
             this.numericUpDownOffset.Location = new System.Drawing.Point(80, 133);
             this.numericUpDownOffset.Maximum = new decimal(new int[] {
-            999,
+            2000,
             0,
             0,
             0});
