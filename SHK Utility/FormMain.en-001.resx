@@ -123,7 +123,8 @@
   <data name="buttonConnect.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="comboBoxComPorts.ToolTip" xml:space="preserve">
+  <data name="
+        .ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="comboBoxBaudrates.ToolTip" xml:space="preserve">

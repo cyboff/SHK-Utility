@@ -241,7 +241,7 @@
             series3.BorderWidth = 0;
             series3.ChartArea = "ChartArea1";
             series3.Color = System.Drawing.Color.DarkSeaGreen;
-            series3.CustomProperties = "PointWidth=0.25";
+            series3.CustomProperties = "PointWidth=0.3";
             series3.Legend = "Legend1";
             series3.LegendText = "Position (Unfiltered)";
             series3.Name = "Position";

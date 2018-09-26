@@ -118,6 +118,7 @@ namespace SHK_Utility
                 if (comboBoxComPorts.SelectedIndex < 0) comboBoxComPorts.SelectedIndex = 0;
 
             }
+            else comboBoxComPorts.BackColor = Color.Red;
 
             comboBoxBaudrates.SelectedIndex = Properties.Settings.Default.BaudrateIndex;
 
@@ -520,6 +521,7 @@ namespace SHK_Utility
             string[] ports = SerialPort.GetPortNames();
             comboBoxComPorts.Items.Clear();
             comboBoxComPorts.Items.AddRange(ports);
+            if (comboBoxComPorts.Items.Count > 0) comboBoxComPorts.BackColor = Color.White; else comboBoxComPorts.BackColor = Color.Red;
         }
 
 
