@@ -454,7 +454,9 @@ namespace SHK_Utility
             textBoxTotalTime.Text = registers[(int)SHKModBusRegisters.TOTAL_RUNTIME].ToString();
             textBoxActTemp.Text = registers[(int)SHKModBusRegisters.ACT_TEMPERATURE].ToString();
             textBoxMaxTemp.Text = registers[(int)SHKModBusRegisters.MAX_TEMPERATURE].ToString();
-            if (registers[(int)SHKModBusRegisters.ACT_TEMPERATURE] > 50)  // internal temperature is too high!
+
+            // if internal temperature is too high!
+            if ((registers[(int)SHKModBusRegisters.ACT_TEMPERATURE] > 55) || ((registers[(int)SHKModBusRegisters.ACT_TEMPERATURE] > 50) && (textBoxActTemp.BackColor == Color.Red))) 
             { textBoxActTemp.BackColor = Color.Red; }
             else
             { textBoxActTemp.BackColor = System.Drawing.SystemColors.Window; }
