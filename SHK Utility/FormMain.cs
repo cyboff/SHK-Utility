@@ -134,8 +134,15 @@ namespace SHK_Utility
             comboBoxParity.SelectedIndex = Properties.Settings.Default.ParityIndex;
 
             comboBoxStopBits.Items.Clear();
-            comboBoxStopBits.Items.Add("1");
-            comboBoxStopBits.Items.Add("2");
+            if (comboBoxParity.SelectedIndex == 1)  // "None"
+            {
+                comboBoxStopBits.Items.Add("1");
+                comboBoxStopBits.Items.Add("2");
+            }
+            else
+            {
+                comboBoxStopBits.Items.Add("1");
+            }
             comboBoxStopBits.SelectedIndex = Properties.Settings.Default.StopBitsIndex;
 
 
@@ -1334,6 +1341,20 @@ namespace SHK_Utility
                 }
             }
 
+        }
+
+        private void comboBoxParity_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            comboBoxStopBits.Items.Clear();
+            if (comboBoxParity.SelectedIndex == 1)  // "None"
+            {
+                comboBoxStopBits.Items.Add("1");
+                comboBoxStopBits.Items.Add("2");
+            }
+            else
+            {
+                comboBoxStopBits.Items.Add("1");
+            }
         }
     }
 }
