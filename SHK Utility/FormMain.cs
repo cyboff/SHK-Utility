@@ -124,7 +124,7 @@ namespace SHK_Utility
 
             comboBoxDataBits.Items.Clear();
             comboBoxDataBits.Items.Add("8");
-            comboBoxDataBits.Items.Add("7");
+            //comboBoxDataBits.Items.Add("7");
             comboBoxDataBits.SelectedIndex = Properties.Settings.Default.DataBitsIndex;
 
             comboBoxParity.Items.Clear();
@@ -187,6 +187,7 @@ namespace SHK_Utility
                         groupBoxLaser.Enabled = false;
                         groupBoxTest.Enabled = false;
                         buttonLogin.Enabled = true;
+                        buttonSaveSerial.Enabled = false;
                         //buttonLogin.Text = "&Login";
                         buttonLogin.Focus();
                     }
@@ -200,6 +201,7 @@ namespace SHK_Utility
                         groupBoxAnalog.Enabled = true;
                         groupBoxFilters.Enabled = true;
                         buttonLogin.Enabled = true;
+                        buttonSaveSerial.Enabled = true;
                     }
 
 
@@ -456,7 +458,7 @@ namespace SHK_Utility
             textBoxMaxTemp.Text = registers[(int)SHKModBusRegisters.MAX_TEMPERATURE].ToString();
 
             // if internal temperature is too high!
-            if ((registers[(int)SHKModBusRegisters.ACT_TEMPERATURE] > 55) || ((registers[(int)SHKModBusRegisters.ACT_TEMPERATURE] > 50) && (textBoxActTemp.BackColor == Color.Red))) 
+            if ((registers[(int)SHKModBusRegisters.ACT_TEMPERATURE] > 55) || ((registers[(int)SHKModBusRegisters.ACT_TEMPERATURE] > 50) && (textBoxActTemp.BackColor == Color.Red)))
             { textBoxActTemp.BackColor = Color.Red; }
             else
             { textBoxActTemp.BackColor = System.Drawing.SystemColors.Window; }
@@ -704,6 +706,7 @@ namespace SHK_Utility
                         buttonLogin.Text = "&Logout";
                         buttonImport.Enabled = true;
                         buttonExport.Enabled = true;
+                        buttonSaveSerial.Enabled = true;
                         groupBoxLaser.Enabled = true;
                         groupBoxTest.Enabled = true;
                         groupBoxSensor.Enabled = true;
@@ -716,6 +719,7 @@ namespace SHK_Utility
                         buttonLogin.Text = "&Logout";
                         buttonImport.Enabled = true;
                         buttonExport.Enabled = true;
+                        buttonSaveSerial.Enabled = true;
                         groupBoxLaser.Enabled = true;
                         groupBoxTest.Enabled = true;
                         groupBoxSensor.Enabled = true;
@@ -726,6 +730,7 @@ namespace SHK_Utility
                         break;
                     case DialogResult.Cancel:  // wrong password
                         buttonLogin.Text = "&Login";
+                        buttonSaveSerial.Enabled = false;
                         groupBoxLaser.Enabled = false;
                         groupBoxTest.Enabled = false;
                         groupBoxSensor.Enabled = false;
@@ -741,6 +746,7 @@ namespace SHK_Utility
                 buttonLogin.Text = "&Login";
                 buttonImport.Enabled = false;
                 buttonExport.Enabled = false;
+                buttonSaveSerial.Enabled = false;
                 groupBoxLaser.Enabled = false;
                 groupBoxTest.Enabled = false;
                 groupBoxSensor.Enabled = false;
@@ -1062,21 +1068,21 @@ namespace SHK_Utility
             {
                 // configure serial port
                 serialPort1.BaudRate = int.Parse(comboBoxBaudrates.SelectedItem.ToString());
+                serialPort1.DataBits = 8;
 
+                //switch (comboBoxDataBits.SelectedItem.ToString())
+                //{
+                //    case "8":
+                //        serialPort1.DataBits = 8;
+                //        break;
+                //    case "7":
+                //        serialPort1.DataBits = 7;
+                //        break;
 
-                switch (comboBoxDataBits.SelectedItem.ToString())
-                {
-                    case "8":
-                        serialPort1.DataBits = 8;
-                        break;
-                    case "7":
-                        serialPort1.DataBits = 7;
-                        break;
-
-                    default:
-                        serialPort1.DataBits = 8;
-                        break;
-                }
+                //    default:
+                //        serialPort1.DataBits = 8;
+                //        break;
+                //}
 
 
                 switch (comboBoxParity.SelectedItem.ToString())
@@ -1264,6 +1270,70 @@ namespace SHK_Utility
             groupBoxLaser.Enabled = false;
             groupBoxTest.Enabled = false;
             buttonLogin.Enabled = false;
+            buttonSaveSerial.Enabled = false;
+        }
+
+        private void buttonSaveSerial_Click(object sender, EventArgs e)
+        {
+            ushort modbusFormat = 0x06;
+            ushort[] modbusData = { 0, 0, 0 };
+
+            if (comboBoxStopBits.SelectedIndex == 0)
+            {
+                switch (comboBoxParity.SelectedItem.ToString())
+                {
+                    case "Even":
+                        modbusFormat = 0x06; // SERIAL_8E1
+                        break;
+                    case "None":
+                        modbusFormat = 0x00; // SERIAL_8N1
+                        break;
+                    case "Odd":
+                        modbusFormat = 0x07; // SERIAL_8O1
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else if ((comboBoxParity.SelectedItem.ToString() == "None") && (comboBoxStopBits.SelectedIndex == 1)) modbusFormat = 0x04; //SERIAL_8N2
+
+            DialogResult dialogResult = MessageBox.Show("Save following settings to sensor?" + Environment.NewLine + Environment.NewLine
+                + "Modbus ID:  " + numericUpDownID.Value.ToString() + Environment.NewLine + Environment.NewLine
+                + "Baudrate:  " + comboBoxBaudrates.SelectedItem.ToString() + Environment.NewLine
+                + "Data Bits:  " + comboBoxDataBits.SelectedItem.ToString() + Environment.NewLine
+                + "Parity:  " + comboBoxParity.SelectedItem.ToString() + Environment.NewLine
+                + "Stop Bits:  " + comboBoxStopBits.SelectedItem.ToString() + Environment.NewLine
+                , "Save Serial Comm. Settings", MessageBoxButtons.YesNo);
+
+            if (dialogResult == DialogResult.Yes)
+            {
+                //do something
+                try
+                {
+                    modbusData[0] = ushort.Parse(numericUpDownID.Value.ToString());
+                    modbusData[1] = (ushort)(int.Parse(comboBoxBaudrates.SelectedItem.ToString()) / 100);
+                    modbusData[2] = modbusFormat;
+
+                    // check changes
+                    if ((modbusData[0] != registers[(int)SHKModBusRegisters.MODBUS_ID])
+                       || (modbusData[1] != registers[(int)SHKModBusRegisters.MODBUS_SPEED])
+                       || (modbusData[2] != registers[(int)SHKModBusRegisters.MODBUS_FORMAT]))
+                    {
+                        master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.MODBUS_ID, modbusData);
+                        textBoxLog.AppendText($"Saving new serial communication settings and reconnecting...\r\n");
+
+
+                        buttonConnect.PerformClick(); // Disconnect
+                        buttonConnect.PerformClick(); // Re-connect with new settings
+                    }
+                }
+                catch (Exception mbe)
+                {
+                    textBoxLog.AppendText(mbe.Message);
+                    textBoxLog.AppendText("\r\n");
+                }
+            }
+
         }
     }
 }

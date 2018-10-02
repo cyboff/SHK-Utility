@@ -145,6 +145,7 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.buttonSaveSerial = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.groupBoxSerial.SuspendLayout();
             this.groupBoxLaser.SuspendLayout();
@@ -427,13 +428,9 @@
             this.comboBoxParity.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.comboBoxParity.FormattingEnabled = true;
             this.comboBoxParity.Items.AddRange(new object[] {
-            "1200",
-            "4800",
-            "9600",
-            "19200",
-            "38400",
-            "57600",
-            "115200"});
+            "Even",
+            "None",
+            "Odd"});
             this.comboBoxParity.Location = new System.Drawing.Point(421, 16);
             this.comboBoxParity.Name = "comboBoxParity";
             this.comboBoxParity.Size = new System.Drawing.Size(49, 21);
@@ -445,13 +442,8 @@
             this.comboBoxStopBits.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.comboBoxStopBits.FormattingEnabled = true;
             this.comboBoxStopBits.Items.AddRange(new object[] {
-            "1200",
-            "4800",
-            "9600",
-            "19200",
-            "38400",
-            "57600",
-            "115200"});
+            "1",
+            "2"});
             this.comboBoxStopBits.Location = new System.Drawing.Point(534, 16);
             this.comboBoxStopBits.Name = "comboBoxStopBits";
             this.comboBoxStopBits.Size = new System.Drawing.Size(33, 21);
@@ -481,13 +473,7 @@
             this.comboBoxDataBits.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.comboBoxDataBits.FormattingEnabled = true;
             this.comboBoxDataBits.Items.AddRange(new object[] {
-            "1200",
-            "4800",
-            "9600",
-            "19200",
-            "38400",
-            "57600",
-            "115200"});
+            "8"});
             this.comboBoxDataBits.Location = new System.Drawing.Point(340, 16);
             this.comboBoxDataBits.Name = "comboBoxDataBits";
             this.comboBoxDataBits.Size = new System.Drawing.Size(33, 21);
@@ -1459,7 +1445,7 @@
             this.groupBoxTCP.Controls.Add(this.textBoxIP);
             this.groupBoxTCP.Location = new System.Drawing.Point(230, 65);
             this.groupBoxTCP.Name = "groupBoxTCP";
-            this.groupBoxTCP.Size = new System.Drawing.Size(600, 47);
+            this.groupBoxTCP.Size = new System.Drawing.Size(435, 47);
             this.groupBoxTCP.TabIndex = 72;
             this.groupBoxTCP.TabStop = false;
             this.groupBoxTCP.Text = "Network";
@@ -1525,11 +1511,23 @@
             this.linkLabel1.Text = "www.ssktrinec.cz";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel1_LinkClicked);
             // 
+            // buttonSaveSerial
+            // 
+            this.buttonSaveSerial.Enabled = false;
+            this.buttonSaveSerial.Location = new System.Drawing.Point(717, 71);
+            this.buttonSaveSerial.Name = "buttonSaveSerial";
+            this.buttonSaveSerial.Size = new System.Drawing.Size(113, 36);
+            this.buttonSaveSerial.TabIndex = 75;
+            this.buttonSaveSerial.Text = "Save Serial Comm. Settings to Sensor";
+            this.buttonSaveSerial.UseVisualStyleBackColor = true;
+            this.buttonSaveSerial.Click += new System.EventHandler(this.buttonSaveSerial_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(964, 631);
+            this.Controls.Add(this.buttonSaveSerial);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.chart1);
@@ -1697,6 +1695,7 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.Button buttonSaveSerial;
     }
 }
 
