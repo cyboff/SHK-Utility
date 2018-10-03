@@ -208,7 +208,7 @@ namespace SHK_Utility
                         groupBoxAnalog.Enabled = true;
                         groupBoxFilters.Enabled = true;
                         buttonLogin.Enabled = true;
-                        buttonSaveSerial.Enabled = true;
+                        if (radioButtonSerial.Checked) buttonSaveSerial.Enabled = true;
                     }
 
 
@@ -713,7 +713,7 @@ namespace SHK_Utility
                         buttonLogin.Text = "&Logout";
                         buttonImport.Enabled = true;
                         buttonExport.Enabled = true;
-                        buttonSaveSerial.Enabled = true;
+                        if (radioButtonSerial.Checked) buttonSaveSerial.Enabled = true;
                         groupBoxLaser.Enabled = true;
                         groupBoxTest.Enabled = true;
                         groupBoxSensor.Enabled = true;
@@ -726,7 +726,7 @@ namespace SHK_Utility
                         buttonLogin.Text = "&Logout";
                         buttonImport.Enabled = true;
                         buttonExport.Enabled = true;
-                        buttonSaveSerial.Enabled = true;
+                        if (radioButtonSerial.Checked) buttonSaveSerial.Enabled = true;
                         groupBoxLaser.Enabled = true;
                         groupBoxTest.Enabled = true;
                         groupBoxSensor.Enabled = true;
@@ -1248,7 +1248,7 @@ namespace SHK_Utility
 
             if (tcpclient != null)
             {
-                tcpclient.GetStream().Close();
+                //tcpclient.GetStream().Close();
                 tcpclient.Close();
                 tcpclient.Dispose();
                 tcpclient = null;
@@ -1355,6 +1355,7 @@ namespace SHK_Utility
             {
                 comboBoxStopBits.Items.Add("1");
             }
+            comboBoxStopBits.SelectedIndex = 0;
         }
     }
 }
