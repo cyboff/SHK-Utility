@@ -221,9 +221,13 @@ namespace SHK_Utility
                     {
                         timer1.Interval = 2000;
                     }
-                    else
+                    else if (registers[(int)SHKModBusRegisters.MODBUS_SPEED] * 100 < 57600)
                     {
                         timer1.Interval = 500;
+                    }
+                    else
+                    {
+                        timer1.Interval = 250;
                     }
 
                     timer1.Start();
@@ -262,6 +266,7 @@ namespace SHK_Utility
                 buttonLogin.Text = "&Login";
                 buttonImport.Enabled = false;
                 buttonExport.Enabled = false;
+                buttonSaveSerial.Enabled = false;
                 groupBoxLaser.Enabled = false;
                 groupBoxTest.Enabled = false;
                 groupBoxSensor.Enabled = false;
