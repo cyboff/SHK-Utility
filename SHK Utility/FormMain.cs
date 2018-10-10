@@ -385,22 +385,27 @@ namespace SHK_Utility
                 return;
             }
 
+
             // update log
+            string registerslog = "";
+
             for (int i = 0; i < numRegisters; i++)
             {
-                //textBox1.AppendText($"R{startAddress + i}={registers[i]} ");
+                //textBox1.AppendText($"R{startAddress + i}={registers[i]} ");  
                 if (logFormatHex)
                 {
-                    textBoxLog.AppendText($"{registers[i]:X4} "); // hex 
+                    //textBoxLog.AppendText($"{registers[i]:X4} "); // hex 
+                    registerslog += $"{registers[i]:X4} ";
                 }
                 else
                 {
-                    textBoxLog.AppendText($"{registers[i]} ");
+                    //textBoxLog.AppendText($"{registers[i]} ");
+                    registerslog += $"{registers[i]} "; // lower CPU load than textBox.AppendText() all the time
                 }
             }
-            textBoxLog.AppendText("\r\n");
+            textBoxLog.AppendText($"{registerslog}\r\n");
 
-            // update setup values every 10 seconds
+            // update setup values every 20 ticks
             if (timer_counter == 0)
             {
                 // load setup from registers
@@ -409,14 +414,14 @@ namespace SHK_Utility
                 textBoxFW.Text = registers[(int)SHKModBusRegisters.MB_FW_VERSION].ToString();
 
 
-                comboBoxSet.SelectedIndex = registers[(int)SHKModBusRegisters.SET];
-                comboBoxPositionMode.SelectedIndex = registers[(int)SHKModBusRegisters.POSITION_MODE];
-                comboBoxAnalogOut.SelectedIndex = registers[(int)SHKModBusRegisters.ANALOG_OUT_MODE];
+                if (!comboBoxSet.DroppedDown) comboBoxSet.SelectedIndex = registers[(int)SHKModBusRegisters.SET];
+                if (!comboBoxPositionMode.DroppedDown) comboBoxPositionMode.SelectedIndex = registers[(int)SHKModBusRegisters.POSITION_MODE];
+                if (!comboBoxAnalogOut.DroppedDown) comboBoxAnalogOut.SelectedIndex = registers[(int)SHKModBusRegisters.ANALOG_OUT_MODE];
 
-                comboBoxGain1.SelectedIndex = comboBoxGain1.FindStringExact(registers[(int)SHKModBusRegisters.GAIN_SET1].ToString());
+                if (!comboBoxGain1.DroppedDown) comboBoxGain1.SelectedIndex = comboBoxGain1.FindStringExact(registers[(int)SHKModBusRegisters.GAIN_SET1].ToString());
                 numericUpDownThre1.Value = registers[(int)SHKModBusRegisters.THRESHOLD_SET1];
 
-                comboBoxGain2.SelectedIndex = comboBoxGain2.FindStringExact(registers[(int)SHKModBusRegisters.GAIN_SET2].ToString());
+                if (!comboBoxGain2.DroppedDown) comboBoxGain2.SelectedIndex = comboBoxGain2.FindStringExact(registers[(int)SHKModBusRegisters.GAIN_SET2].ToString());
                 numericUpDownThre2.Value = registers[(int)SHKModBusRegisters.THRESHOLD_SET2];
 
                 numericUpDownWindowBeg.Value = registers[(int)SHKModBusRegisters.WINDOW_BEGIN];
@@ -518,9 +523,7 @@ namespace SHK_Utility
                 chart1.Series["Signal"].Points.AddXY(i * 4, ((float)((uint)registers[i + (int)SHKModBusRegisters.AN_VALUES] % 256)) * 100 / 256); // LSB to 0-100%
                 chart1.Series["Signal"].Points.AddXY(i * 4 + 2, ((float)((uint)registers[i + (int)SHKModBusRegisters.AN_VALUES] >> 8)) * 100 / 256); // MSB to 0-100%
             }
-            //repeat last value to have nice chart
-            //chart1.Series["Signal"].Points.AddXY(100, ((float)((uint)registers[(int)SHKModBusRegisters.MOTOR_TIME_DIFF - 1] >> 8)) * 100 / 256); // MSB to 0-100% 
-
+            
             //time chart
             chart1.ChartAreas[1].AxisX.Minimum = minDate.ToOADate();
             chart1.ChartAreas[1].AxisX.Maximum = now.ToOADate();

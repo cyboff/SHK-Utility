@@ -243,7 +243,7 @@
             series3.BorderWidth = 0;
             series3.ChartArea = "ChartArea1";
             series3.Color = System.Drawing.Color.DarkSeaGreen;
-            series3.CustomProperties = "PointWidth=0.3";
+            series3.CustomProperties = "PointWidth=0.4";
             series3.Legend = "Legend1";
             series3.LegendText = "Position (Unfiltered)";
             series3.Name = "Position";
@@ -743,6 +743,11 @@
             // 
             // numericUpDownThre1
             // 
+            this.numericUpDownThre1.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
             this.numericUpDownThre1.Location = new System.Drawing.Point(70, 79);
             this.numericUpDownThre1.Maximum = new decimal(new int[] {
             80,
@@ -788,6 +793,11 @@
             // 
             // numericUpDownThre2
             // 
+            this.numericUpDownThre2.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
             this.numericUpDownThre2.Location = new System.Drawing.Point(70, 133);
             this.numericUpDownThre2.Maximum = new decimal(new int[] {
             80,
@@ -811,6 +821,11 @@
             // 
             // numericUpDownWindowBeg
             // 
+            this.numericUpDownWindowBeg.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
             this.numericUpDownWindowBeg.Location = new System.Drawing.Point(80, 80);
             this.numericUpDownWindowBeg.Maximum = new decimal(new int[] {
             50,
@@ -834,6 +849,11 @@
             // 
             // numericUpDownWindowEnd
             // 
+            this.numericUpDownWindowEnd.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
             this.numericUpDownWindowEnd.Location = new System.Drawing.Point(80, 107);
             this.numericUpDownWindowEnd.Maximum = new decimal(new int[] {
             95,
@@ -1003,6 +1023,11 @@
             // 
             // numericUpDownFilterPosition
             // 
+            this.numericUpDownFilterPosition.Increment = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
             this.numericUpDownFilterPosition.Location = new System.Drawing.Point(58, 26);
             this.numericUpDownFilterPosition.Maximum = new decimal(new int[] {
             9999,
@@ -1554,7 +1579,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(980, 670);
             this.Name = "FormMain";
-            this.Text = "SHK Utility 1.2";
+            this.Text = "SHK Utility 1.3";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.groupBoxSerial.ResumeLayout(false);
