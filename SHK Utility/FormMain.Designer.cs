@@ -828,7 +828,7 @@
             0});
             this.numericUpDownWindowBeg.Location = new System.Drawing.Point(80, 80);
             this.numericUpDownWindowBeg.Maximum = new decimal(new int[] {
-            50,
+            45,
             0,
             0,
             0});
@@ -861,7 +861,7 @@
             0,
             0});
             this.numericUpDownWindowEnd.Minimum = new decimal(new int[] {
-            50,
+            55,
             0,
             0,
             0});
