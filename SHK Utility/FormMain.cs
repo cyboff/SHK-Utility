@@ -278,7 +278,7 @@ namespace SHK_Utility
                 timerLogout_counter--;
             }
 
-            if (settingsChanged) // update only once per tick, to avoid hang-ups
+            if ((settingsChanged) && (buttonLogin.Text.Equals("&Logout"))) // update only once per tick, to avoid hang-ups
             {
                 // check Sensor settings
                 try
