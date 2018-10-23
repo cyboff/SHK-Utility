@@ -1288,7 +1288,7 @@ namespace SHK_Utility
             buttonSaveSerial.Enabled = false;
         }
 
-        private void buttonSaveSerial_Click(object sender, EventArgs e)
+        private void ButtonSaveSerial_Click(object sender, EventArgs e)
         {
             ushort modbusFormat = 0x06;
             ushort[] modbusData = { 0, 0, 0 };
@@ -1351,7 +1351,7 @@ namespace SHK_Utility
 
         }
 
-        private void comboBoxParity_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBoxParity_SelectedIndexChanged(object sender, EventArgs e)
         {
             comboBoxStopBits.Items.Clear();
             if (comboBoxParity.SelectedIndex == 1)  // "None"

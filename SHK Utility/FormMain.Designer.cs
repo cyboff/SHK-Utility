@@ -436,7 +436,7 @@
             this.comboBoxParity.Name = "comboBoxParity";
             this.comboBoxParity.Size = new System.Drawing.Size(49, 21);
             this.comboBoxParity.TabIndex = 16;
-            this.comboBoxParity.SelectedIndexChanged += new System.EventHandler(this.comboBoxParity_SelectedIndexChanged);
+            this.comboBoxParity.SelectedIndexChanged += new System.EventHandler(this.ComboBoxParity_SelectedIndexChanged);
             // 
             // comboBoxStopBits
             // 
@@ -1547,7 +1547,7 @@
             this.buttonSaveSerial.TabIndex = 75;
             this.buttonSaveSerial.Text = "Save Serial Comm. Settings to Sensor";
             this.buttonSaveSerial.UseVisualStyleBackColor = true;
-            this.buttonSaveSerial.Click += new System.EventHandler(this.buttonSaveSerial_Click);
+            this.buttonSaveSerial.Click += new System.EventHandler(this.ButtonSaveSerial_Click);
             // 
             // FormMain
             // 
