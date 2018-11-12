@@ -489,7 +489,7 @@ namespace SHK_Utility
             chart1.Series["Window"].Points.Clear();
             chart1.Series["Threshold"].Points.Clear();
 
-            if (registers[(int)SHKModBusRegisters.SET] < 2)
+            if (registers[(int)SHKModBusRegisters.SET] == 1 || (registers[(int)SHKModBusRegisters.SET] == 0 && checkedListBoxIOStatus.GetItemCheckState((int)IO_Status.IO_SET_IN) != CheckState.Checked))
             {
                 chart1.Series["Threshold"].Points.AddXY(0, registers[(int)SHKModBusRegisters.THRESHOLD_SET1] - 5, registers[(int)SHKModBusRegisters.THRESHOLD_SET1] + 5);
                 chart1.Series["Threshold"].Points.AddXY(99.9, registers[(int)SHKModBusRegisters.THRESHOLD_SET1] - 5, registers[(int)SHKModBusRegisters.THRESHOLD_SET1] + 5);
