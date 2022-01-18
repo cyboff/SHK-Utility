@@ -78,11 +78,13 @@ namespace SHK_Utility
         IO_SET_IN,
         IO_ALARM_OUT,
         IO_SIGNAL_OUT,
-        IO_BTN_A,
-        IO_BTN_B,
         IO_LED_ALARM,
         IO_LED_SIGNAL,
-        IO_LED_POWER
+        IO_LED_POWER,
+        IO_BTN_A,
+        IO_BTN_B,
+        IO_BTN_C,
+        IO_BTN_D
     };
 
 
