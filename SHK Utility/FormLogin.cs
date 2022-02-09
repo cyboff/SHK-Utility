@@ -30,7 +30,7 @@ namespace SHK_Utility
                 this.DialogResult = DialogResult.Yes;
                 this.Close();
             }
-            else if (textBoxPassword.Text.Equals("1122"))
+            else if (textBoxPassword.Text.Equals("2314"))
             {
                 this.DialogResult = DialogResult.OK;
                 this.Close();
