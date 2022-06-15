@@ -29,25 +29,25 @@ namespace SHK_Utility
         MB_MODEL_SERIAL_NUMBER,
         MB_FW_VERSION,
 
-        MODBUS_ID,
-        MODBUS_SPEED, // = baud rate/100 to fit into word
-        MODBUS_FORMAT,
+        MODBUS_ID,     // address 1..247
+        MODBUS_SPEED,  // baud rate/100 to fit into word
+        MODBUS_FORMAT, // SERIAL_8N1 = 0, SERIAL_8E1 = 6, SERIAL_8O1 = 7 , SERIAL_8N2 = 4
 
-        SET,
-        GAIN_SET1,
-        THRESHOLD_SET1,
-        GAIN_SET2,
-        THRESHOLD_SET2,
+        SET,            // RELAY = 0 (REL1 || REL2), MAN1 = 1, MAN2 = 2
+        GAIN_SET1,      // valid values 1,2,4,8,16,32,64
+        THRESHOLD_SET1, // min 20, max 80
+        GAIN_SET2,      // valid values 1,2,4,8,16,32,64
+        THRESHOLD_SET2, // min 20, max 80
 
-        WINDOW_BEGIN,
-        WINDOW_END,
-        POSITION_MODE,
-        ANALOG_OUT_MODE,
-        POSITION_OFFSET,
+        WINDOW_BEGIN,    // min 5, max 50
+        WINDOW_END,      // min 50 max 95
+        POSITION_MODE,   // hmd = 0, rising = 1, falling = 2, peak = 3
+        ANALOG_OUT_MODE, // an1/an2: "1Int2Pos" = 0, "1Pos2Int" = 1, "1Int2Int" = 2, "1Pos2Pos" = 3
+        POSITION_OFFSET, // min 5, max 95 to avoid coincidence with pulse interrupts
 
-        FILTER_POSITION,
-        FILTER_ON,
-        FILTER_OFF,
+        FILTER_POSITION, // range 0 - 9999 ms (or nr of mirrors) for moving average
+        FILTER_ON,       // range 0 - 9999 ms
+        FILTER_OFF,      // range 0 - 9999 ms
 
         ACT_TEMPERATURE,
         MAX_TEMPERATURE,
@@ -58,17 +58,17 @@ namespace SHK_Utility
         POSITION_VALUE,
         POSITION_VALUE_AVG,
 
-        AN_VALUES,                       // 25 registers
+        AN_VALUES, // 25 registers
         MOTOR_TIME_DIFF = AN_VALUES + 25,
-        EXEC_TIME_ADC,                   // time of adc convertions for one mirror
-        EXEC_TIME,                       // time of adc conv + results calculation
-        EXEC_TIME_TRIGGER,
-        OFFSET_DELAY,
-        TOTAL_ERRORS,                    // modbus errors
+        EXEC_TIME_ADC,     // exectime of adc conversions
+        EXEC_TIME,         // exectime of adc conversions + results calculation
+        EXEC_TIME_TRIGGER, // exectime of each triggering
+        OFFSET_DELAY,      // calculated trigger delay
+        TOTAL_ERRORS,
         // leave this one
         TOTAL_REGS_SIZE
         // total number of registers for function 3 and 16 share the same register array
-    }
+    };
 
     enum IO_Status
     {
@@ -518,12 +518,12 @@ namespace SHK_Utility
 
             chart1.Series["Signal"].Points.Clear();
             // start from second point to have nice chart
-            chart1.Series["Signal"].Points.AddXY(2, ((float)((uint)registers[(int)SHKModBusRegisters.AN_VALUES] >> 8)) * 100 / 256); // MSB to 0-100%
+            chart1.Series["Signal"].Points.AddXY(2, ((float)(registers[(int)SHKModBusRegisters.AN_VALUES] >> 8)) * 100 / 256); // MSB to 0-100%
             for (int i = 1; i < ((int)SHKModBusRegisters.MOTOR_TIME_DIFF - (int)SHKModBusRegisters.AN_VALUES); i++)   // MOTOR_TIME_DIFF = AN_VALUES+25
             {
                 // AN_VALUES 50 values from analog_buffer[200]: MSB = signal[i*8+4], LSB = signal[i*8] 
-                chart1.Series["Signal"].Points.AddXY(i * 4, ((float)((uint)registers[i + (int)SHKModBusRegisters.AN_VALUES] % 256)) * 100 / 256); // LSB to 0-100%
-                chart1.Series["Signal"].Points.AddXY(i * 4 + 2, ((float)((uint)registers[i + (int)SHKModBusRegisters.AN_VALUES] >> 8)) * 100 / 256); // MSB to 0-100%
+                chart1.Series["Signal"].Points.AddXY(i * 4, ((float)(registers[i + (int)SHKModBusRegisters.AN_VALUES] % 256)) * 100 / 256); // LSB to 0-100%
+                chart1.Series["Signal"].Points.AddXY(i * 4 + 2, ((float)(registers[i + (int)SHKModBusRegisters.AN_VALUES] >> 8)) * 100 / 256); // MSB to 0-100%
             }
             
             //time chart
@@ -1114,7 +1114,7 @@ namespace SHK_Utility
                         serialPort1.Parity = Parity.Odd;
                         break;
                     default:
-                        serialPort1.Parity = Parity.Even;
+                        serialPort1.Parity = Parity.None;
                         break;
                 }
 
