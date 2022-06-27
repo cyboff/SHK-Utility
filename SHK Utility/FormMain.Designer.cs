@@ -648,8 +648,8 @@
             this.checkedListBoxIOStatus.Items.AddRange(new object[] {
             "LASER",
             "IR LED",
-            "TEST",
-            "SET REL2",
+            "TEST IN",
+            "SET IN",
             "ALARM",
             "MAT. PRESENT"});
             this.checkedListBoxIOStatus.Location = new System.Drawing.Point(6, 29);
