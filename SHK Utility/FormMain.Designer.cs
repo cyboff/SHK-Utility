@@ -429,8 +429,8 @@
             this.comboBoxParity.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.comboBoxParity.FormattingEnabled = true;
             this.comboBoxParity.Items.AddRange(new object[] {
-            "Even",
             "None",
+            "Even",
             "Odd"});
             this.comboBoxParity.Location = new System.Drawing.Point(421, 16);
             this.comboBoxParity.Name = "comboBoxParity";

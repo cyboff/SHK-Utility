@@ -130,13 +130,13 @@ namespace SHK_Utility
             comboBoxDataBits.SelectedIndex = Properties.Settings.Default.DataBitsIndex;
 
             comboBoxParity.Items.Clear();
-            comboBoxParity.Items.Add(Parity.Even.ToString());
             comboBoxParity.Items.Add(Parity.None.ToString());
+            comboBoxParity.Items.Add(Parity.Even.ToString());
             comboBoxParity.Items.Add(Parity.Odd.ToString());
             comboBoxParity.SelectedIndex = Properties.Settings.Default.ParityIndex;
 
             comboBoxStopBits.Items.Clear();
-            if (comboBoxParity.SelectedIndex == 1)  // "None"
+            if (comboBoxParity.SelectedIndex == 0)  // "None"
             {
                 comboBoxStopBits.Items.Add("1");
                 comboBoxStopBits.Items.Add("2");
@@ -347,7 +347,7 @@ namespace SHK_Utility
                     {
                         //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.WINDOW_BEGIN, ushort.Parse(numericUpDownWindowBeg.Value.ToString()));
                         modbusData[0] = ushort.Parse(numericUpDownWindowBeg.Value.ToString());
-                        master.WriteMultipleRegisters(slaveId,(ushort)SHKModBusRegisters.WINDOW_BEGIN, modbusData);
+                        master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.WINDOW_BEGIN, modbusData);
                         textBoxLog.AppendText("Window Begin saved!\r\n");
                     }
 
@@ -362,7 +362,7 @@ namespace SHK_Utility
                     if (registers[(int)SHKModBusRegisters.POSITION_OFFSET] != ushort.Parse(numericUpDownOffset.Value.ToString()))
                     {
                         //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.POSITION_OFFSET, ushort.Parse(numericUpDownOffset.Value.ToString()));
-                        modbusData[0]=ushort.Parse(numericUpDownOffset.Value.ToString());
+                        modbusData[0] = ushort.Parse(numericUpDownOffset.Value.ToString());
                         master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.POSITION_OFFSET, modbusData);
                         textBoxLog.AppendText("Offset saved!\r\n");
                     }
@@ -371,8 +371,8 @@ namespace SHK_Utility
                     if (registers[(int)SHKModBusRegisters.FILTER_POSITION] != ushort.Parse(numericUpDownFilterPosition.Value.ToString()))
                     {
                         //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.FILTER_POSITION, ushort.Parse(numericUpDownFilterPosition.Value.ToString()));
-                        modbusData[0]= ushort.Parse(numericUpDownFilterPosition.Value.ToString());
-                        master.WriteMultipleRegisters(slaveId,(ushort)SHKModBusRegisters.FILTER_POSITION, modbusData);
+                        modbusData[0] = ushort.Parse(numericUpDownFilterPosition.Value.ToString());
+                        master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.FILTER_POSITION, modbusData);
                         textBoxLog.AppendText("Filter Position saved!\r\n");
                     }
 
@@ -387,7 +387,7 @@ namespace SHK_Utility
                     if (registers[(int)SHKModBusRegisters.FILTER_OFF] != ushort.Parse(numericUpDownFilterOff.Value.ToString()))
                     {
                         //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.FILTER_OFF, ushort.Parse(numericUpDownFilterOff.Value.ToString()));
-                        modbusData[0]=ushort.Parse(numericUpDownFilterOff.Value.ToString());
+                        modbusData[0] = ushort.Parse(numericUpDownFilterOff.Value.ToString());
                         master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.FILTER_OFF, modbusData);
                         textBoxLog.AppendText("Filter Signal Off saved!\r\n");
                     }
@@ -552,7 +552,7 @@ namespace SHK_Utility
                 chart1.Series["Signal"].Points.AddXY(i * 4, ((float)(registers[i + (int)SHKModBusRegisters.AN_VALUES] % 256)) * 100 / 256); // LSB to 0-100%
                 chart1.Series["Signal"].Points.AddXY(i * 4 + 2, ((float)(registers[i + (int)SHKModBusRegisters.AN_VALUES] >> 8)) * 100 / 256); // MSB to 0-100%
             }
-            
+
             //time chart
             chart1.ChartAreas[1].AxisX.Minimum = minDate.ToOADate();
             chart1.ChartAreas[1].AxisX.Maximum = now.ToOADate();
@@ -642,7 +642,7 @@ namespace SHK_Utility
                     iostate &= ~(1 << (int)IO_Status.IO_LASER); // LASER bit to 0
                     registers[(int)SHKModBusRegisters.IO_STATE] = (ushort)iostate;
                     //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.IO_STATE, registers[(int)SHKModBusRegisters.IO_STATE]);
-                    modbusData[0]=registers[(int)SHKModBusRegisters.IO_STATE];
+                    modbusData[0] = registers[(int)SHKModBusRegisters.IO_STATE];
                     master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.IO_STATE, modbusData);
                 }
                 catch (Exception mbe)
@@ -1145,12 +1145,14 @@ namespace SHK_Utility
 
                 switch (comboBoxParity.SelectedItem.ToString())
                 {
-                    case "Even":
-                        serialPort1.Parity = Parity.Even;
-                        break;
                     case "None":
                         serialPort1.Parity = Parity.None;
                         break;
+
+                    case "Even":
+                        serialPort1.Parity = Parity.Even;
+                        break;
+
                     case "Odd":
                         serialPort1.Parity = Parity.Odd;
                         break;
@@ -1340,11 +1342,11 @@ namespace SHK_Utility
             {
                 switch (comboBoxParity.SelectedItem.ToString())
                 {
-                    case "Even":
-                        modbusFormat = 0x06; // SERIAL_8E1
-                        break;
                     case "None":
                         modbusFormat = 0x00; // SERIAL_8N1
+                        break;
+                    case "Even":
+                        modbusFormat = 0x06; // SERIAL_8E1
                         break;
                     case "Odd":
                         modbusFormat = 0x07; // SERIAL_8O1
@@ -1397,7 +1399,7 @@ namespace SHK_Utility
         private void ComboBoxParity_SelectedIndexChanged(object sender, EventArgs e)
         {
             comboBoxStopBits.Items.Clear();
-            if (comboBoxParity.SelectedIndex == 1)  // "None"
+            if (comboBoxParity.SelectedIndex == 0)  // "None"
             {
                 comboBoxStopBits.Items.Add("1");
                 comboBoxStopBits.Items.Add("2");
