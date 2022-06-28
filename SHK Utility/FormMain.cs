@@ -261,6 +261,7 @@ namespace SHK_Utility
 
             DateTime now = DateTime.Now;
             DateTime minDate = DateTime.Now.AddMinutes(-5);
+            ushort[] modbusData = { 0 }; // size of only single register for use with command 16 (write multiple registers) instead of command 4 (write single register)
             //DateTime maxDate = DateTime.Now.AddSeconds(1);
 
             if (timerLogout_counter == 0)  // automatic logout after 30 minutes
@@ -287,81 +288,107 @@ namespace SHK_Utility
                 {
                     if (registers[(int)SHKModBusRegisters.SET] != ushort.Parse(comboBoxSet.SelectedIndex.ToString()))
                     {
-                        master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.SET, ushort.Parse(comboBoxSet.SelectedIndex.ToString()));
+                        //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.SET, ushort.Parse(comboBoxSet.SelectedIndex.ToString())); 
+                        modbusData[0] = ushort.Parse(comboBoxSet.SelectedIndex.ToString());
+                        master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.SET, modbusData); // for compatibility reason better use command 16
                         textBoxLog.AppendText("Set saved!\r\n");
                     }
 
                     if (registers[(int)SHKModBusRegisters.GAIN_SET1] != ushort.Parse(comboBoxGain1.SelectedItem.ToString()))
                     {
-                        master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.GAIN_SET1, ushort.Parse(comboBoxGain1.SelectedItem.ToString()));
+                        //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.GAIN_SET1, ushort.Parse(comboBoxGain1.SelectedItem.ToString()));
+                        modbusData[0] = ushort.Parse(comboBoxGain1.SelectedItem.ToString());
+                        master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.GAIN_SET1, modbusData);
                         textBoxLog.AppendText("Gain1 saved!\r\n");
                     }
 
                     if (registers[(int)SHKModBusRegisters.THRESHOLD_SET1] != ushort.Parse(numericUpDownThre1.Value.ToString()))
                     {
-                        master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.THRESHOLD_SET1, ushort.Parse(numericUpDownThre1.Value.ToString()));
+                        //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.THRESHOLD_SET1, ushort.Parse(numericUpDownThre1.Value.ToString()));
+                        modbusData[0] = ushort.Parse(numericUpDownThre1.Value.ToString());
+                        master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.THRESHOLD_SET1, modbusData);
                         textBoxLog.AppendText("Threshold1 saved!\r\n");
                     }
 
                     if (registers[(int)SHKModBusRegisters.GAIN_SET2] != ushort.Parse(comboBoxGain2.SelectedItem.ToString()))
                     {
-                        master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.GAIN_SET2, ushort.Parse(comboBoxGain2.SelectedItem.ToString()));
+                        //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.GAIN_SET2, ushort.Parse(comboBoxGain2.SelectedItem.ToString()));
+                        modbusData[0] = ushort.Parse(comboBoxGain2.SelectedItem.ToString());
+                        master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.GAIN_SET2, modbusData);
                         textBoxLog.AppendText("Gain2 saved!\r\n");
                     }
 
                     if (registers[(int)SHKModBusRegisters.THRESHOLD_SET2] != ushort.Parse(numericUpDownThre2.Value.ToString()))
                     {
-                        master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.THRESHOLD_SET2, ushort.Parse(numericUpDownThre2.Value.ToString()));
+                        //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.THRESHOLD_SET2, ushort.Parse(numericUpDownThre2.Value.ToString()));
+                        modbusData[0] = ushort.Parse(numericUpDownThre2.Value.ToString());
+                        master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.THRESHOLD_SET2, modbusData);
                         textBoxLog.AppendText("Threshold2 saved!\r\n");
                     }
 
                     //check Analog settings
                     if (registers[(int)SHKModBusRegisters.ANALOG_OUT_MODE] != ushort.Parse(comboBoxAnalogOut.SelectedIndex.ToString()))
                     {
-                        master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.ANALOG_OUT_MODE, ushort.Parse(comboBoxAnalogOut.SelectedIndex.ToString()));
+                        //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.ANALOG_OUT_MODE, ushort.Parse(comboBoxAnalogOut.SelectedIndex.ToString()));
+                        modbusData[0] = ushort.Parse(comboBoxAnalogOut.SelectedIndex.ToString());
+                        master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.ANALOG_OUT_MODE, modbusData);
                         textBoxLog.AppendText("Analog Out Mode saved!\r\n");
                     }
 
                     if (registers[(int)SHKModBusRegisters.POSITION_MODE] != ushort.Parse(comboBoxPositionMode.SelectedIndex.ToString()))
                     {
-                        master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.POSITION_MODE, ushort.Parse(comboBoxPositionMode.SelectedIndex.ToString()));
+                        //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.POSITION_MODE, ushort.Parse(comboBoxPositionMode.SelectedIndex.ToString()));
+                        modbusData[0] = ushort.Parse(comboBoxPositionMode.SelectedIndex.ToString());
+                        master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.POSITION_MODE, modbusData);
                         textBoxLog.AppendText("Position Mode saved!\r\n");
                     }
 
                     if (registers[(int)SHKModBusRegisters.WINDOW_BEGIN] != ushort.Parse(numericUpDownWindowBeg.Value.ToString()))
                     {
-                        master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.WINDOW_BEGIN, ushort.Parse(numericUpDownWindowBeg.Value.ToString()));
+                        //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.WINDOW_BEGIN, ushort.Parse(numericUpDownWindowBeg.Value.ToString()));
+                        modbusData[0] = ushort.Parse(numericUpDownWindowBeg.Value.ToString());
+                        master.WriteMultipleRegisters(slaveId,(ushort)SHKModBusRegisters.WINDOW_BEGIN, modbusData);
                         textBoxLog.AppendText("Window Begin saved!\r\n");
                     }
 
                     if (registers[(int)SHKModBusRegisters.WINDOW_END] != ushort.Parse(numericUpDownWindowEnd.Value.ToString()))
                     {
-                        master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.WINDOW_END, ushort.Parse(numericUpDownWindowEnd.Value.ToString()));
+                        //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.WINDOW_END, ushort.Parse(numericUpDownWindowEnd.Value.ToString()));
+                        modbusData[0] = ushort.Parse(numericUpDownWindowEnd.Value.ToString());
+                        master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.WINDOW_END, modbusData);
                         textBoxLog.AppendText("Window End saved!\r\n");
                     }
 
                     if (registers[(int)SHKModBusRegisters.POSITION_OFFSET] != ushort.Parse(numericUpDownOffset.Value.ToString()))
                     {
-                        master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.POSITION_OFFSET, ushort.Parse(numericUpDownOffset.Value.ToString()));
+                        //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.POSITION_OFFSET, ushort.Parse(numericUpDownOffset.Value.ToString()));
+                        modbusData[0]=ushort.Parse(numericUpDownOffset.Value.ToString());
+                        master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.POSITION_OFFSET, modbusData);
                         textBoxLog.AppendText("Offset saved!\r\n");
                     }
 
                     //check Filter settings
                     if (registers[(int)SHKModBusRegisters.FILTER_POSITION] != ushort.Parse(numericUpDownFilterPosition.Value.ToString()))
                     {
-                        master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.FILTER_POSITION, ushort.Parse(numericUpDownFilterPosition.Value.ToString()));
+                        //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.FILTER_POSITION, ushort.Parse(numericUpDownFilterPosition.Value.ToString()));
+                        modbusData[0]= ushort.Parse(numericUpDownFilterPosition.Value.ToString());
+                        master.WriteMultipleRegisters(slaveId,(ushort)SHKModBusRegisters.FILTER_POSITION, modbusData);
                         textBoxLog.AppendText("Filter Position saved!\r\n");
                     }
 
                     if (registers[(int)SHKModBusRegisters.FILTER_ON] != ushort.Parse(numericUpDownFilterOn.Value.ToString()))
                     {
-                        master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.FILTER_ON, ushort.Parse(numericUpDownFilterOn.Value.ToString()));
+                        //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.FILTER_ON, ushort.Parse(numericUpDownFilterOn.Value.ToString()));
+                        modbusData[0] = ushort.Parse(numericUpDownFilterOn.Value.ToString());
+                        master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.FILTER_ON, modbusData);
                         textBoxLog.AppendText("Filter Signal On saved!\r\n");
                     }
 
                     if (registers[(int)SHKModBusRegisters.FILTER_OFF] != ushort.Parse(numericUpDownFilterOff.Value.ToString()))
                     {
-                        master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.FILTER_OFF, ushort.Parse(numericUpDownFilterOff.Value.ToString()));
+                        //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.FILTER_OFF, ushort.Parse(numericUpDownFilterOff.Value.ToString()));
+                        modbusData[0]=ushort.Parse(numericUpDownFilterOff.Value.ToString());
+                        master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.FILTER_OFF, modbusData);
                         textBoxLog.AppendText("Filter Signal Off saved!\r\n");
                     }
                 }
@@ -576,6 +603,8 @@ namespace SHK_Utility
 
         private void RadioButtonLaserOn_CheckedChanged(object sender, EventArgs e)
         {
+            ushort[] modbusData = { 0 };
+
             if (radioButtonLaserOn.Checked) { radioButtonLaserOn.BackColor = Color.Red; } else { radioButtonLaserOn.BackColor = DefaultBackColor; }
 
             if (radioButtonLaserOn.Checked && !Convert.ToBoolean(registers[(int)SHKModBusRegisters.IO_STATE] & (1 << (int)IO_Status.IO_LASER)))
@@ -586,7 +615,9 @@ namespace SHK_Utility
                 try
                 {
                     registers[(int)SHKModBusRegisters.IO_STATE] |= 1 << (int)IO_Status.IO_LASER; // LASER bit to 1
-                    master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.IO_STATE, registers[(int)SHKModBusRegisters.IO_STATE]);
+                    //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.IO_STATE, registers[(int)SHKModBusRegisters.IO_STATE]);
+                    modbusData[0] = registers[(int)SHKModBusRegisters.IO_STATE];
+                    master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.IO_STATE, modbusData);
                 }
                 catch (Exception mbe)
                 {
@@ -598,7 +629,7 @@ namespace SHK_Utility
 
         private void RadioButtonLaserOff_CheckedChanged(object sender, EventArgs e)
         {
-
+            ushort[] modbusData = { 0 };
 
             if (radioButtonLaserOff.Checked && Convert.ToBoolean(registers[(int)SHKModBusRegisters.IO_STATE] & (1 << (int)IO_Status.IO_LASER)))
             {
@@ -610,7 +641,9 @@ namespace SHK_Utility
                     int iostate = registers[(int)SHKModBusRegisters.IO_STATE];
                     iostate &= ~(1 << (int)IO_Status.IO_LASER); // LASER bit to 0
                     registers[(int)SHKModBusRegisters.IO_STATE] = (ushort)iostate;
-                    master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.IO_STATE, registers[(int)SHKModBusRegisters.IO_STATE]);
+                    //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.IO_STATE, registers[(int)SHKModBusRegisters.IO_STATE]);
+                    modbusData[0]=registers[(int)SHKModBusRegisters.IO_STATE];
+                    master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.IO_STATE, modbusData);
                 }
                 catch (Exception mbe)
                 {
@@ -622,6 +655,8 @@ namespace SHK_Utility
 
         private void RadioButtonTestOn_CheckedChanged(object sender, EventArgs e)
         {
+            ushort[] modbusData = { 0 };
+
             if (radioButtonTestOn.Checked) { radioButtonTestOn.BackColor = Color.Red; } else { radioButtonTestOn.BackColor = DefaultBackColor; }
 
             if (radioButtonTestOn.Checked && !Convert.ToBoolean(registers[(int)SHKModBusRegisters.IO_STATE] & (1 << (int)IO_Status.IO_IR_LED)))
@@ -632,7 +667,9 @@ namespace SHK_Utility
                 try
                 {
                     registers[(int)SHKModBusRegisters.IO_STATE] |= 1 << (int)IO_Status.IO_IR_LED; // IR_LED bit to 1
-                    master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.IO_STATE, registers[(int)SHKModBusRegisters.IO_STATE]);
+                    //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.IO_STATE, registers[(int)SHKModBusRegisters.IO_STATE]);
+                    modbusData[0] = registers[(int)SHKModBusRegisters.IO_STATE];
+                    master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.IO_STATE, modbusData);
                 }
                 catch (Exception mbe)
                 {
@@ -644,6 +681,8 @@ namespace SHK_Utility
 
         private void RadioButtonTestOff_CheckedChanged(object sender, EventArgs e)
         {
+            ushort[] modbusData = { 0 };
+
             if (radioButtonTestOff.Checked && Convert.ToBoolean(registers[(int)SHKModBusRegisters.IO_STATE] & (1 << (int)IO_Status.IO_IR_LED)))
             {
 
@@ -654,7 +693,9 @@ namespace SHK_Utility
                     int iostate = registers[(int)SHKModBusRegisters.IO_STATE];
                     iostate &= ~(1 << (int)IO_Status.IO_IR_LED); // IR_LED bit to 0
                     registers[(int)SHKModBusRegisters.IO_STATE] = (ushort)iostate;
-                    master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.IO_STATE, registers[(int)SHKModBusRegisters.IO_STATE]);
+                    //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.IO_STATE, registers[(int)SHKModBusRegisters.IO_STATE]);
+                    modbusData[0] = registers[(int)SHKModBusRegisters.IO_STATE];
+                    master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.IO_STATE, modbusData);
                 }
                 catch (Exception mbe)
                 {
