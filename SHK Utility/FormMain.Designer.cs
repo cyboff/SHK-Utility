@@ -584,9 +584,9 @@
             this.comboBoxSet.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.comboBoxSet.FormattingEnabled = true;
             this.comboBoxSet.Items.AddRange(new object[] {
-            "RELAY",
             "SET1",
-            "SET2"});
+            "SET2",
+            "RELAY"});
             this.comboBoxSet.Location = new System.Drawing.Point(70, 25);
             this.comboBoxSet.Name = "comboBoxSet";
             this.comboBoxSet.Size = new System.Drawing.Size(60, 21);
@@ -602,10 +602,10 @@
             this.comboBoxPositionMode.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.comboBoxPositionMode.FormattingEnabled = true;
             this.comboBoxPositionMode.Items.AddRange(new object[] {
-            "HMD",
-            "Rising",
-            "Falling",
-            "Peak"});
+            "LS-Rising",
+            "LS-Falling",
+            "LS-Peak",
+            "HMD"});
             this.comboBoxPositionMode.Location = new System.Drawing.Point(80, 51);
             this.comboBoxPositionMode.Name = "comboBoxPositionMode";
             this.comboBoxPositionMode.Size = new System.Drawing.Size(86, 21);
@@ -615,7 +615,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(6, 55);
+            this.label14.Location = new System.Drawing.Point(6, 54);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(77, 13);
             this.label14.TabIndex = 38;
@@ -1579,7 +1579,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(980, 670);
             this.Name = "FormMain";
-            this.Text = "SHK Utility 1.5";
+            this.Text = "SHK Utility 1.6";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.groupBoxSerial.ResumeLayout(false);
