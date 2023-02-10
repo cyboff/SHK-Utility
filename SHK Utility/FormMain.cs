@@ -84,7 +84,8 @@ namespace SHK_Utility
         IO_BTN_A,
         IO_BTN_B,
         IO_BTN_C,
-        IO_BTN_D
+        IO_BTN_D,
+        IO_SW_RESET
     };
 
 
@@ -276,6 +277,7 @@ namespace SHK_Utility
                 groupBoxSensor.Enabled = false;
                 groupBoxAnalog.Enabled = false;
                 groupBoxFilters.Enabled = false;
+                //buttonRestart.Enabled = false;
             }
             else
             {
@@ -792,6 +794,7 @@ namespace SHK_Utility
                         groupBoxSensor.Enabled = true;
                         groupBoxAnalog.Enabled = true;
                         numericUpDownOffset.Enabled = true;
+                        buttonRestart.Enabled = true;
                         groupBoxFilters.Enabled = true;
                         timerLogout_counter = 3600;  // automatic logout after 30 min
                         break;
@@ -805,6 +808,7 @@ namespace SHK_Utility
                         groupBoxSensor.Enabled = true;
                         groupBoxAnalog.Enabled = true;
                         numericUpDownOffset.Enabled = false;
+                        buttonRestart.Enabled = false;
                         groupBoxFilters.Enabled = true;
                         timerLogout_counter = 3600; // automatic logout after 30 min
                         break;
@@ -816,6 +820,7 @@ namespace SHK_Utility
                         groupBoxSensor.Enabled = false;
                         groupBoxAnalog.Enabled = false;
                         groupBoxFilters.Enabled = false;
+                        buttonRestart.Enabled = false;
                         //this.Close();
                         break;
 
@@ -832,6 +837,7 @@ namespace SHK_Utility
                 groupBoxSensor.Enabled = false;
                 groupBoxAnalog.Enabled = false;
                 groupBoxFilters.Enabled = false;
+                buttonRestart.Enabled = false;
                 timerLogout_counter = 0;
             }
 
@@ -1351,6 +1357,7 @@ namespace SHK_Utility
             groupBoxFilters.Enabled = false;
             groupBoxLaser.Enabled = false;
             groupBoxTest.Enabled = false;
+            //buttonRestart.Enabled = false;
             buttonLogin.Enabled = false;
             buttonSaveSerial.Enabled = false;
         }
@@ -1431,6 +1438,24 @@ namespace SHK_Utility
                 comboBoxStopBits.Items.Add("1");
             }
             comboBoxStopBits.SelectedIndex = 0;
+        }
+
+        private void buttonRestart_Click(object sender, EventArgs e)
+        {
+            ushort[] modbusData = { 0 };
+
+            try
+            {
+                registers[(int)SHKModBusRegisters.IO_STATE] |= 1 << (int)IO_Status.IO_SW_RESET; // SW_RESET bit to 1
+                                                                                             //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.IO_STATE, registers[(int)SHKModBusRegisters.IO_STATE]);
+                modbusData[0] = registers[(int)SHKModBusRegisters.IO_STATE];
+                master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.IO_STATE, modbusData);
+            }
+            catch (Exception mbe)
+            {
+                textBoxLog.AppendText(mbe.Message);
+                textBoxLog.AppendText("\r\n");
+            }
         }
     }
 }
