@@ -166,7 +166,7 @@ namespace SHK_Utility
         {
             if (buttonConnect.Text.Equals("&Connect"))
             {
-
+                //buttonConnect.Text = "&Disconnect";
                 CreateModbusMaster();
 
                 try
@@ -182,6 +182,8 @@ namespace SHK_Utility
                     numRegisters = registers[0];
 
                     textBoxLog.AppendText($"Connected to Slave ID: {slaveId}\r\nNumber of registers: {numRegisters}\r\n");
+                    master.Transport.ReadTimeout = 5000;
+                    master.Transport.WriteTimeout = 5000;
 
                     // enable groups
                     buttonConnect.Text = "&Disconnect";
@@ -794,6 +796,7 @@ namespace SHK_Utility
                         groupBoxSensor.Enabled = true;
                         groupBoxAnalog.Enabled = true;
                         numericUpDownOffset.Enabled = true;
+                        labelOffset.Enabled = true;
                         buttonRestart.Enabled = true;
                         groupBoxFilters.Enabled = true;
                         timerLogout_counter = 3600;  // automatic logout after 30 min
@@ -808,6 +811,7 @@ namespace SHK_Utility
                         groupBoxSensor.Enabled = true;
                         groupBoxAnalog.Enabled = true;
                         numericUpDownOffset.Enabled = false;
+                        labelOffset.Enabled = false;
                         buttonRestart.Enabled = false;
                         groupBoxFilters.Enabled = true;
                         timerLogout_counter = 3600; // automatic logout after 30 min
@@ -1300,8 +1304,8 @@ namespace SHK_Utility
                 }
             }
 
-            master.Transport.ReadTimeout = 5000;
-            master.Transport.WriteTimeout = 5000;
+            master.Transport.ReadTimeout = 2000;
+            master.Transport.WriteTimeout = 2000;
 
         }
 
