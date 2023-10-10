@@ -24,7 +24,7 @@ namespace SHK_Utility
     {
         // just add or remove registers and your good to go...
         // The first register starts at address 0
-        ENUM_SIZE,
+        REG_SIZE,
         MB_MODEL_TYPE,
         MB_MODEL_SERIAL_NUMBER,
         MB_FW_VERSION,
@@ -58,13 +58,14 @@ namespace SHK_Utility
         POSITION_VALUE,
         POSITION_VALUE_AVG,
 
-        AN_VALUES, // 25 registers
-        MOTOR_TIME_DIFF = AN_VALUES + 25,
+        MOTOR_TIME_DIFF, 
         EXEC_TIME_ADC,     // exectime of adc conversions
         EXEC_TIME,         // exectime of adc conversions + results calculation
         EXEC_TIME_TRIGGER, // exectime of each triggering
         OFFSET_DELAY,      // calculated trigger delay
-        TOTAL_ERRORS,
+
+        AN_VALUES, // 25 registers
+        TOTAL_ERRORS = AN_VALUES + 50,
         // leave this one
         TOTAL_REGS_SIZE
         // total number of registers for function 3 and 16 share the same register array
@@ -99,6 +100,7 @@ namespace SHK_Utility
         private IModbusMaster master;
         private byte slaveId = 1;
         private ushort[] registers;
+        private ushort[] registersValues;
         private ushort startAddress = 0;
         private ushort numRegisters = 1;
         private int timer_counter = 0;
@@ -177,6 +179,7 @@ namespace SHK_Utility
                     numRegisters = 7;
 
                     // read total number of registers first - SHKModBusRegisters.ENUM_SIZE
+                    
                     registers = master.ReadHoldingRegisters(slaveId, startAddress, numRegisters);
 
                     numRegisters = registers[0];
@@ -184,6 +187,7 @@ namespace SHK_Utility
                     textBoxLog.AppendText($"Connected to Slave ID: {slaveId}\r\nNumber of registers: {numRegisters}\r\n");
                     master.Transport.ReadTimeout = 5000;
                     master.Transport.WriteTimeout = 5000;
+                    
 
                     // enable groups
                     buttonConnect.Text = "&Disconnect";
@@ -299,10 +303,9 @@ namespace SHK_Utility
                         textBoxLog.AppendText("Set saved!\r\n");
                     }
 
-                    if (registers[(int)SHKModBusRegisters.GAIN_SET1] / 100 != ushort.Parse(comboBoxGain1.SelectedItem.ToString()))
+                    if (registers[(int)SHKModBusRegisters.GAIN_SET1] / 100 != ushort.Parse(numericUpDownGain1.Value.ToString()))
                     {
-                        //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.GAIN_SET1, ushort.Parse(comboBoxGain1.SelectedItem.ToString()));
-                        modbusData[0] = (ushort)(100 * ushort.Parse(comboBoxGain1.SelectedItem.ToString()));
+                        modbusData[0] = (ushort)(100 * ushort.Parse(numericUpDownGain1.Value.ToString()));
                         master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.GAIN_SET1, modbusData);
                         textBoxLog.AppendText("Gain1 saved!\r\n");
                     }
@@ -315,10 +318,10 @@ namespace SHK_Utility
                         textBoxLog.AppendText("Threshold1 saved!\r\n");
                     }
 
-                    if (registers[(int)SHKModBusRegisters.GAIN_SET2] / 100  != ushort.Parse(comboBoxGain2.SelectedItem.ToString()))
+                    if (registers[(int)SHKModBusRegisters.GAIN_SET2] / 100  != ushort.Parse(numericUpDownGain2.Value.ToString()))
                     {
                         //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.GAIN_SET2, ushort.Parse(comboBoxGain2.SelectedItem.ToString()));
-                        modbusData[0] = (ushort)(100 * ushort.Parse(comboBoxGain2.SelectedItem.ToString()));
+                        modbusData[0] = (ushort)(100 * ushort.Parse(numericUpDownGain2.Value.ToString()));
                         master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.GAIN_SET2, modbusData);
                         textBoxLog.AppendText("Gain2 saved!\r\n");
                     }
@@ -408,7 +411,8 @@ namespace SHK_Utility
 
             try
             {
-                registers = master.ReadHoldingRegisters(slaveId, startAddress, numRegisters);
+                registers = master.ReadHoldingRegisters(slaveId, startAddress, numRegisters); // get registers
+                //registersValues = master.ReadHoldingRegisters(slaveId, (ushort)SHKModBusRegisters.AN_VALUES, (ushort)SHKModBusRegisters.TOTAL_REGS_SIZE - (ushort)SHKModBusRegisters.AN_VALUES);
             }
             catch (Exception mbe)
             {
@@ -419,7 +423,20 @@ namespace SHK_Utility
                 return;
             }
 
-
+            //try
+            //{
+            //    //registers = master.ReadHoldingRegisters(slaveId, startAddress, numRegisters); // get registers without AN_VALUES
+            //    registersValues = master.ReadHoldingRegisters(slaveId, (ushort)SHKModBusRegisters.AN_VALUES, (ushort)SHKModBusRegisters.TOTAL_REGS_SIZE - (ushort)SHKModBusRegisters.AN_VALUES);
+            //}
+            //catch (Exception mbe)
+            //{
+            //    textBoxLog.AppendText(mbe.Message);
+            //    textBoxLog.AppendText("\r\n");
+            //    timer1.Stop();
+            //    DoDisconnect();
+            //    return;
+            //}
+            
             // update log
             string registerslog = "";
 
@@ -437,6 +454,21 @@ namespace SHK_Utility
                     registerslog += $"{registers[i]} "; // lower CPU load than textBox.AppendText() all the time
                 }
             }
+
+            //for (int i = 0; i < (ushort)SHKModBusRegisters.TOTAL_REGS_SIZE - (ushort)SHKModBusRegisters.AN_VALUES; i++)
+            //{
+            //    //textBox1.AppendText($"R{startAddress + i}={registers[i]} ");  
+            //    if (logFormatHex)
+            //    {
+            //        //textBoxLog.AppendText($"{registers[i]:X4} "); // hex 
+            //        registerslog += $"{registersValues[i]:X4} ";
+            //    }
+            //    else
+            //    {
+            //        //textBoxLog.AppendText($"{registers[i]} ");
+            //        registerslog += $"{registersValues[i]} "; // lower CPU load than textBox.AppendText() all the time
+            //    }
+            //}
             textBoxLog.AppendText($"{registerslog}\r\n");
 
             // update setup values every 20 ticks
@@ -465,10 +497,10 @@ namespace SHK_Utility
                     }
                 }
 
-                if (!comboBoxGain1.DroppedDown) comboBoxGain1.SelectedIndex = comboBoxGain1.FindStringExact((registers[(int)SHKModBusRegisters.GAIN_SET1] / 100).ToString());
+                numericUpDownGain1.Value = registers[(int)SHKModBusRegisters.GAIN_SET1] / 100;
                 numericUpDownThre1.Value = registers[(int)SHKModBusRegisters.THRESHOLD_SET1] / 100;
 
-                if (!comboBoxGain2.DroppedDown) comboBoxGain2.SelectedIndex = comboBoxGain2.FindStringExact((registers[(int)SHKModBusRegisters.GAIN_SET2] / 100).ToString());
+                numericUpDownGain2.Value = registers[(int)SHKModBusRegisters.GAIN_SET2] / 100;
                 numericUpDownThre2.Value = registers[(int)SHKModBusRegisters.THRESHOLD_SET2] / 100;
 
                 numericUpDownWindowBeg.Value = registers[(int)SHKModBusRegisters.WINDOW_BEGIN] / 100;
@@ -538,11 +570,21 @@ namespace SHK_Utility
 
             if (registers[(int)SHKModBusRegisters.SET] == 1 || (registers[(int)SHKModBusRegisters.SET] == 3 && checkedListBoxIOStatus.GetItemCheckState((int)IO_Status.IO_SET_IN) != CheckState.Checked))  // MAN1 or REL1
             {
+                numericUpDownGain1.BackColor = Color.Yellow;
+                numericUpDownThre1.BackColor = Color.Yellow;
+                numericUpDownGain2.BackColor = comboBoxSet.BackColor;
+                numericUpDownThre2.BackColor = comboBoxSet.BackColor;
+                
                 chart1.Series["Threshold"].Points.AddXY(0, registers[(int)SHKModBusRegisters.THRESHOLD_SET1]/100 - 5, registers[(int)SHKModBusRegisters.THRESHOLD_SET1]/100 + 5);
                 chart1.Series["Threshold"].Points.AddXY(99.9, registers[(int)SHKModBusRegisters.THRESHOLD_SET1]/100 - 5, registers[(int)SHKModBusRegisters.THRESHOLD_SET1]/100 + 5);
             }
             else // MAN2 or REL2
             {
+                numericUpDownGain1.BackColor = comboBoxSet.BackColor;
+                numericUpDownThre1.BackColor = comboBoxSet.BackColor;
+                numericUpDownGain2.BackColor = Color.Yellow;
+                numericUpDownThre2.BackColor = Color.Yellow;
+                
                 chart1.Series["Threshold"].Points.AddXY(0, registers[(int)SHKModBusRegisters.THRESHOLD_SET2]/100 - 5, registers[(int)SHKModBusRegisters.THRESHOLD_SET2]/100 + 5);
                 chart1.Series["Threshold"].Points.AddXY(99.9, registers[(int)SHKModBusRegisters.THRESHOLD_SET2]/100 - 5, registers[(int)SHKModBusRegisters.THRESHOLD_SET2]/100 + 5);
             }
@@ -554,8 +596,8 @@ namespace SHK_Utility
             chart1.Series["Window"].Points.AddXY(registers[(int)SHKModBusRegisters.WINDOW_END]/100, 100);
             chart1.Series["Window"].Points.AddXY(100, 100);
 
-            chart1.ChartAreas[0].AxisX.Minimum = 100 * (float)(registers[(int)SHKModBusRegisters.WINDOW_BEGIN]/100) / ((float)(registers[(int)SHKModBusRegisters.WINDOW_BEGIN]/100) - (float)(registers[(int)SHKModBusRegisters.WINDOW_END]/100));
-            chart1.ChartAreas[0].AxisX.Maximum = (100 * (100 - chart1.ChartAreas[0].AxisX.Minimum) / (float)(registers[(int)SHKModBusRegisters.WINDOW_END]/100)) + chart1.ChartAreas[0].AxisX.Minimum;
+            chart1.ChartAreas[0].AxisX.Minimum = 100 * (float)(registers[(int)SHKModBusRegisters.WINDOW_BEGIN] / 100) / ((float)(registers[(int)SHKModBusRegisters.WINDOW_BEGIN] / 100) - (float)(registers[(int)SHKModBusRegisters.WINDOW_END] / 100));
+            chart1.ChartAreas[0].AxisX.Maximum = (100 * (100 - chart1.ChartAreas[0].AxisX.Minimum) / (float)(registers[(int)SHKModBusRegisters.WINDOW_END] / 100)) + chart1.ChartAreas[0].AxisX.Minimum;
             chart1.ChartAreas[0].AxisX.IntervalOffset = -chart1.ChartAreas[0].AxisX.Minimum;
 
             chart1.Series["Position"].Points.Clear();
@@ -563,12 +605,12 @@ namespace SHK_Utility
 
             chart1.Series["Signal"].Points.Clear();
             // start from second point to have nice chart
-            chart1.Series["Signal"].Points.AddXY(2, ((float)(registers[(int)SHKModBusRegisters.AN_VALUES] >> 8)) * 100 / 256); // MSB to 0-100%
-            for (int i = 1; i < ((int)SHKModBusRegisters.MOTOR_TIME_DIFF - (int)SHKModBusRegisters.AN_VALUES); i++)   // MOTOR_TIME_DIFF = AN_VALUES+25
+            chart1.Series["Signal"].Points.AddXY(1, ((float)(registers[(short)SHKModBusRegisters.AN_VALUES] >> 8)) * 100 / 256); // MSB to 0-100%
+            for (int i = 1; i < ((short)SHKModBusRegisters.TOTAL_ERRORS - (short)SHKModBusRegisters.AN_VALUES); i++)   // AN_VALUES+25
             {
                 // AN_VALUES 50 values from analog_buffer[200]: MSB = signal[i*8+4], LSB = signal[i*8] 
-                chart1.Series["Signal"].Points.AddXY(i * 4, ((float)(registers[i + (int)SHKModBusRegisters.AN_VALUES] % 256)) * 100 / 256); // LSB to 0-100%
-                chart1.Series["Signal"].Points.AddXY(i * 4 + 2, ((float)(registers[i + (int)SHKModBusRegisters.AN_VALUES] >> 8)) * 100 / 256); // MSB to 0-100%
+                chart1.Series["Signal"].Points.AddXY(i * 2, ((float)(registers[i + (short)SHKModBusRegisters.AN_VALUES] % 256)) * 100 / 256); // LSB to 0-100%
+                chart1.Series["Signal"].Points.AddXY(i * 2 + 1, ((float)(registers[i + (short)SHKModBusRegisters.AN_VALUES] >> 8)) * 100 / 256); // MSB to 0-100%
             }
 
             //time chart
@@ -589,20 +631,6 @@ namespace SHK_Utility
             comboBoxComPorts.Items.AddRange(ports);
             if (comboBoxComPorts.Items.Count > 0) comboBoxComPorts.BackColor = Color.White; else comboBoxComPorts.BackColor = Color.Red;
         }
-
-
-
-        private void ComboBoxGain1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            settingsChanged = true;
-        }
-
-
-        private void ComboBoxGain2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            settingsChanged = true;
-        }
-
 
 
         private void ComboBoxSet_SelectedIndexChanged(object sender, EventArgs e)
@@ -723,9 +751,17 @@ namespace SHK_Utility
             }
         }
 
-
+        private void NumericUpDownGain1_ValueChanged(object sender, EventArgs e)
+        {
+            settingsChanged = true;
+        }
 
         private void NumericUpDownThre1_ValueChanged(object sender, EventArgs e)
+        {
+            settingsChanged = true;
+        }
+
+        private void NumericUpDownGain2_ValueChanged(object sender, EventArgs e)
         {
             settingsChanged = true;
         }
@@ -906,9 +942,9 @@ namespace SHK_Utility
                     {
 
                         comboBoxSet.SelectedIndex = ushort.Parse(file.Sections["Sensor"].Keys["Set"].Value.ToString()) - 1;
-                        comboBoxGain1.SelectedIndex = comboBoxGain1.FindStringExact(file.Sections["Sensor"].Keys["Gain1"].Value.ToString());
+                        numericUpDownGain1.Value = ushort.Parse(file.Sections["Sensor"].Keys["Gain1"].Value.ToString());
                         numericUpDownThre1.Value = ushort.Parse(file.Sections["Sensor"].Keys["Threshold1"].Value.ToString());
-                        comboBoxGain2.SelectedIndex = comboBoxGain2.FindStringExact(file.Sections["Sensor"].Keys["Gain2"].Value.ToString());
+                        numericUpDownGain2.Value = ushort.Parse(file.Sections["Sensor"].Keys["Gain2"].Value.ToString());
                         numericUpDownThre2.Value = ushort.Parse(file.Sections["Sensor"].Keys["Threshold2"].Value.ToString());
 
                         comboBoxAnalogOut.SelectedIndex = ushort.Parse(file.Sections["Analog"].Keys["Analog Outputs"].Value.ToString());
@@ -973,13 +1009,13 @@ namespace SHK_Utility
             setIniKey.LeadingComment.Text = " MAN1 = 1, MAN2 = 2, RELAY = 3";
             setIniKey.LeadingComment.LeftIndentation = 4;
             IniKey gain1IniKey = sensorIniSection.Keys.Add("Gain1", (registers[(int)SHKModBusRegisters.GAIN_SET1] / 100).ToString());
-            gain1IniKey.LeadingComment.Text = " valid values 1,2,4,8,16,32,64";
+            gain1IniKey.LeadingComment.Text = " valid values 1..100";
             gain1IniKey.LeadingComment.LeftIndentation = 4;
             IniKey threshold1IniKey = sensorIniSection.Keys.Add("Threshold1", (registers[(int)SHKModBusRegisters.THRESHOLD_SET1] / 100).ToString());
             threshold1IniKey.LeadingComment.Text = " valid values 20 .. 80 ";
             threshold1IniKey.LeadingComment.LeftIndentation = 4;
             IniKey gain2IniKey = sensorIniSection.Keys.Add("Gain2", (registers[(int)SHKModBusRegisters.GAIN_SET2] / 100).ToString());
-            gain2IniKey.LeadingComment.Text = " valid values 1,2,4,8,16,32,64";
+            gain2IniKey.LeadingComment.Text = " valid values 1..100";
             gain2IniKey.LeadingComment.LeftIndentation = 4;
             IniKey threshold2IniKey = sensorIniSection.Keys.Add("Threshold2", (registers[(int)SHKModBusRegisters.THRESHOLD_SET2] / 100).ToString());
             threshold2IniKey.LeadingComment.Text = " valid values 20 .. 80 ";

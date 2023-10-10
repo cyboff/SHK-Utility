@@ -29,18 +29,18 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea9 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea10 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend9 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend10 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series33 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series34 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series35 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series36 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series37 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series38 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series39 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series40 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
@@ -49,7 +49,6 @@
             this.comboBoxBaudrates = new System.Windows.Forms.ComboBox();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.textBoxLog = new System.Windows.Forms.TextBox();
-            this.comboBoxGain1 = new System.Windows.Forms.ComboBox();
             this.labelGain1 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -61,10 +60,9 @@
             this.comboBoxDataBits = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.labelOffset = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.comboBoxGain2 = new System.Windows.Forms.ComboBox();
+            this.labelThre1 = new System.Windows.Forms.Label();
+            this.labelThre2 = new System.Windows.Forms.Label();
+            this.labelGain2 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
@@ -87,6 +85,8 @@
             this.numericUpDownWindowEnd = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownOffset = new System.Windows.Forms.NumericUpDown();
             this.groupBoxSensor = new System.Windows.Forms.GroupBox();
+            this.numericUpDownGain2 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownGain1 = new System.Windows.Forms.NumericUpDown();
             this.groupBoxAnalog = new System.Windows.Forms.GroupBox();
             this.comboBoxAnalogOut = new System.Windows.Forms.ComboBox();
             this.label18 = new System.Windows.Forms.Label();
@@ -159,6 +159,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWindowEnd)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOffset)).BeginInit();
             this.groupBoxSensor.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGain2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGain1)).BeginInit();
             this.groupBoxAnalog.SuspendLayout();
             this.groupBoxFilters.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilterOff)).BeginInit();
@@ -178,115 +180,115 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chart1.BackColor = System.Drawing.SystemColors.Menu;
             this.chart1.BorderlineColor = System.Drawing.SystemColors.ControlLight;
-            chartArea1.AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.True;
-            chartArea1.AxisX.Interval = 10D;
-            chartArea1.AxisX.LabelAutoFitMinFontSize = 8;
-            chartArea1.AxisX.LabelAutoFitStyle = ((System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles)((System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.IncreaseFont | System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.DecreaseFont)));
-            chartArea1.AxisX.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
-            chartArea1.AxisX.Maximum = 100D;
-            chartArea1.AxisX.Minimum = 0D;
-            chartArea1.AxisX.TextOrientation = System.Windows.Forms.DataVisualization.Charting.TextOrientation.Horizontal;
-            chartArea1.AxisX2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.True;
-            chartArea1.AxisX2.Interval = 10D;
-            chartArea1.AxisX2.IsStartedFromZero = false;
-            chartArea1.AxisX2.LabelAutoFitMaxFontSize = 8;
-            chartArea1.AxisX2.MajorGrid.Interval = 10D;
-            chartArea1.AxisX2.MajorGrid.LineColor = System.Drawing.Color.LightGray;
-            chartArea1.AxisX2.Maximum = 100D;
-            chartArea1.AxisX2.Minimum = 0D;
-            chartArea1.AxisY.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.True;
-            chartArea1.AxisY.Interval = 10D;
-            chartArea1.AxisY.MajorGrid.LineColor = System.Drawing.Color.LightGray;
-            chartArea1.AxisY.Maximum = 100D;
-            chartArea1.AxisY.Minimum = 0D;
-            chartArea1.AxisY.TitleAlignment = System.Drawing.StringAlignment.Far;
-            chartArea1.AxisY.ToolTip = "%";
-            chartArea1.AxisY2.MajorGrid.LineColor = System.Drawing.Color.LightGray;
-            chartArea1.Name = "ChartArea1";
-            chartArea2.AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.True;
-            chartArea2.AxisX.MajorGrid.LineColor = System.Drawing.Color.LightGray;
-            chartArea2.AxisY.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.True;
-            chartArea2.AxisY.Interval = 10D;
-            chartArea2.AxisY.MajorGrid.LineColor = System.Drawing.Color.LightGray;
-            chartArea2.AxisY.Maximum = 100D;
-            chartArea2.AxisY.Minimum = 0D;
-            chartArea2.Name = "ChartArea2";
-            this.chart1.ChartAreas.Add(chartArea1);
-            this.chart1.ChartAreas.Add(chartArea2);
-            legend1.Alignment = System.Drawing.StringAlignment.Center;
-            legend1.DockedToChartArea = "ChartArea1";
-            legend1.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
-            legend1.IsDockedInsideChartArea = false;
-            legend1.Name = "Legend1";
-            legend2.Alignment = System.Drawing.StringAlignment.Center;
-            legend2.DockedToChartArea = "ChartArea2";
-            legend2.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
-            legend2.IsDockedInsideChartArea = false;
-            legend2.Name = "Legend2";
-            this.chart1.Legends.Add(legend1);
-            this.chart1.Legends.Add(legend2);
+            chartArea9.AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.True;
+            chartArea9.AxisX.Interval = 10D;
+            chartArea9.AxisX.LabelAutoFitMinFontSize = 8;
+            chartArea9.AxisX.LabelAutoFitStyle = ((System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles)((System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.IncreaseFont | System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.DecreaseFont)));
+            chartArea9.AxisX.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
+            chartArea9.AxisX.Maximum = 100D;
+            chartArea9.AxisX.Minimum = 0D;
+            chartArea9.AxisX.TextOrientation = System.Windows.Forms.DataVisualization.Charting.TextOrientation.Horizontal;
+            chartArea9.AxisX2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.True;
+            chartArea9.AxisX2.Interval = 10D;
+            chartArea9.AxisX2.IsStartedFromZero = false;
+            chartArea9.AxisX2.LabelAutoFitMaxFontSize = 8;
+            chartArea9.AxisX2.MajorGrid.Interval = 10D;
+            chartArea9.AxisX2.MajorGrid.LineColor = System.Drawing.Color.LightGray;
+            chartArea9.AxisX2.Maximum = 100D;
+            chartArea9.AxisX2.Minimum = 0D;
+            chartArea9.AxisY.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.True;
+            chartArea9.AxisY.Interval = 10D;
+            chartArea9.AxisY.MajorGrid.LineColor = System.Drawing.Color.LightGray;
+            chartArea9.AxisY.Maximum = 100D;
+            chartArea9.AxisY.Minimum = 0D;
+            chartArea9.AxisY.TitleAlignment = System.Drawing.StringAlignment.Far;
+            chartArea9.AxisY.ToolTip = "%";
+            chartArea9.AxisY2.MajorGrid.LineColor = System.Drawing.Color.LightGray;
+            chartArea9.Name = "ChartArea1";
+            chartArea10.AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.True;
+            chartArea10.AxisX.MajorGrid.LineColor = System.Drawing.Color.LightGray;
+            chartArea10.AxisY.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.True;
+            chartArea10.AxisY.Interval = 10D;
+            chartArea10.AxisY.MajorGrid.LineColor = System.Drawing.Color.LightGray;
+            chartArea10.AxisY.Maximum = 100D;
+            chartArea10.AxisY.Minimum = 0D;
+            chartArea10.Name = "ChartArea2";
+            this.chart1.ChartAreas.Add(chartArea9);
+            this.chart1.ChartAreas.Add(chartArea10);
+            legend9.Alignment = System.Drawing.StringAlignment.Center;
+            legend9.DockedToChartArea = "ChartArea1";
+            legend9.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
+            legend9.IsDockedInsideChartArea = false;
+            legend9.Name = "Legend1";
+            legend10.Alignment = System.Drawing.StringAlignment.Center;
+            legend10.DockedToChartArea = "ChartArea2";
+            legend10.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
+            legend10.IsDockedInsideChartArea = false;
+            legend10.Name = "Legend2";
+            this.chart1.Legends.Add(legend9);
+            this.chart1.Legends.Add(legend10);
             this.chart1.Location = new System.Drawing.Point(458, 118);
             this.chart1.Name = "chart1";
-            series1.BorderColor = System.Drawing.Color.SandyBrown;
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Range;
-            series1.Color = System.Drawing.Color.PeachPuff;
-            series1.Legend = "Legend1";
-            series1.Name = "Threshold";
-            series1.XAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
-            series1.YValuesPerPoint = 2;
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Area;
-            series2.Color = System.Drawing.Color.Beige;
-            series2.Legend = "Legend1";
-            series2.Name = "Window";
-            series2.XAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
-            series3.BorderWidth = 0;
-            series3.ChartArea = "ChartArea1";
-            series3.Color = System.Drawing.Color.DarkSeaGreen;
-            series3.CustomProperties = "PointWidth=0.4";
-            series3.Legend = "Legend1";
-            series3.LegendText = "Position (Unfiltered)";
-            series3.Name = "Position";
-            series3.XAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
-            series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series4.Color = System.Drawing.Color.SteelBlue;
-            series4.Legend = "Legend1";
-            series4.Name = "Signal";
-            series4.XAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
-            series5.ChartArea = "ChartArea2";
-            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series5.Color = System.Drawing.Color.SteelBlue;
-            series5.Legend = "Legend2";
-            series5.Name = "Intensity";
-            series5.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Time;
-            series6.ChartArea = "ChartArea2";
-            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series6.Color = System.Drawing.Color.DarkSeaGreen;
-            series6.Legend = "Legend2";
-            series6.LegendText = "Pos. (Unfiltered)";
-            series6.Name = "Position Raw";
-            series7.ChartArea = "ChartArea2";
-            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series7.Color = System.Drawing.Color.DarkGreen;
-            series7.Legend = "Legend2";
-            series7.LegendText = "Pos. (Output)";
-            series7.Name = "Position Out";
-            series8.ChartArea = "ChartArea2";
-            series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series8.Color = System.Drawing.Color.Salmon;
-            series8.Legend = "Legend2";
-            series8.LegendText = "Internal Temp.";
-            series8.Name = "Temperature";
-            this.chart1.Series.Add(series1);
-            this.chart1.Series.Add(series2);
-            this.chart1.Series.Add(series3);
-            this.chart1.Series.Add(series4);
-            this.chart1.Series.Add(series5);
-            this.chart1.Series.Add(series6);
-            this.chart1.Series.Add(series7);
-            this.chart1.Series.Add(series8);
+            series33.BorderColor = System.Drawing.Color.SandyBrown;
+            series33.ChartArea = "ChartArea1";
+            series33.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Range;
+            series33.Color = System.Drawing.Color.PeachPuff;
+            series33.Legend = "Legend1";
+            series33.Name = "Threshold";
+            series33.XAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
+            series33.YValuesPerPoint = 2;
+            series34.ChartArea = "ChartArea1";
+            series34.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Area;
+            series34.Color = System.Drawing.Color.Beige;
+            series34.Legend = "Legend1";
+            series34.Name = "Window";
+            series34.XAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
+            series35.BorderWidth = 0;
+            series35.ChartArea = "ChartArea1";
+            series35.Color = System.Drawing.Color.DarkSeaGreen;
+            series35.CustomProperties = "PointWidth=0.4";
+            series35.Legend = "Legend1";
+            series35.LegendText = "Position (Unfiltered)";
+            series35.Name = "Position";
+            series35.XAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
+            series36.ChartArea = "ChartArea1";
+            series36.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series36.Color = System.Drawing.Color.SteelBlue;
+            series36.Legend = "Legend1";
+            series36.Name = "Signal";
+            series36.XAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
+            series37.ChartArea = "ChartArea2";
+            series37.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series37.Color = System.Drawing.Color.SteelBlue;
+            series37.Legend = "Legend2";
+            series37.Name = "Intensity";
+            series37.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Time;
+            series38.ChartArea = "ChartArea2";
+            series38.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series38.Color = System.Drawing.Color.DarkSeaGreen;
+            series38.Legend = "Legend2";
+            series38.LegendText = "Pos. (Unfiltered)";
+            series38.Name = "Position Raw";
+            series39.ChartArea = "ChartArea2";
+            series39.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series39.Color = System.Drawing.Color.DarkGreen;
+            series39.Legend = "Legend2";
+            series39.LegendText = "Pos. (Output)";
+            series39.Name = "Position Out";
+            series40.ChartArea = "ChartArea2";
+            series40.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series40.Color = System.Drawing.Color.Salmon;
+            series40.Legend = "Legend2";
+            series40.LegendText = "Internal Temp.";
+            series40.Name = "Temperature";
+            this.chart1.Series.Add(series33);
+            this.chart1.Series.Add(series34);
+            this.chart1.Series.Add(series35);
+            this.chart1.Series.Add(series36);
+            this.chart1.Series.Add(series37);
+            this.chart1.Series.Add(series38);
+            this.chart1.Series.Add(series39);
+            this.chart1.Series.Add(series40);
             this.chart1.Size = new System.Drawing.Size(494, 422);
             this.chart1.TabIndex = 2;
             this.chart1.Text = "chart1";
@@ -365,28 +367,6 @@
             this.textBoxLog.WordWrap = false;
             this.textBoxLog.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBox1_KeyDown);
             this.textBoxLog.MouseHover += new System.EventHandler(this.TextBoxLog_MouseHover);
-            // 
-            // comboBoxGain1
-            // 
-            this.comboBoxGain1.AllowDrop = true;
-            this.comboBoxGain1.AutoCompleteCustomSource.AddRange(new string[] {
-            "1..247"});
-            this.comboBoxGain1.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.comboBoxGain1.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.comboBoxGain1.FormattingEnabled = true;
-            this.comboBoxGain1.Items.AddRange(new object[] {
-            "1",
-            "2",
-            "4",
-            "8",
-            "16",
-            "32",
-            "64"});
-            this.comboBoxGain1.Location = new System.Drawing.Point(70, 52);
-            this.comboBoxGain1.Name = "comboBoxGain1";
-            this.comboBoxGain1.Size = new System.Drawing.Size(60, 21);
-            this.comboBoxGain1.TabIndex = 12;
-            this.comboBoxGain1.SelectedIndexChanged += new System.EventHandler(this.ComboBoxGain1_SelectedIndexChanged);
             // 
             // labelGain1
             // 
@@ -501,54 +481,32 @@
             this.labelOffset.TabIndex = 24;
             this.labelOffset.Text = "Offset:";
             // 
-            // label8
+            // labelThre1
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 81);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(63, 13);
-            this.label8.TabIndex = 26;
-            this.label8.Text = "Threshold1:";
+            this.labelThre1.AutoSize = true;
+            this.labelThre1.Location = new System.Drawing.Point(6, 81);
+            this.labelThre1.Name = "labelThre1";
+            this.labelThre1.Size = new System.Drawing.Size(63, 13);
+            this.labelThre1.TabIndex = 26;
+            this.labelThre1.Text = "Threshold1:";
             // 
-            // label9
+            // labelThre2
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(6, 135);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(63, 13);
-            this.label9.TabIndex = 30;
-            this.label9.Text = "Threshold2:";
+            this.labelThre2.AutoSize = true;
+            this.labelThre2.Location = new System.Drawing.Point(6, 135);
+            this.labelThre2.Name = "labelThre2";
+            this.labelThre2.Size = new System.Drawing.Size(63, 13);
+            this.labelThre2.TabIndex = 30;
+            this.labelThre2.Text = "Threshold2:";
             // 
-            // label10
+            // labelGain2
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(6, 109);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(38, 13);
-            this.label10.TabIndex = 28;
-            this.label10.Text = "Gain2:";
-            // 
-            // comboBoxGain2
-            // 
-            this.comboBoxGain2.AllowDrop = true;
-            this.comboBoxGain2.AutoCompleteCustomSource.AddRange(new string[] {
-            "1..247"});
-            this.comboBoxGain2.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.comboBoxGain2.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.comboBoxGain2.FormattingEnabled = true;
-            this.comboBoxGain2.Items.AddRange(new object[] {
-            "1",
-            "2",
-            "4",
-            "8",
-            "16",
-            "32",
-            "64"});
-            this.comboBoxGain2.Location = new System.Drawing.Point(70, 106);
-            this.comboBoxGain2.Name = "comboBoxGain2";
-            this.comboBoxGain2.Size = new System.Drawing.Size(60, 21);
-            this.comboBoxGain2.TabIndex = 27;
-            this.comboBoxGain2.SelectedIndexChanged += new System.EventHandler(this.ComboBoxGain2_SelectedIndexChanged);
+            this.labelGain2.AutoSize = true;
+            this.labelGain2.Location = new System.Drawing.Point(6, 109);
+            this.labelGain2.Name = "labelGain2";
+            this.labelGain2.Size = new System.Drawing.Size(38, 13);
+            this.labelGain2.TabIndex = 28;
+            this.labelGain2.Text = "Gain2:";
             // 
             // label11
             // 
@@ -815,7 +773,7 @@
             this.numericUpDownThre2.Size = new System.Drawing.Size(60, 20);
             this.numericUpDownThre2.TabIndex = 47;
             this.numericUpDownThre2.Value = new decimal(new int[] {
-            20,
+            50,
             0,
             0,
             0});
@@ -897,13 +855,13 @@
             // 
             // groupBoxSensor
             // 
-            this.groupBoxSensor.Controls.Add(this.comboBoxGain2);
-            this.groupBoxSensor.Controls.Add(this.comboBoxGain1);
+            this.groupBoxSensor.Controls.Add(this.numericUpDownGain2);
+            this.groupBoxSensor.Controls.Add(this.numericUpDownGain1);
             this.groupBoxSensor.Controls.Add(this.labelGain1);
-            this.groupBoxSensor.Controls.Add(this.label8);
+            this.groupBoxSensor.Controls.Add(this.labelThre1);
             this.groupBoxSensor.Controls.Add(this.numericUpDownThre2);
-            this.groupBoxSensor.Controls.Add(this.label10);
-            this.groupBoxSensor.Controls.Add(this.label9);
+            this.groupBoxSensor.Controls.Add(this.labelGain2);
+            this.groupBoxSensor.Controls.Add(this.labelThre2);
             this.groupBoxSensor.Controls.Add(this.numericUpDownThre1);
             this.groupBoxSensor.Controls.Add(this.label13);
             this.groupBoxSensor.Controls.Add(this.comboBoxSet);
@@ -914,6 +872,42 @@
             this.groupBoxSensor.TabIndex = 51;
             this.groupBoxSensor.TabStop = false;
             this.groupBoxSensor.Text = "Sensor";
+            // 
+            // numericUpDownGain2
+            // 
+            this.numericUpDownGain2.Location = new System.Drawing.Point(70, 107);
+            this.numericUpDownGain2.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownGain2.Name = "numericUpDownGain2";
+            this.numericUpDownGain2.Size = new System.Drawing.Size(60, 20);
+            this.numericUpDownGain2.TabIndex = 49;
+            this.numericUpDownGain2.Value = new decimal(new int[] {
+            75,
+            0,
+            0,
+            0});
+            this.numericUpDownGain2.ValueChanged += new System.EventHandler(this.NumericUpDownGain2_ValueChanged);
+            // 
+            // numericUpDownGain1
+            // 
+            this.numericUpDownGain1.Location = new System.Drawing.Point(70, 53);
+            this.numericUpDownGain1.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownGain1.Name = "numericUpDownGain1";
+            this.numericUpDownGain1.Size = new System.Drawing.Size(60, 20);
+            this.numericUpDownGain1.TabIndex = 48;
+            this.numericUpDownGain1.Value = new decimal(new int[] {
+            25,
+            0,
+            0,
+            0});
+            this.numericUpDownGain1.ValueChanged += new System.EventHandler(this.NumericUpDownGain1_ValueChanged);
             // 
             // groupBoxAnalog
             // 
@@ -1290,9 +1284,9 @@
             this.label31.AutoSize = true;
             this.label31.Location = new System.Drawing.Point(147, 47);
             this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(62, 13);
+            this.label31.Size = new System.Drawing.Size(55, 13);
             this.label31.TabIndex = 62;
-            this.label31.Text = "CPU Temp:";
+            this.label31.Text = "Int. Temp:";
             // 
             // label32
             // 
@@ -1593,7 +1587,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(980, 670);
             this.Name = "FormMain";
-            this.Text = "SHK Utility 1.6";
+            this.Text = "SHK Utility 23.10";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.groupBoxSerial.ResumeLayout(false);
@@ -1611,6 +1605,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOffset)).EndInit();
             this.groupBoxSensor.ResumeLayout(false);
             this.groupBoxSensor.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGain2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownGain1)).EndInit();
             this.groupBoxAnalog.ResumeLayout(false);
             this.groupBoxAnalog.PerformLayout();
             this.groupBoxFilters.ResumeLayout(false);
@@ -1640,7 +1636,6 @@
         private System.Windows.Forms.ComboBox comboBoxBaudrates;
         private System.IO.Ports.SerialPort serialPort1;
         private System.Windows.Forms.TextBox textBoxLog;
-        private System.Windows.Forms.ComboBox comboBoxGain1;
         private System.Windows.Forms.Label labelGain1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
@@ -1652,10 +1647,9 @@
         private System.Windows.Forms.ComboBox comboBoxDataBits;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label labelOffset;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.ComboBox comboBoxGain2;
+        private System.Windows.Forms.Label labelThre1;
+        private System.Windows.Forms.Label labelThre2;
+        private System.Windows.Forms.Label labelGain2;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label13;
@@ -1738,6 +1732,8 @@
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.Button buttonSaveSerial;
         private System.Windows.Forms.Button buttonRestart;
+        private System.Windows.Forms.NumericUpDown numericUpDownGain2;
+        private System.Windows.Forms.NumericUpDown numericUpDownGain1;
     }
 }
 
