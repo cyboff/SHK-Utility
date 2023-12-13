@@ -33,32 +33,33 @@ namespace SHK_Utility
         MODBUS_SPEED,  // baud rate/100 to fit into word
         MODBUS_FORMAT, // SERIAL_8N1 = 0, SERIAL_8E1 = 6, SERIAL_8O1 = 7 , SERIAL_8N2 = 4
 
-        SET,            // RELAY = 3 (REL1 || REL2), MAN1 = 1, MAN2 = 2
-        GAIN_SET1,      // valid values 1,2,4,8,16,32,64
-        THRESHOLD_SET1, // min 20, max 80
-        GAIN_SET2,      // valid values 1,2,4,8,16,32,64
-        THRESHOLD_SET2, // min 20, max 80
+        SET,            // MAN1 = 1, MAN2 = 2, RELAY = 3 (REL1 || REL2),
+        GAIN_SET1,      // 0 to 100 * 100
+        THRESHOLD_SET1, // min 20, max 80 * 100
+        GAIN_SET2,      // 0 to 100 * 100
+        THRESHOLD_SET2, // min 20, max 80 * 100
+        GAIN_OFFSET,     // 0 to 255 
 
-        WINDOW_BEGIN,    // min 5, max 50
-        WINDOW_END,      // min 50 max 95
-        POSITION_MODE,   // rising = 1, falling = 2, peak = 3, hmd = 4
+        WINDOW_BEGIN,    // min 5, max 50 * 100
+        WINDOW_END,      // min 50 max 95 * 100
+        POSITION_MODE,   // rising = 1, falling = 2, peak = 3 , hmd = 4
         ANALOG_OUT_MODE, // an1/an2: "1Int 2Pos" = 0x0501, "1Pos 2Int" = 0x0105, "1Int 2Int" = 0x0505, "1Pos 2Pos" = 0x0101
-        POSITION_OFFSET, // min 5, max 95 to avoid coincidence with pulse interrupts
+        POSITION_OFFSET, // min 0, max 2000 
 
         FILTER_POSITION, // range 0 - 9999 ms (or nr of mirrors) for moving average
         FILTER_ON,       // range 0 - 9999 ms
         FILTER_OFF,      // range 0 - 9999 ms
 
-        ACT_TEMPERATURE,
-        MAX_TEMPERATURE,
+        ACT_TEMPERATURE,  // act_temp * 256
+        MAX_TEMPERATURE,  // max_temp * 256
         TOTAL_RUNTIME,
         IO_STATE,
 
-        PEAK_VALUE,
-        POSITION_VALUE,
-        POSITION_VALUE_AVG,
+        PEAK_VALUE,       // 0-100% * 100
+        POSITION_VALUE,   // 0-100% * 100
+        POSITION_VALUE_AVG,  // 0-100% * 100
 
-        MOTOR_TIME_DIFF, 
+        MOTOR_TIME_DIFF,   // one rotation of the motor should be exactly 6000us
         EXEC_TIME_ADC,     // exectime of adc conversions
         EXEC_TIME,         // exectime of adc conversions + results calculation
         EXEC_TIME_TRIGGER, // exectime of each triggering
@@ -203,6 +204,8 @@ namespace SHK_Utility
                         groupBoxFilters.Enabled = false;
                         groupBoxLaser.Enabled = false;
                         groupBoxTest.Enabled = false;
+                        groupBoxCalibration.Enabled = false;
+                        buttonRestart.Enabled = false;
                         buttonLogin.Enabled = true;
                         buttonSaveSerial.Enabled = false;
                         //buttonLogin.Text = "&Login";
@@ -283,7 +286,8 @@ namespace SHK_Utility
                 groupBoxSensor.Enabled = false;
                 groupBoxAnalog.Enabled = false;
                 groupBoxFilters.Enabled = false;
-                //buttonRestart.Enabled = false;
+                groupBoxCalibration.Enabled = false;
+                buttonRestart.Enabled = false;
             }
             else
             {
@@ -303,33 +307,33 @@ namespace SHK_Utility
                         textBoxLog.AppendText("Set saved!\r\n");
                     }
 
-                    if (registers[(int)SHKModBusRegisters.GAIN_SET1] / 100 != ushort.Parse(numericUpDownGain1.Value.ToString()))
+                    if (registers[(int)SHKModBusRegisters.GAIN_SET1] / 100 != numericUpDownGain1.Value)
                     {
-                        modbusData[0] = (ushort)(100 * ushort.Parse(numericUpDownGain1.Value.ToString()));
+                        modbusData[0] = (ushort)(100 * numericUpDownGain1.Value);
                         master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.GAIN_SET1, modbusData);
                         textBoxLog.AppendText("Gain1 saved!\r\n");
                     }
 
-                    if (registers[(int)SHKModBusRegisters.THRESHOLD_SET1] / 100 != ushort.Parse(numericUpDownThre1.Value.ToString()))
+                    if (registers[(int)SHKModBusRegisters.THRESHOLD_SET1] / 100 != numericUpDownThre1.Value)
                     {
                         //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.THRESHOLD_SET1, ushort.Parse(numericUpDownThre1.Value.ToString()));
-                        modbusData[0] = (ushort)(100 * ushort.Parse(numericUpDownThre1.Value.ToString()));
+                        modbusData[0] = (ushort)(100 * numericUpDownThre1.Value);
                         master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.THRESHOLD_SET1, modbusData);
                         textBoxLog.AppendText("Threshold1 saved!\r\n");
                     }
 
-                    if (registers[(int)SHKModBusRegisters.GAIN_SET2] / 100  != ushort.Parse(numericUpDownGain2.Value.ToString()))
+                    if (registers[(int)SHKModBusRegisters.GAIN_SET2] / 100  != numericUpDownGain2.Value)
                     {
                         //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.GAIN_SET2, ushort.Parse(comboBoxGain2.SelectedItem.ToString()));
-                        modbusData[0] = (ushort)(100 * ushort.Parse(numericUpDownGain2.Value.ToString()));
+                        modbusData[0] = (ushort)(100 * numericUpDownGain2.Value);
                         master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.GAIN_SET2, modbusData);
                         textBoxLog.AppendText("Gain2 saved!\r\n");
                     }
 
-                    if (registers[(int)SHKModBusRegisters.THRESHOLD_SET2] / 100 != ushort.Parse(numericUpDownThre2.Value.ToString()))
+                    if (registers[(int)SHKModBusRegisters.THRESHOLD_SET2] / 100 != numericUpDownThre2.Value)
                     {
                         //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.THRESHOLD_SET2, ushort.Parse(numericUpDownThre2.Value.ToString()));
-                        modbusData[0] = (ushort)(100 * ushort.Parse(numericUpDownThre2.Value.ToString()));
+                        modbusData[0] = (ushort)(100 * numericUpDownThre2.Value);
                         master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.THRESHOLD_SET2, modbusData);
                         textBoxLog.AppendText("Threshold2 saved!\r\n");
                     }
@@ -367,35 +371,42 @@ namespace SHK_Utility
                         textBoxLog.AppendText("Window End saved!\r\n");
                     }
 
-                    if (registers[(int)SHKModBusRegisters.POSITION_OFFSET] != ushort.Parse(numericUpDownOffset.Value.ToString()))
+                    if (registers[(int)SHKModBusRegisters.POSITION_OFFSET] != (ushort)numericUpDownPosCal.Value)
                     {
                         //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.POSITION_OFFSET, ushort.Parse(numericUpDownOffset.Value.ToString()));
-                        modbusData[0] = ushort.Parse(numericUpDownOffset.Value.ToString());
+                        modbusData[0] = (ushort)numericUpDownPosCal.Value;
                         master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.POSITION_OFFSET, modbusData);
-                        textBoxLog.AppendText("Offset saved!\r\n");
+                        textBoxLog.AppendText("Position Offset saved!\r\n");
+                    }
+
+                    if ((sbyte)registers[(int)SHKModBusRegisters.GAIN_OFFSET] != (sbyte)numericUpDownGainCal.Value)
+                    {
+                        modbusData[0] = (byte)(sbyte)(numericUpDownGainCal.Value);
+                        master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.GAIN_OFFSET, modbusData);
+                        textBoxLog.AppendText("Gain Offset saved!\r\n");
                     }
 
                     //check Filter settings
-                    if (registers[(int)SHKModBusRegisters.FILTER_POSITION] != ushort.Parse(numericUpDownFilterPosition.Value.ToString()))
+                    if (registers[(int)SHKModBusRegisters.FILTER_POSITION] != numericUpDownFilterPosition.Value)
                     {
                         //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.FILTER_POSITION, ushort.Parse(numericUpDownFilterPosition.Value.ToString()));
-                        modbusData[0] = ushort.Parse(numericUpDownFilterPosition.Value.ToString());
+                        modbusData[0] = (ushort)numericUpDownFilterPosition.Value;
                         master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.FILTER_POSITION, modbusData);
                         textBoxLog.AppendText("Filter Position saved!\r\n");
                     }
 
-                    if (registers[(int)SHKModBusRegisters.FILTER_ON] != ushort.Parse(numericUpDownFilterOn.Value.ToString()))
+                    if (registers[(int)SHKModBusRegisters.FILTER_ON] != numericUpDownFilterOn.Value)
                     {
                         //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.FILTER_ON, ushort.Parse(numericUpDownFilterOn.Value.ToString()));
-                        modbusData[0] = ushort.Parse(numericUpDownFilterOn.Value.ToString());
+                        modbusData[0] = (ushort)numericUpDownFilterOn.Value;
                         master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.FILTER_ON, modbusData);
                         textBoxLog.AppendText("Filter Signal On saved!\r\n");
                     }
 
-                    if (registers[(int)SHKModBusRegisters.FILTER_OFF] != ushort.Parse(numericUpDownFilterOff.Value.ToString()))
+                    if (registers[(int)SHKModBusRegisters.FILTER_OFF] != numericUpDownFilterOff.Value)
                     {
                         //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.FILTER_OFF, ushort.Parse(numericUpDownFilterOff.Value.ToString()));
-                        modbusData[0] = ushort.Parse(numericUpDownFilterOff.Value.ToString());
+                        modbusData[0] = (ushort)numericUpDownFilterOff.Value;
                         master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.FILTER_OFF, modbusData);
                         textBoxLog.AppendText("Filter Signal Off saved!\r\n");
                     }
@@ -505,11 +516,13 @@ namespace SHK_Utility
 
                 numericUpDownWindowBeg.Value = registers[(int)SHKModBusRegisters.WINDOW_BEGIN] / 100;
                 numericUpDownWindowEnd.Value = registers[(int)SHKModBusRegisters.WINDOW_END] / 100;
-                numericUpDownOffset.Value = registers[(int)SHKModBusRegisters.POSITION_OFFSET];
+                
 
                 numericUpDownFilterPosition.Value = registers[(int)SHKModBusRegisters.FILTER_POSITION];
                 numericUpDownFilterOn.Value = registers[(int)SHKModBusRegisters.FILTER_ON];
                 numericUpDownFilterOff.Value = registers[(int)SHKModBusRegisters.FILTER_OFF];
+                numericUpDownPosCal.Value = registers[(int)SHKModBusRegisters.POSITION_OFFSET];
+                numericUpDownGainCal.Value = (sbyte)registers[(int)SHKModBusRegisters.GAIN_OFFSET];
 
             }
             else
@@ -781,7 +794,12 @@ namespace SHK_Utility
             settingsChanged = true;
         }
 
-        private void NumericUpDownOffset_ValueChanged(object sender, EventArgs e)
+        private void NumericUpDownPosCal_ValueChanged(object sender, EventArgs e)
+        {
+            settingsChanged = true;
+        }
+
+        private void NumericUpDownGainCal_ValueChanged(object sender, EventArgs e)
         {
             settingsChanged = true;
         }
@@ -831,10 +849,9 @@ namespace SHK_Utility
                         groupBoxTest.Enabled = true;
                         groupBoxSensor.Enabled = true;
                         groupBoxAnalog.Enabled = true;
-                        numericUpDownOffset.Enabled = true;
-                        labelOffset.Enabled = true;
-                        buttonRestart.Enabled = true;
                         groupBoxFilters.Enabled = true;
+                        groupBoxCalibration.Enabled = true;
+                        buttonRestart.Enabled = true;
                         timerLogout_counter = 3600;  // automatic logout after 30 min
                         break;
                     case DialogResult.OK: // password for operator
@@ -846,8 +863,7 @@ namespace SHK_Utility
                         groupBoxTest.Enabled = true;
                         groupBoxSensor.Enabled = true;
                         groupBoxAnalog.Enabled = true;
-                        numericUpDownOffset.Enabled = false;
-                        labelOffset.Enabled = false;
+                        groupBoxCalibration.Enabled = false;
                         buttonRestart.Enabled = false;
                         groupBoxFilters.Enabled = true;
                         timerLogout_counter = 3600; // automatic logout after 30 min
@@ -860,6 +876,7 @@ namespace SHK_Utility
                         groupBoxSensor.Enabled = false;
                         groupBoxAnalog.Enabled = false;
                         groupBoxFilters.Enabled = false;
+                        groupBoxCalibration.Enabled = false;
                         buttonRestart.Enabled = false;
                         //this.Close();
                         break;
@@ -877,6 +894,7 @@ namespace SHK_Utility
                 groupBoxSensor.Enabled = false;
                 groupBoxAnalog.Enabled = false;
                 groupBoxFilters.Enabled = false;
+                groupBoxCalibration.Enabled = false;
                 buttonRestart.Enabled = false;
                 timerLogout_counter = 0;
             }
@@ -1340,8 +1358,8 @@ namespace SHK_Utility
                 }
             }
 
-            master.Transport.ReadTimeout = 2000;
-            master.Transport.WriteTimeout = 2000;
+            master.Transport.ReadTimeout = 500;
+            master.Transport.WriteTimeout = 500;
 
         }
 
@@ -1395,9 +1413,10 @@ namespace SHK_Utility
             groupBoxSensor.Enabled = false;
             groupBoxAnalog.Enabled = false;
             groupBoxFilters.Enabled = false;
+            groupBoxCalibration.Enabled = false;
             groupBoxLaser.Enabled = false;
             groupBoxTest.Enabled = false;
-            //buttonRestart.Enabled = false;
+            buttonRestart.Enabled = false;
             buttonLogin.Enabled = false;
             buttonSaveSerial.Enabled = false;
         }
@@ -1497,5 +1516,7 @@ namespace SHK_Utility
                 textBoxLog.AppendText("\r\n");
             }
         }
+
+        
     }
 }
