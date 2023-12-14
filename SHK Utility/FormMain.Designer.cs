@@ -88,7 +88,9 @@
             this.numericUpDownGain2 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownGain1 = new System.Windows.Forms.NumericUpDown();
             this.groupBoxAnalog = new System.Windows.Forms.GroupBox();
-            this.comboBoxAnalogOut = new System.Windows.Forms.ComboBox();
+            this.comboBoxAnalogOut2 = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.comboBoxAnalogOut1 = new System.Windows.Forms.ComboBox();
             this.label18 = new System.Windows.Forms.Label();
             this.buttonRestart = new System.Windows.Forms.Button();
             this.groupBoxFilters = new System.Windows.Forms.GroupBox();
@@ -515,7 +517,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 109);
+            this.label11.Location = new System.Drawing.Point(6, 136);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(71, 13);
             this.label11.TabIndex = 32;
@@ -524,7 +526,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(6, 82);
+            this.label12.Location = new System.Drawing.Point(6, 109);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(71, 13);
             this.label12.TabIndex = 34;
@@ -570,7 +572,7 @@
             "LS-Falling",
             "LS-Peak",
             "HMD"});
-            this.comboBoxPositionMode.Location = new System.Drawing.Point(80, 51);
+            this.comboBoxPositionMode.Location = new System.Drawing.Point(80, 78);
             this.comboBoxPositionMode.Name = "comboBoxPositionMode";
             this.comboBoxPositionMode.Size = new System.Drawing.Size(86, 21);
             this.comboBoxPositionMode.TabIndex = 37;
@@ -579,7 +581,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(6, 55);
+            this.label14.Location = new System.Drawing.Point(6, 82);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(77, 13);
             this.label14.TabIndex = 38;
@@ -790,7 +792,7 @@
             0,
             0,
             0});
-            this.numericUpDownWindowBeg.Location = new System.Drawing.Point(80, 80);
+            this.numericUpDownWindowBeg.Location = new System.Drawing.Point(80, 107);
             this.numericUpDownWindowBeg.Maximum = new decimal(new int[] {
             45,
             0,
@@ -818,7 +820,7 @@
             0,
             0,
             0});
-            this.numericUpDownWindowEnd.Location = new System.Drawing.Point(80, 107);
+            this.numericUpDownWindowEnd.Location = new System.Drawing.Point(80, 134);
             this.numericUpDownWindowEnd.Maximum = new decimal(new int[] {
             95,
             0,
@@ -910,7 +912,9 @@
             // 
             // groupBoxAnalog
             // 
-            this.groupBoxAnalog.Controls.Add(this.comboBoxAnalogOut);
+            this.groupBoxAnalog.Controls.Add(this.comboBoxAnalogOut2);
+            this.groupBoxAnalog.Controls.Add(this.label7);
+            this.groupBoxAnalog.Controls.Add(this.comboBoxAnalogOut1);
             this.groupBoxAnalog.Controls.Add(this.label18);
             this.groupBoxAnalog.Controls.Add(this.label12);
             this.groupBoxAnalog.Controls.Add(this.label11);
@@ -926,33 +930,59 @@
             this.groupBoxAnalog.TabStop = false;
             this.groupBoxAnalog.Text = "Analog";
             // 
-            // comboBoxAnalogOut
+            // comboBoxAnalogOut2
             // 
-            this.comboBoxAnalogOut.AllowDrop = true;
-            this.comboBoxAnalogOut.AutoCompleteCustomSource.AddRange(new string[] {
+            this.comboBoxAnalogOut2.AllowDrop = true;
+            this.comboBoxAnalogOut2.AutoCompleteCustomSource.AddRange(new string[] {
             "1..247"});
-            this.comboBoxAnalogOut.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.comboBoxAnalogOut.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.comboBoxAnalogOut.FormattingEnabled = true;
-            this.comboBoxAnalogOut.Items.AddRange(new object[] {
-            "1:Int 2:Pos",
-            "1:Pos 2:Int",
-            "1:Int 2:Int",
-            "1:Pos 2:Pos"});
-            this.comboBoxAnalogOut.Location = new System.Drawing.Point(80, 24);
-            this.comboBoxAnalogOut.Name = "comboBoxAnalogOut";
-            this.comboBoxAnalogOut.Size = new System.Drawing.Size(86, 21);
-            this.comboBoxAnalogOut.TabIndex = 51;
-            this.comboBoxAnalogOut.SelectedIndexChanged += new System.EventHandler(this.ComboBoxAnalogOut_SelectedIndexChanged);
+            this.comboBoxAnalogOut2.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.comboBoxAnalogOut2.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.comboBoxAnalogOut2.FormattingEnabled = true;
+            this.comboBoxAnalogOut2.Items.AddRange(new object[] {
+            "Intensity",
+            "Position"});
+            this.comboBoxAnalogOut2.Location = new System.Drawing.Point(80, 51);
+            this.comboBoxAnalogOut2.MaxDropDownItems = 2;
+            this.comboBoxAnalogOut2.Name = "comboBoxAnalogOut2";
+            this.comboBoxAnalogOut2.Size = new System.Drawing.Size(86, 21);
+            this.comboBoxAnalogOut2.TabIndex = 55;
+            this.comboBoxAnalogOut2.SelectedIndexChanged += new System.EventHandler(this.ComboBoxAnalogOut_SelectedIndexChanged);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 56);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(72, 13);
+            this.label7.TabIndex = 54;
+            this.label7.Text = "Analog Out 2:";
+            // 
+            // comboBoxAnalogOut1
+            // 
+            this.comboBoxAnalogOut1.AllowDrop = true;
+            this.comboBoxAnalogOut1.AutoCompleteCustomSource.AddRange(new string[] {
+            "1..247"});
+            this.comboBoxAnalogOut1.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.comboBoxAnalogOut1.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.comboBoxAnalogOut1.FormattingEnabled = true;
+            this.comboBoxAnalogOut1.Items.AddRange(new object[] {
+            "Intensity",
+            "Position"});
+            this.comboBoxAnalogOut1.Location = new System.Drawing.Point(80, 24);
+            this.comboBoxAnalogOut1.MaxDropDownItems = 2;
+            this.comboBoxAnalogOut1.Name = "comboBoxAnalogOut1";
+            this.comboBoxAnalogOut1.Size = new System.Drawing.Size(86, 21);
+            this.comboBoxAnalogOut1.TabIndex = 51;
+            this.comboBoxAnalogOut1.SelectedIndexChanged += new System.EventHandler(this.ComboBoxAnalogOut_SelectedIndexChanged);
             // 
             // label18
             // 
             this.label18.AutoSize = true;
             this.label18.Location = new System.Drawing.Point(6, 28);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(68, 13);
+            this.label18.Size = new System.Drawing.Size(72, 13);
             this.label18.TabIndex = 52;
-            this.label18.Text = "Analog Outs:";
+            this.label18.Text = "Analog Out 1:";
             // 
             // buttonRestart
             // 
@@ -1722,7 +1752,7 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.NumericUpDown numericUpDownFilterPosition;
         private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.ComboBox comboBoxAnalogOut;
+        private System.Windows.Forms.ComboBox comboBoxAnalogOut1;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.GroupBox groupBoxActValues;
         private System.Windows.Forms.Label label23;
@@ -1779,6 +1809,8 @@
         private System.Windows.Forms.Label labelGainCal;
         private System.Windows.Forms.NumericUpDown numericUpDownGainCal;
         private System.Windows.Forms.GroupBox groupBoxCalibration;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.ComboBox comboBoxAnalogOut2;
     }
 }
 

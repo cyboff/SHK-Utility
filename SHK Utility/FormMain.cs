@@ -107,7 +107,7 @@ namespace SHK_Utility
         private int timer_counter = 0;
         private int timerLogout_counter = 0;
         private bool logFormatHex = false;
-        private ushort analogOutMode = 0; // an1/an2: "1Int 2Pos" = 0x0501, "1Pos 2Int" = 0x0105, "1Int 2Int" = 0x0505, "1Pos 2Pos" = 0x0101
+        private int analogOutMode = 0; // an1/an2: "1Int 2Pos" = 0x0501, "1Pos 2Int" = 0x0105, "1Int 2Int" = 0x0505, "1Pos 2Pos" = 0x0101
         private bool settingsChanged = false;
 
 
@@ -342,7 +342,7 @@ namespace SHK_Utility
                     if (registers[(int)SHKModBusRegisters.ANALOG_OUT_MODE] != analogOutMode)
                     {
                         //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.ANALOG_OUT_MODE, ushort.Parse(comboBoxAnalogOut.SelectedIndex.ToString()));
-                        modbusData[0] = analogOutMode;
+                        modbusData[0] = (ushort)analogOutMode;
                         master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.ANALOG_OUT_MODE, modbusData);
                         textBoxLog.AppendText("Analog Out Mode saved!\r\n");
                     }
@@ -494,16 +494,16 @@ namespace SHK_Utility
                 if (!comboBoxSet.DroppedDown) comboBoxSet.SelectedIndex = registers[(int)SHKModBusRegisters.SET] - 1;
                 if (!comboBoxPositionMode.DroppedDown) comboBoxPositionMode.SelectedIndex = registers[(int)SHKModBusRegisters.POSITION_MODE] - 1;
                 //if (!comboBoxAnalogOut.DroppedDown) comboBoxAnalogOut.SelectedIndex = registers[(int)SHKModBusRegisters.ANALOG_OUT_MODE]; 
-                if (!comboBoxAnalogOut.DroppedDown)
+                if (!comboBoxAnalogOut1.DroppedDown && !comboBoxAnalogOut2.DroppedDown)
                 {
                     analogOutMode = registers[(int)SHKModBusRegisters.ANALOG_OUT_MODE];
                     switch (registers[(int)SHKModBusRegisters.ANALOG_OUT_MODE])  // an1/an2: "1Int 2Pos" = 0x0501, "1Pos 2Int" = 0x0105, "1Int 2Int" = 0x0505, "1Pos 2Pos" = 0x0101
                     {
-                        case 0x0501: comboBoxAnalogOut.SelectedIndex = 0; break;
-                        case 0x0105: comboBoxAnalogOut.SelectedIndex = 1; break;
-                        case 0x0505: comboBoxAnalogOut.SelectedIndex = 2; break;
-                        case 0x0101: comboBoxAnalogOut.SelectedIndex = 3; break;
-                        default: comboBoxAnalogOut.SelectedIndex = 0; break;
+                        case 0x0501: comboBoxAnalogOut1.SelectedIndex = 0; comboBoxAnalogOut2.SelectedIndex = 1; break;
+                        case 0x0105: comboBoxAnalogOut1.SelectedIndex = 1; comboBoxAnalogOut2.SelectedIndex = 0; break;
+                        case 0x0505: comboBoxAnalogOut1.SelectedIndex = 0; comboBoxAnalogOut2.SelectedIndex = 0; break;
+                        case 0x0101: comboBoxAnalogOut1.SelectedIndex = 1; comboBoxAnalogOut2.SelectedIndex = 1; break;
+                        default: comboBoxAnalogOut1.SelectedIndex = 0; comboBoxAnalogOut2.SelectedIndex = 1; break;
 
                     }
                 }
@@ -821,14 +821,9 @@ namespace SHK_Utility
 
         private void ComboBoxAnalogOut_SelectedIndexChanged(object sender, EventArgs e)
         {
-            switch (comboBoxAnalogOut.SelectedIndex)
-            {
-                case 0: analogOutMode = 0x0501; break;
-                case 1: analogOutMode = 0x0105; break;
-                case 2: analogOutMode = 0x0505; break;
-                case 3: analogOutMode = 0x0101; break;
-                default: analogOutMode = 0x0501; break;
-            }
+            if (comboBoxAnalogOut1.SelectedIndex == 0) { analogOutMode |= (1 << 10); } else { analogOutMode &= ~(1 << 10); }  // set vs clear bit: 0x05XX vs 0x01XX
+            if (comboBoxAnalogOut2.SelectedIndex == 0) { analogOutMode |= (1 << 2); } else { analogOutMode &= ~(1 << 2); }  // set vs clear bit: 0xXX05 vs 0xXX01
+
             settingsChanged = true;
         }
 
@@ -965,7 +960,7 @@ namespace SHK_Utility
                         numericUpDownGain2.Value = ushort.Parse(file.Sections["Sensor"].Keys["Gain2"].Value.ToString());
                         numericUpDownThre2.Value = ushort.Parse(file.Sections["Sensor"].Keys["Threshold2"].Value.ToString());
 
-                        comboBoxAnalogOut.SelectedIndex = ushort.Parse(file.Sections["Analog"].Keys["Analog Outputs"].Value.ToString());
+                        comboBoxAnalogOut1.SelectedIndex = ushort.Parse(file.Sections["Analog"].Keys["Analog Outputs"].Value.ToString());
                         comboBoxPositionMode.SelectedIndex = ushort.Parse(file.Sections["Analog"].Keys["Position Mode"].Value.ToString()) - 1;
                         numericUpDownWindowBeg.Value = ushort.Parse(file.Sections["Analog"].Keys["Window Begin"].Value.ToString());
                         numericUpDownWindowEnd.Value = ushort.Parse(file.Sections["Analog"].Keys["Window End"].Value.ToString());
@@ -1042,7 +1037,7 @@ namespace SHK_Utility
             IniSection analogIniSection = file.Sections.Add("Analog");
             analogIniSection.TrailingComment.Text = "Analog Outputs Setup";
             analogIniSection.TrailingComment.EmptyLinesBefore = 1;
-            IniKey analogoutIniKey = analogIniSection.Keys.Add("Analog Outputs", comboBoxAnalogOut.SelectedIndex.ToString());
+            IniKey analogoutIniKey = analogIniSection.Keys.Add("Analog Outputs", comboBoxAnalogOut1.SelectedIndex.ToString());
             analogoutIniKey.LeadingComment.Text = " 1:Int 2:Pos = 0, 1:Pos 2:Int = 1, 1:Int 2: Int = 2, 1:Pos 2:Pos = 3";
             analogoutIniKey.LeadingComment.LeftIndentation = 4;
             IniKey positionmodeIniKey = analogIniSection.Keys.Add("Position Mode", registers[(int)SHKModBusRegisters.POSITION_MODE].ToString());
