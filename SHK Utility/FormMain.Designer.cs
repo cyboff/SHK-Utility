@@ -568,9 +568,7 @@
             this.comboBoxPositionMode.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.comboBoxPositionMode.FormattingEnabled = true;
             this.comboBoxPositionMode.Items.AddRange(new object[] {
-            "LS-Rising",
-            "LS-Falling",
-            "LS-Peak",
+            "LS",
             "HMD"});
             this.comboBoxPositionMode.Location = new System.Drawing.Point(80, 78);
             this.comboBoxPositionMode.Name = "comboBoxPositionMode";

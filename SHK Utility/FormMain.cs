@@ -42,7 +42,7 @@ namespace SHK_Utility
 
         WINDOW_BEGIN,    // min 5, max 50 * 100
         WINDOW_END,      // min 50 max 95 * 100
-        POSITION_MODE,   // rising = 1, falling = 2, peak = 3 , hmd = 4
+        POSITION_MODE,   // LS = 1, HMD = 4
         ANALOG_OUT_MODE, // an1/an2: "1Int 2Pos" = 0x0501, "1Pos 2Int" = 0x0105, "1Int 2Int" = 0x0505, "1Pos 2Pos" = 0x0101
         POSITION_OFFSET, // min 0, max 2000 
 
@@ -347,10 +347,10 @@ namespace SHK_Utility
                         textBoxLog.AppendText("Analog Out Mode saved!\r\n");
                     }
 
-                    if (registers[(int)SHKModBusRegisters.POSITION_MODE] != comboBoxPositionMode.SelectedIndex + 1)
+                    if ((registers[(int)SHKModBusRegisters.POSITION_MODE] == 1 && comboBoxPositionMode.SelectedIndex != 0) || (registers[(int)SHKModBusRegisters.POSITION_MODE] == 4 && comboBoxPositionMode.SelectedIndex != 1))
                     {
                         //master.WriteSingleRegister(slaveId, (ushort)SHKModBusRegisters.POSITION_MODE, ushort.Parse(comboBoxPositionMode.SelectedIndex.ToString()));
-                        modbusData[0] = (ushort)(comboBoxPositionMode.SelectedIndex + 1);
+                        modbusData[0] = (ushort)((comboBoxPositionMode.SelectedIndex == 0)? 1:4);  // LS or HMD
                         master.WriteMultipleRegisters(slaveId, (ushort)SHKModBusRegisters.POSITION_MODE, modbusData);
                         textBoxLog.AppendText("Position Mode saved!\r\n");
                     }
@@ -492,7 +492,7 @@ namespace SHK_Utility
 
 
                 if (!comboBoxSet.DroppedDown) comboBoxSet.SelectedIndex = registers[(int)SHKModBusRegisters.SET] - 1;
-                if (!comboBoxPositionMode.DroppedDown) comboBoxPositionMode.SelectedIndex = registers[(int)SHKModBusRegisters.POSITION_MODE] - 1;
+                if (!comboBoxPositionMode.DroppedDown) comboBoxPositionMode.SelectedIndex = (registers[(int)SHKModBusRegisters.POSITION_MODE] == 1)? 0 : 1;   // LS = 1 or HMD = 4
                 //if (!comboBoxAnalogOut.DroppedDown) comboBoxAnalogOut.SelectedIndex = registers[(int)SHKModBusRegisters.ANALOG_OUT_MODE]; 
                 if (!comboBoxAnalogOut1.DroppedDown && !comboBoxAnalogOut2.DroppedDown)
                 {
