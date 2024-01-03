@@ -630,7 +630,7 @@ namespace SHK_Utility
             chart1.ChartAreas[1].AxisX.Minimum = minDate.ToOADate();
             chart1.ChartAreas[1].AxisX.Maximum = now.ToOADate();
             chart1.Series["Intensity"].Points.AddXY(now.ToOADate(), registers[(int)SHKModBusRegisters.PEAK_VALUE] / 100);
-            chart1.Series["Position Raw"].Points.AddXY(now.ToOADate(), (float)registers[(int)SHKModBusRegisters.POSITION_VALUE] / 100);
+            //chart1.Series["Position Raw"].Points.AddXY(now.ToOADate(), (float)registers[(int)SHKModBusRegisters.POSITION_VALUE] / 100);
             chart1.Series["Position Out"].Points.AddXY(now.ToOADate(), (float)registers[(int)SHKModBusRegisters.POSITION_VALUE_AVG] / 100);
             chart1.Series["Temperature"].Points.AddXY(now.ToOADate(), registers[(int)SHKModBusRegisters.ACT_TEMPERATURE] / 256);
         }
